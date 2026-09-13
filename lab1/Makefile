@@ -6,6 +6,7 @@ IMAGE ?= itcs355-lab1
 TAG   ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 PLATFORM ?= linux/amd64
 SEED ?= 20260101
+DATA_SEED ?= 20260101
 GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 MLFLOW_VOLUME ?= itcs355-lab1-mlflow
 N_ESTIMATORS ?= 100
@@ -27,7 +28,7 @@ cloud-check: ## Resolve the eight capability slots
 	python scripts/cloud_check.py
 
 data: ## Generate the default dataset (deterministic)
-	python scripts/make_dataset.py --seed $(SEED)
+	python scripts/make_dataset.py --seed $(DATA_SEED)
 
 test: ## Run data contract and split property tests
 	pytest -q tests/
@@ -50,18 +51,19 @@ image-push: image ## Push to CONTAINER_REGISTRY via your adapter
 	print(get_adapter(config.load()).push_image(\"$(IMAGE):$(TAG)\"))"
 
 reproduce: image ## THE ONE COMMAND. Grader runs this.
-	dvc pull data/raw.dvc
 	docker run --rm \
 	  -w /app/reports \
-	  -v "$$PWD/data/raw:/app/data/raw:ro" \
 	  -v "$$PWD/reports:/app/reports" \
 	  -v "$(MLFLOW_VOLUME):/app/reports/mlruns" \
 	  -e GIT_COMMIT=$(GIT_COMMIT) \
 	  -e PYTHONHASHSEED=$(SEED) \
 	  -e MLFLOW_TRACKING_URI=sqlite:////app/reports/mlflow.db \
-	  $(IMAGE):$(TAG) --n-estimators $(N_ESTIMATORS) --max-depth $(MAX_DEPTH) \
-	  --min-samples-leaf $(MIN_SAMPLES_LEAF) --seed $(SEED) \
-	  --run-name reproduce-fewer-trees --metrics-out /app/reports/metrics.json
+	  --entrypoint /bin/sh $(IMAGE):$(TAG) -c '\
+	  python /app/scripts/make_dataset.py --seed $(DATA_SEED) \
+	    --out /app/data/raw/sensors.csv && \
+	  python -m src.train --n-estimators $(N_ESTIMATORS) --max-depth $(MAX_DEPTH) \
+	    --min-samples-leaf $(MIN_SAMPLES_LEAF) --seed $(SEED) \
+	    --run-name reproduce-fewer-trees --metrics-out /app/reports/metrics.json'
 
 experiments: image ## Run the declared five-run Lab 1 MLflow matrix
 	IMAGE_REF="$(IMAGE):$(TAG)" GIT_COMMIT="$(GIT_COMMIT)" SEED="$(SEED)" \
