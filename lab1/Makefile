@@ -8,6 +8,9 @@ PLATFORM ?= linux/amd64
 SEED ?= 20260101
 GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 MLFLOW_VOLUME ?= itcs355-lab1-mlflow
+N_ESTIMATORS ?= 100
+MAX_DEPTH ?= 8
+MIN_SAMPLES_LEAF ?= 5
 
 .PHONY: help setup cloud-check data test portability-audit train image image-push reproduce experiments verify clean teardown \
         tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
@@ -33,7 +36,10 @@ portability-audit: ## Fail if provider strings leak into src/
 	python scripts/portability_audit.py
 
 train: ## Train locally, outside the container
-	PYTHONHASHSEED=$(SEED) GIT_COMMIT=$(GIT_COMMIT) python -m src.train --seed $(SEED) --metrics-out reports/metrics.json
+	PYTHONHASHSEED=$(SEED) GIT_COMMIT=$(GIT_COMMIT) python -m src.train \
+	  --n-estimators $(N_ESTIMATORS) --max-depth $(MAX_DEPTH) \
+	  --min-samples-leaf $(MIN_SAMPLES_LEAF) --seed $(SEED) \
+	  --metrics-out reports/metrics.json
 
 image: ## Build the training image for linux/amd64
 	docker buildx build --progress=plain --platform $(PLATFORM) \
@@ -53,7 +59,9 @@ reproduce: image ## THE ONE COMMAND. Grader runs this.
 	  -e GIT_COMMIT=$(GIT_COMMIT) \
 	  -e PYTHONHASHSEED=$(SEED) \
 	  -e MLFLOW_TRACKING_URI=sqlite:////app/reports/mlflow.db \
-	  $(IMAGE):$(TAG) --seed $(SEED) --metrics-out /app/reports/metrics.json
+	  $(IMAGE):$(TAG) --n-estimators $(N_ESTIMATORS) --max-depth $(MAX_DEPTH) \
+	  --min-samples-leaf $(MIN_SAMPLES_LEAF) --seed $(SEED) \
+	  --run-name reproduce-fewer-trees --metrics-out /app/reports/metrics.json
 
 experiments: image ## Run the declared five-run Lab 1 MLflow matrix
 	IMAGE_REF="$(IMAGE):$(TAG)" GIT_COMMIT="$(GIT_COMMIT)" SEED="$(SEED)" \
