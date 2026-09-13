@@ -1,8 +1,7 @@
 # NEVER commit this. Real credentials and account identifiers live here.
 cloud.env
 
-# DVC manages these; Git must not.
-data/raw/
+# DVC cache and local storage must not be committed.
 data/_local_blob/
 .dvc/cache/
 
