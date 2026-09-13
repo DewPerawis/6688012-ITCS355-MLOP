@@ -55,3 +55,13 @@
 - The container regenerated data seed `20260101` without host DVC or Azure credentials and produced the expected DVC hash/fingerprint and metric.
 - Final ACR tag: `itcs355:ef75b24`
 - Final ACR digest: `sha256:6d929afee4e99c73908497eade70f448dc2e89dbc7fdb90cf80b89e6ba39fc47`
+
+## 2026-09-14 — Fresh-clone verification
+
+- Source commit: `1cb6226` (`fix: make reproduction require only Docker`)
+- The first native-Linux `/tmp` clone exposed a SQLite permission failure on the host bind mount; no metric was produced and data tests skipped because raw data was absent.
+- The reproduction path was changed to keep MLflow state in a fresh Docker named volume and copy only `metrics.json` back through stdout; training remains non-root UID 10001.
+- A second fresh clone started without `cloud.env` or `data/raw/sensors.csv` and used a new empty Docker volume.
+- Reproduced test ROC AUC: `0.84655741609384`; DVC version and data fingerprint matched the declared values.
+- After explicit deterministic data generation, Lab 1 tests passed 10/10 and the portability audit passed.
+- Generated files remained ignored and `git status --short --untracked-files=all` was empty.
