@@ -9,7 +9,7 @@ SEED ?= 20260101
 GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 MLFLOW_VOLUME ?= itcs355-lab1-mlflow
 
-.PHONY: help setup cloud-check data test portability-audit train image image-push reproduce verify clean teardown \
+.PHONY: help setup cloud-check data test portability-audit train image image-push reproduce experiments verify clean teardown \
         tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
 
 help:
@@ -54,6 +54,10 @@ reproduce: image ## THE ONE COMMAND. Grader runs this.
 	  -e PYTHONHASHSEED=$(SEED) \
 	  -e MLFLOW_TRACKING_URI=sqlite:////app/reports/mlflow.db \
 	  $(IMAGE):$(TAG) --seed $(SEED) --metrics-out /app/reports/metrics.json
+
+experiments: image ## Run the declared five-run Lab 1 MLflow matrix
+	IMAGE_REF="$(IMAGE):$(TAG)" GIT_COMMIT="$(GIT_COMMIT)" SEED="$(SEED)" \
+	  MLFLOW_VOLUME="$(MLFLOW_VOLUME)" bash scripts/run_experiments.sh
 
 verify: ## Check the produced metric against the README claim
 	python scripts/verify_metric.py
