@@ -27,3 +27,13 @@
 - MLflow named-volume artifact check: 10 files, passed
 - Runtime: `linux/amd64`, non-root UID 10001
 - The first two container attempts exposed write/metadata limitations on a Windows bind mount. The final run stores MLflow artifacts in Docker named volume `itcs355-lab1-mlflow`, while the tracking database and metrics remain under `reports/`.
+
+## 2026-09-13 — Azure adapter
+
+- Blob upload/download round trip: passed; SHA-256 `265b6fd6e69fd45e65b6e49efb32f0302c7847fe55e69e1a075f48200fe8e9b9`
+- Blob object: `itcs355/itcs355/adapter-probes/roundtrip-6688012.txt`
+- Adapter implementation commit/tag: `b4b1a18`
+- The first ACR upload attempt received a transient HTTP 502 during a layer PUT. A health check/login and direct retry resumed the upload successfully.
+- ACR repository/tag: `itcs355:b4b1a18`
+- ACR digest: `sha256:14a7cce1ba697aaf9961a06dde8abb4f809e3ec5b5e8ca256d0c2abc5877698f`
+- Adapter returned the same digest-pinned image reference; exit code 0.
