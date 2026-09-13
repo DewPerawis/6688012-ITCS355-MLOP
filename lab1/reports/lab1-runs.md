@@ -34,4 +34,22 @@ The dataset has an 11.7% positive rate, so validation PR AUC is useful for compa
 
 - This matrix changes one hyperparameter factor at a time and uses one fixed seed.
 - Runtime, latency and monetary cost were not measured per run, so no performance or cost reduction is claimed.
-- A separate fixed-configuration repeat and seed-sensitivity study are still required before making a reproducibility or variance claim.
+- Testing was performed on `linux/amd64` through WSL2 and Docker Desktop; another physical architecture was not available.
+
+## Repeatability and seed sensitivity
+
+The selected configuration was repeated three times at commit `8d6fae82bf9b3a98f85ca1f0e10c40b512f1b34f` with identical data, config and seed. All three runs produced test ROC AUC `0.84655741609384` (spread `0`). Measured end-to-end times were 144, 36 and 36 seconds; the first run built/exported the new image and later runs used Docker cache.
+
+Changing only the training/split seed produced:
+
+| Seed | Test ROC AUC |
+|---:|---:|
+| 20260101 | 0.846557416093840 |
+| 20260102 | 0.866198650244004 |
+| 20260103 | 0.837999698674166 |
+| 20260104 | 0.855363349607217 |
+| 20260105 | 0.850513724685910 |
+
+Mean was `0.851326567861028`, full spread `0.028198951569838`, and population standard deviation `0.009364671977191`. This is a split-sensitivity study and is kept separate from the fixed-seed repeatability claim.
+
+The final Docker-only reproduction at commit `ef75b24da8baa1d6af985f02d49ec7005eed7e4c` regenerated the same dataset inside the container and reproduced test ROC AUC `0.84655741609384` with matching DVC hash and fingerprint.

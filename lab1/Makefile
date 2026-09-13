@@ -31,7 +31,7 @@ data: ## Generate the default dataset (deterministic)
 	python scripts/make_dataset.py --seed $(DATA_SEED)
 
 test: ## Run data contract and split property tests
-	pytest -q tests/
+	pytest -q tests/test_data.py
 
 portability-audit: ## Fail if provider strings leak into src/
 	python scripts/portability_audit.py

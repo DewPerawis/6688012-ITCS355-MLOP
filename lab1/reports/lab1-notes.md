@@ -44,3 +44,14 @@
 - Five pre-declared runs completed successfully with the same data and seed.
 - Selected candidate from validation results: `fewer-trees`, full run ID `14366694d7bc417fac0f6fda8d1c69fc`.
 - Selection rationale and all run metrics are recorded in `reports/lab1-runs.md`.
+
+## 2026-09-14 — Final reproducibility evidence
+
+- Selected config: `n_estimators=100`, `max_depth=8`, `min_samples_leaf=5`, seed `20260101`
+- Fixed-seed repetitions: 3/3 produced test ROC AUC `0.84655741609384`; spread `0`
+- Seed study: 5/5 completed; mean `0.851326567861028`, spread `0.028198951569838`, population SD `0.009364671977191`
+- Docker-only reproduction commit: `ef75b24da8baa1d6af985f02d49ec7005eed7e4c`
+- Docker-only reproduction: passed in 140 seconds after building/exporting the final image
+- The container regenerated data seed `20260101` without host DVC or Azure credentials and produced the expected DVC hash/fingerprint and metric.
+- Final ACR tag: `itcs355:ef75b24`
+- Final ACR digest: `sha256:6d929afee4e99c73908497eade70f448dc2e89dbc7fdb90cf80b89e6ba39fc47`
