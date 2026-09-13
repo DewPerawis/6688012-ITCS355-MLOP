@@ -6,6 +6,7 @@ IMAGE ?= itcs355-lab1
 TAG   ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 PLATFORM ?= linux/amd64
 SEED ?= 20260101
+GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 
 .PHONY: help setup cloud-check data test portability-audit train image image-push reproduce verify clean teardown \
         tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
@@ -15,7 +16,7 @@ help:
 
 setup: ## Install dependencies and print environment status
 	python -m pip install --upgrade pip
-	pip install -r requirements.txt
+	python -m pip install --require-hashes -r requirements.txt
 	@echo "environment ok"
 
 cloud-check: ## Resolve the eight capability slots
@@ -31,19 +32,23 @@ portability-audit: ## Fail if provider strings leak into src/
 	python scripts/portability_audit.py
 
 train: ## Train locally, outside the container
-	python -m src.train --seed $(SEED) --metrics-out reports/metrics.json
+	PYTHONHASHSEED=$(SEED) GIT_COMMIT=$(GIT_COMMIT) python -m src.train --seed $(SEED) --metrics-out reports/metrics.json
 
 image: ## Build the training image for linux/amd64
-	docker buildx build --platform $(PLATFORM) -t $(IMAGE):$(TAG) --load .
+	docker buildx build --progress=plain --platform $(PLATFORM) \
+	  --build-arg GIT_COMMIT=$(GIT_COMMIT) -t $(IMAGE):$(TAG) --load .
 
 image-push: image ## Push to CONTAINER_REGISTRY via your adapter
 	python -c "from src import config; from cloudlayer.factory import get_adapter; \
 	print(get_adapter(config.load()).push_image(\"$(IMAGE):$(TAG)\"))"
 
-reproduce: data image ## THE ONE COMMAND. Grader runs this.
+reproduce: image ## THE ONE COMMAND. Grader runs this.
+	dvc pull data/raw.dvc
 	docker run --rm \
-	  -v "$$PWD/data:/app/data:ro" \
+	  -v "$$PWD/data/raw:/app/data/raw:ro" \
 	  -v "$$PWD/reports:/app/reports" \
+	  -e GIT_COMMIT=$(GIT_COMMIT) \
+	  -e PYTHONHASHSEED=$(SEED) \
 	  -e MLFLOW_TRACKING_URI=sqlite:////app/reports/mlflow.db \
 	  $(IMAGE):$(TAG) --seed $(SEED) --metrics-out /app/reports/metrics.json
 

@@ -16,13 +16,16 @@ from pathlib import Path
 
 import mlflow
 import mlflow.sklearn
+import yaml
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import average_precision_score, roc_auc_score
 
 from src import config, data, seeds
 
 
-def git_commit() -> str:
+def git_commit(configured: str = "") -> str:
+    if configured:
+        return configured
     try:
         out = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -31,6 +34,17 @@ def git_commit() -> str:
         return out.stdout.strip()
     except Exception:
         return "unknown"
+
+
+def dvc_data_version(pointer: Path) -> str:
+    """Return the complete DVC object hash recorded for the raw dataset."""
+    if not pointer.exists():
+        raise FileNotFoundError(f"DVC pointer missing: {pointer}")
+    document = yaml.safe_load(pointer.read_text()) or {}
+    outs = document.get("outs") or []
+    if len(outs) != 1 or not outs[0].get("md5"):
+        raise ValueError(f"invalid DVC pointer: {pointer}")
+    return str(outs[0]["md5"])
 
 
 def parse_args() -> argparse.Namespace:
@@ -53,6 +67,8 @@ def main() -> None:
 
     df = data.load_raw(cfg.raw_path)
     fingerprint = data.data_fingerprint(cfg.raw_path)
+    data_version = dvc_data_version(cfg.data_dir / "raw.dvc")
+    revision = git_commit(cfg.git_commit)
     train_df, val_df, test_df = data.split(df, seed=seed)
 
     mlflow.set_tracking_uri(cfg.mlflow_tracking_uri)
@@ -68,7 +84,8 @@ def main() -> None:
         })
         # Provenance. This is what makes the metric traceable.
         mlflow.set_tags({
-            "git_commit": git_commit(),
+            "git_commit": revision,
+            "data_version": data_version,
             "data_fingerprint": fingerprint,
             "split_strategy": "group_by_machine_id",
             "n_train_rows": len(train_df),
@@ -93,11 +110,17 @@ def main() -> None:
         mlflow.log_metrics(metrics)
         mlflow.sklearn.log_model(model, name="model")
 
-        print(json.dumps({"seed": seed, "data_fingerprint": fingerprint, **metrics}, indent=2))
+        evidence = {
+            "seed": seed,
+            "git_commit": revision,
+            "data_version": data_version,
+            "data_fingerprint": fingerprint,
+            **metrics,
+        }
+        print(json.dumps(evidence, indent=2))
         if args.metrics_out:
             args.metrics_out.parent.mkdir(parents=True, exist_ok=True)
-            args.metrics_out.write_text(json.dumps(
-                {"seed": seed, "data_fingerprint": fingerprint, **metrics}, indent=2))
+            args.metrics_out.write_text(json.dumps(evidence, indent=2))
 
 
 if __name__ == "__main__":
