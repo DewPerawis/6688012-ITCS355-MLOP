@@ -7,6 +7,7 @@ TAG   ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 PLATFORM ?= linux/amd64
 SEED ?= 20260101
 GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
+MLFLOW_VOLUME ?= itcs355-lab1-mlflow
 
 .PHONY: help setup cloud-check data test portability-audit train image image-push reproduce verify clean teardown \
         tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
@@ -48,6 +49,7 @@ reproduce: image ## THE ONE COMMAND. Grader runs this.
 	  -w /app/reports \
 	  -v "$$PWD/data/raw:/app/data/raw:ro" \
 	  -v "$$PWD/reports:/app/reports" \
+	  -v "$(MLFLOW_VOLUME):/app/reports/mlruns" \
 	  -e GIT_COMMIT=$(GIT_COMMIT) \
 	  -e PYTHONHASHSEED=$(SEED) \
 	  -e MLFLOW_TRACKING_URI=sqlite:////app/reports/mlflow.db \

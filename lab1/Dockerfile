@@ -21,12 +21,15 @@ ARG GIT_COMMIT=unknown
 LABEL org.opencontainers.image.revision="${GIT_COMMIT}"
 
 # Non-root. A training container has no reason to run as root, and graders check.
-RUN useradd --create-home --uid 10001 runner
+RUN useradd --create-home --uid 10001 runner \
+    && mkdir -p /app/reports/mlruns \
+    && chown -R runner:runner /app/reports
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app \
     PYTHONHASHSEED=20260101 \
-    GIT_COMMIT=${GIT_COMMIT}
+    GIT_COMMIT=${GIT_COMMIT} \
+    GIT_PYTHON_REFRESH=quiet
 
 COPY --from=builder /install /usr/local
 WORKDIR /app
