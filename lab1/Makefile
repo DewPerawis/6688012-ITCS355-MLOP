@@ -9,6 +9,7 @@ SEED ?= 20260101
 DATA_SEED ?= 20260101
 GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 MLFLOW_VOLUME ?= itcs355-lab1-mlflow
+REPRODUCE_VOLUME ?= itcs355-lab1-reproduce
 N_ESTIMATORS ?= 100
 MAX_DEPTH ?= 8
 MIN_SAMPLES_LEAF ?= 5
@@ -51,10 +52,10 @@ image-push: image ## Push to CONTAINER_REGISTRY via your adapter
 	print(get_adapter(config.load()).push_image(\"$(IMAGE):$(TAG)\"))"
 
 reproduce: image ## THE ONE COMMAND. Grader runs this.
+	mkdir -p reports
 	docker run --rm \
 	  -w /app/reports \
-	  -v "$$PWD/reports:/app/reports" \
-	  -v "$(MLFLOW_VOLUME):/app/reports/mlruns" \
+	  -v "$(REPRODUCE_VOLUME):/app/reports" \
 	  -e GIT_COMMIT=$(GIT_COMMIT) \
 	  -e PYTHONHASHSEED=$(SEED) \
 	  -e MLFLOW_TRACKING_URI=sqlite:////app/reports/mlflow.db \
@@ -64,6 +65,10 @@ reproduce: image ## THE ONE COMMAND. Grader runs this.
 	  python -m src.train --n-estimators $(N_ESTIMATORS) --max-depth $(MAX_DEPTH) \
 	    --min-samples-leaf $(MIN_SAMPLES_LEAF) --seed $(SEED) \
 	    --run-name reproduce-fewer-trees --metrics-out /app/reports/metrics.json'
+	docker run --rm \
+	  -v "$(REPRODUCE_VOLUME):/app/reports:ro" \
+	  --entrypoint /bin/cat $(IMAGE):$(TAG) \
+	  /app/reports/metrics.json > reports/metrics.json
 
 experiments: image ## Run the declared five-run Lab 1 MLflow matrix
 	IMAGE_REF="$(IMAGE):$(TAG)" GIT_COMMIT="$(GIT_COMMIT)" SEED="$(SEED)" \

@@ -76,7 +76,9 @@ trees as the baseline; test results were not used for selection.
 Full run IDs, parameters, metrics, provenance, and limitations are in
 [`reports/lab1-runs.md`](reports/lab1-runs.md). Every run logs the seed, Git SHA, DVC hash, data
 fingerprint, split strategy, and trained model. Local MLflow artifacts persist in Docker volume
-`itcs355-lab1-mlflow`; generated SQLite and JSON files are intentionally ignored by Git.
+`itcs355-lab1-mlflow` for the experiment matrix. One-command reproduction uses the separate
+`itcs355-lab1-reproduce` volume and copies only `metrics.json` back for verification. Generated
+SQLite and JSON files are intentionally ignored by Git.
 
 ## Development checks
 
@@ -125,8 +127,8 @@ the exact artifacts I tested.
   36 seconds.
 - The synthetic dataset is regenerated inside the container so reproduction needs no private DVC
   credentials. Its fingerprint and DVC pointer are checked in every run.
-- MLflow artifacts use a Docker named volume because Windows bind mounts did not preserve all file
-  metadata required by MLflow.
+- MLflow uses Docker named volumes because bind-mount permissions and file metadata differ between
+  Windows-backed WSL paths and native Linux paths. Training still runs as non-root UID 10001.
 
 ---
 
