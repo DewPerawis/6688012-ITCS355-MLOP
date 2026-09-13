@@ -52,4 +52,4 @@ Changing only the training/split seed produced:
 
 Mean was `0.851326567861028`, full spread `0.028198951569838`, and population standard deviation `0.009364671977191`. This is a split-sensitivity study and is kept separate from the fixed-seed repeatability claim.
 
-The final Docker-only reproduction at commit `ef75b24da8baa1d6af985f02d49ec7005eed7e4c` regenerated the same dataset inside the container and reproduced test ROC AUC `0.84655741609384` with matching DVC hash and fingerprint.
+The initial Docker-only reproduction at commit `ef75b24da8baa1d6af985f02d49ec7005eed7e4c` regenerated the same dataset inside the container and reproduced test ROC AUC `0.84655741609384` with matching DVC hash and fingerprint. Fresh-clone verification and the final registry image use commit `57a8c5ddb266cbf885145910c560d526ed17f69c` after fixing native-Linux bind-mount permissions.

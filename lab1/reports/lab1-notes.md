@@ -50,11 +50,10 @@
 - Selected config: `n_estimators=100`, `max_depth=8`, `min_samples_leaf=5`, seed `20260101`
 - Fixed-seed repetitions: 3/3 produced test ROC AUC `0.84655741609384`; spread `0`
 - Seed study: 5/5 completed; mean `0.851326567861028`, spread `0.028198951569838`, population SD `0.009364671977191`
-- Docker-only reproduction commit: `ef75b24da8baa1d6af985f02d49ec7005eed7e4c`
+- Initial Docker-only reproduction commit: `ef75b24da8baa1d6af985f02d49ec7005eed7e4c`
 - Docker-only reproduction: passed in 140 seconds after building/exporting the final image
 - The container regenerated data seed `20260101` without host DVC or Azure credentials and produced the expected DVC hash/fingerprint and metric.
-- Final ACR tag: `itcs355:ef75b24`
-- Final ACR digest: `sha256:6d929afee4e99c73908497eade70f448dc2e89dbc7fdb90cf80b89e6ba39fc47`
+- Initial Docker-only ACR tag/digest: `itcs355:ef75b24` at `sha256:6d929afee4e99c73908497eade70f448dc2e89dbc7fdb90cf80b89e6ba39fc47`
 
 ## 2026-09-14 — Fresh-clone verification
 
@@ -65,3 +64,5 @@
 - Reproduced test ROC AUC: `0.84655741609384`; DVC version and data fingerprint matched the declared values.
 - After explicit deterministic data generation, Lab 1 tests passed 10/10 and the portability audit passed.
 - Generated files remained ignored and `git status --short --untracked-files=all` was empty.
+- Final fresh-clone-verified image tag: `itcs355:57a8c5d`
+- Final image digest: `sha256:f8eaad5b655af10fc43e6155afa844dd397f850fe665b0a1aa94b9cd088b259a`

@@ -98,8 +98,8 @@ does not define Lab 1 acceptance.
 
 ## Cloud artifacts and provenance
 
-- Final tested implementation commit: `ef75b24da8baa1d6af985f02d49ec7005eed7e4c`
-- Azure Container Registry image: `itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355@sha256:6d929afee4e99c73908497eade70f448dc2e89dbc7fdb90cf80b89e6ba39fc47`
+- Final fresh-clone-verified commit: `57a8c5ddb266cbf885145910c560d526ed17f69c`
+- Azure Container Registry image: `itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355@sha256:f8eaad5b655af10fc43e6155afa844dd397f850fe665b0a1aa94b9cd088b259a`
 - DVC remote: `azure://itcs355/itcs355/dvc`, storage account `itcs3556688012`
 
 The registry and DVC remote remain private. An instructor who needs direct access must receive an
