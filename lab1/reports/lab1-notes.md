@@ -37,3 +37,10 @@
 - ACR repository/tag: `itcs355:b4b1a18`
 - ACR digest: `sha256:14a7cce1ba697aaf9961a06dde8abb4f809e3ec5b5e8ca256d0c2abc5877698f`
 - Adapter returned the same digest-pinned image reference; exit code 0.
+
+## 2026-09-14 — MLflow experiment matrix
+
+- Experiment matrix commit: `3d99e1cc077f1bd0f366408aed66b25c7c96ecc6`
+- Five pre-declared runs completed successfully with the same data and seed.
+- Selected candidate from validation results: `fewer-trees`, full run ID `14366694d7bc417fac0f6fda8d1c69fc`.
+- Selection rationale and all run metrics are recorded in `reports/lab1-runs.md`.
