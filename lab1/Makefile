@@ -45,6 +45,7 @@ image-push: image ## Push to CONTAINER_REGISTRY via your adapter
 reproduce: image ## THE ONE COMMAND. Grader runs this.
 	dvc pull data/raw.dvc
 	docker run --rm \
+	  -w /app/reports \
 	  -v "$$PWD/data/raw:/app/data/raw:ro" \
 	  -v "$$PWD/reports:/app/reports" \
 	  -e GIT_COMMIT=$(GIT_COMMIT) \
