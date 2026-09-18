@@ -2,6 +2,7 @@
 # `make reproduce` is the one command a grader runs. Keep it working.
 
 SHELL := /bin/bash
+DOCKER ?= docker
 IMAGE ?= itcs355-lab2
 TAG   ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 PLATFORM ?= linux/amd64
@@ -47,12 +48,12 @@ train: ## Train locally, outside the container
 	  --metrics-out reports/metrics.json
 
 image: ## Build the training image for linux/amd64
-	@if docker buildx version >/dev/null 2>&1; then \
-	  docker buildx build --progress=plain --platform $(PLATFORM) \
+	@if $(DOCKER) buildx version >/dev/null 2>&1; then \
+	  $(DOCKER) buildx build --progress=plain --platform $(PLATFORM) \
 	    --build-arg GIT_COMMIT=$(GIT_COMMIT) -t $(IMAGE):$(TAG) --load .; \
 	else \
-	  echo "docker buildx is unavailable; using docker build"; \
-	  docker build --platform $(PLATFORM) \
+	  echo "$(DOCKER) buildx is unavailable; using $(DOCKER) build"; \
+	  $(DOCKER) build --platform $(PLATFORM) \
 	    --build-arg GIT_COMMIT=$(GIT_COMMIT) -t $(IMAGE):$(TAG) .; \
 	fi
 
@@ -62,7 +63,7 @@ image-push: image ## Push to CONTAINER_REGISTRY via your adapter
 
 reproduce: image ## THE ONE COMMAND. Grader runs this.
 	mkdir -p reports
-	docker run --rm \
+	$(DOCKER) run --rm \
 	  -w /app/reports \
 	  -v "$(REPRODUCE_VOLUME):/app/reports" \
 	  -e GIT_COMMIT=$(GIT_COMMIT) \
@@ -74,7 +75,7 @@ reproduce: image ## THE ONE COMMAND. Grader runs this.
 	  python -m src.train --n-estimators $(N_ESTIMATORS) --max-depth $(MAX_DEPTH) \
 	    --min-samples-leaf $(MIN_SAMPLES_LEAF) --seed $(SEED) \
 	    --run-name reproduce-fewer-trees --metrics-out /app/reports/metrics.json'
-	docker run --rm \
+	$(DOCKER) run --rm \
 	  -v "$(REPRODUCE_VOLUME):/app/reports:ro" \
 	  --entrypoint /bin/cat $(IMAGE):$(TAG) \
 	  /app/reports/metrics.json > reports/metrics.json
@@ -120,7 +121,7 @@ serve: ## Run the inference service locally on :8080
 	MODEL_PATH=reports/model.joblib MODEL_VERSION=local uvicorn service.app:app --port 8080
 
 serve-image: ## Build the serving image
-	docker buildx build --platform $(PLATFORM) -f service/Dockerfile.serve -t itcs355-serve:$(TAG) --load .
+	$(DOCKER) buildx build --platform $(PLATFORM) -f service/Dockerfile.serve -t itcs355-serve:$(TAG) --load .
 
 loadtest: ## Load test at three concurrency levels
 	@for vus in 1 10 50; do \
