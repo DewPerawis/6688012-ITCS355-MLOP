@@ -1,0 +1,28 @@
+# NEVER commit this. Real credentials and account identifiers live here.
+cloud.env
+
+# DVC cache and local storage must not be committed.
+data/_local_blob/
+.dvc/cache/
+
+# Local tracking store
+mlruns/
+mlartifacts/
+mlflow.db
+
+reports/*.json
+reports/*.joblib
+# Lab 2 evidence is part of the submission. Keep generic/local JSON ignored,
+# but explicitly retain the managed-run, registry, and bootstrap records.
+!reports/lab2-*.json
+!reports/azureml-bootstrap.json
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Excel lock files — created while the specification workbook is open.
+~$*
+
+# ruff cache
+.ruff_cache/

@@ -1,0 +1,3 @@
+# DVC will add its own ignore rule for data/raw after `dvc add`.
+_local_blob/
+/raw
