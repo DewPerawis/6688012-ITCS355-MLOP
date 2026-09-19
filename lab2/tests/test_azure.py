@@ -1,9 +1,10 @@
-"""Unit tests for Azure resource-name resolution without contacting Azure."""
+"""Unit tests for Azure resource setup without contacting Azure."""
 from __future__ import annotations
 
 import pytest
 
 from cloudlayer import azure
+from scripts.bootstrap_azureml import _dedicated_compute
 
 
 def test_acr_resource_id_resolves_dnl_hashed_login_server(monkeypatch):
@@ -44,3 +45,14 @@ def test_acr_resource_id_rejects_missing_registry(monkeypatch):
 def test_acr_resource_id_rejects_non_acr_hostname():
     with pytest.raises(ValueError, match="must end with"):
         azure._acr_resource_id("registry.example.com")
+
+
+def test_dedicated_compute_has_scale_to_zero_system_identity():
+    compute = _dedicated_compute("course-compute", {"course": "example"})
+
+    assert compute.size == "Standard_DS2_v2"
+    assert compute.min_instances == 0
+    assert compute.max_instances == 1
+    assert compute.idle_time_before_scale_down == 120
+    assert compute.tier == "dedicated"
+    assert compute.identity.type.value == "SystemAssigned"

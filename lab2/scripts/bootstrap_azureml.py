@@ -12,7 +12,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from azure.ai.ml import MLClient
-from azure.ai.ml.entities import AmlCompute, AzureBlobDatastore, Workspace
+from azure.ai.ml.constants import ManagedServiceIdentityType
+from azure.ai.ml.entities import (
+    AmlCompute,
+    AzureBlobDatastore,
+    IdentityConfiguration,
+    Workspace,
+)
 from azure.core.exceptions import ResourceNotFoundError
 from azure.identity import DefaultAzureCredential
 
@@ -24,6 +30,20 @@ def _resource_id(subscription: str, group: str, provider: str, resource_type: st
     return (
         f"/subscriptions/{subscription}/resourceGroups/{group}/providers/"
         f"{provider}/{resource_type}/{name}"
+    )
+
+
+def _dedicated_compute(name: str, tags: dict[str, str]) -> AmlCompute:
+    """Build the scale-to-zero compute spec with an identity for private ACR pulls."""
+    return AmlCompute(
+        name=name,
+        size="Standard_DS2_v2",
+        min_instances=0,
+        max_instances=1,
+        idle_time_before_scale_down=120,
+        tier="dedicated",
+        identity=IdentityConfiguration(type=ManagedServiceIdentityType.SYSTEM_ASSIGNED),
+        tags=tags,
     )
 
 
@@ -81,16 +101,14 @@ def main() -> int:
     )
     datastore = client.datastores.create_or_update(datastore)
 
-    compute_spec = AmlCompute(
-        name=cfg.training_target,
-        size="Standard_DS2_v2",
-        min_instances=0,
-        max_instances=1,
-        idle_time_before_scale_down=120,
-        tier="dedicated",
-        tags=cfg.tags(2),
-    )
+    compute_spec = _dedicated_compute(cfg.training_target, cfg.tags(2))
     compute = client.compute.begin_create_or_update(compute_spec).result()
+
+    compute_identity = getattr(compute, "identity", None)
+    compute_identity_type = getattr(compute_identity, "type", None)
+    compute_principal_id = getattr(compute_identity, "principal_id", None)
+    if not compute_principal_id:
+        raise RuntimeError("Azure ML compute returned no managed-identity principal ID")
 
     evidence = {
         "workspace": workspace.name,
@@ -102,6 +120,8 @@ def main() -> int:
         "compute": compute.name,
         "compute_size": compute.size,
         "compute_tier": compute.tier,
+        "compute_identity_type": str(compute_identity_type),
+        "compute_principal_configured": True,
         "min_instances": compute.min_instances,
         "max_instances": compute.max_instances,
     }
