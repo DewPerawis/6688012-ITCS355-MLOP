@@ -51,13 +51,16 @@ def _training_environment(
     args: dict[str, Any],
     image_uri: str,
     job_name: str,
+    tracking_uri: str,
 ) -> dict[str, str]:
     """Build the non-secret runtime configuration injected into a training job."""
+    if not tracking_uri.startswith("azureml://"):
+        raise ValueError("managed training requires an Azure ML tracking URI")
     return {
         "CLOUD_PROVIDER": str(cfg.provider),
         "REGION": str(cfg.region),
         "TRAINING_INSTANCE": str(cfg.training_instance),
-        "MLFLOW_TRACKING_URI": str(cfg.mlflow_tracking_uri),
+        "MLFLOW_TRACKING_URI": tracking_uri,
         "GIT_COMMIT": str(args.get("git_commit", "unknown")),
         "DATA_VERSION": str(args["data_version"]),
         "TRAINING_JOB_ID": job_name,
@@ -307,7 +310,11 @@ class AzureAdapter(CloudAdapter):
             },
             identity=ManagedIdentityConfiguration(),
             environment_variables=_training_environment(
-                self.cfg, args, image_uri, job_name
+                self.cfg,
+                args,
+                image_uri,
+                job_name,
+                self.tracking_uri(),
             ),
             tags={**self.cfg.tags(2), "study": str(args["study_id"])},
             limits=CommandJobLimits(timeout=int(args.get("timeout_s", 7200))),

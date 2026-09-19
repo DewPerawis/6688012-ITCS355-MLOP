@@ -132,7 +132,11 @@ def test_training_environment_injects_cloud_runtime_configuration():
     image_uri = "registry.example/course@sha256:digest-example"
 
     environment = azure._training_environment(
-        cfg, args, image_uri, "job-example"
+        cfg,
+        args,
+        image_uri,
+        "job-example",
+        "azureml://tracking/example",
     )
 
     assert environment == {
@@ -146,6 +150,23 @@ def test_training_environment_injects_cloud_runtime_configuration():
         "IMAGE_DIGEST": "sha256:digest-example",
         "PYTHONHASHSEED": "1234",
     }
+
+
+def test_training_environment_rejects_local_tracking_uri():
+    cfg = SimpleNamespace(
+        provider="azure",
+        region="centralindia",
+        training_instance="Standard_DS2_v2-dedicated",
+    )
+
+    with pytest.raises(ValueError, match="Azure ML tracking URI"):
+        azure._training_environment(
+            cfg,
+            {"data_version": "data-version-example"},
+            "registry.example/course@sha256:digest-example",
+            "job-example",
+            "sqlite:///mlflow.db",
+        )
 
 
 def test_wait_for_terminal_job_polls_past_interim_status(monkeypatch):
