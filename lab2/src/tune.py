@@ -12,6 +12,7 @@ import itertools
 import json
 import os
 import statistics
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -31,6 +32,12 @@ SEARCH_SPACE: dict[str, list[int]] = {
     "min_samples_leaf": [2, 8],
 }
 SELECTION_METRIC = "val_pr_auc"
+MODEL_PIP_REQUIREMENTS = [
+    "scikit-learn==1.8.0",
+    "numpy==2.4.4",
+    "pandas==2.3.3",
+    "cloudpickle==3.1.2",
+]
 
 
 def grid(space: dict[str, list[int]]) -> list[dict[str, int]]:
@@ -79,6 +86,25 @@ def save_checkpoint(path: Path, state: dict[str, Any]) -> None:
 
 def trial_key(phase: str, params: dict[str, int], seed: int) -> str:
     return json.dumps({"phase": phase, "params": params, "seed": seed}, sort_keys=True)
+
+
+def _log_model_run_artifact(model: Any) -> None:
+    """Log a loadable MLflow model without requiring the MLflow 3 model API.
+
+    Azure ML's tracking backend supports run artifacts but may not implement the
+    MLflow 3 ``/logged-models`` endpoint used by ``mlflow.sklearn.log_model``.
+    Saving the standard MLflow model directory locally and uploading its contents
+    preserves the ``runs:/<run-id>/model`` contract used by registration/reload.
+    """
+    with tempfile.TemporaryDirectory(prefix="itcs355-mlflow-model-") as directory:
+        model_dir = Path(directory) / "model"
+        mlflow.sklearn.save_model(
+            model,
+            path=str(model_dir),
+            serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
+            pip_requirements=MODEL_PIP_REQUIREMENTS,
+        )
+        mlflow.log_artifacts(str(model_dir), artifact_path="model")
 
 
 def select_candidate(
@@ -144,15 +170,7 @@ def _run_trial(
             "lab": "2",
             "phase": phase,
         })
-        mlflow.sklearn.log_model(
-            model,
-            name="model",
-            pip_requirements=[
-                "scikit-learn==1.8.0",
-                "numpy==2.4.4",
-                "pandas==2.3.3",
-            ],
-        )
+        _log_model_run_artifact(model)
 
     return {
         "phase": phase,
