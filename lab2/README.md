@@ -32,8 +32,10 @@ make train-remote \
   IMAGE_URI='<registry>/itcs355@sha256:<digest>' \
   STUDY_ID='lab2-<commit>'
 
-make compare
-make register
+make compare STUDY_ID='lab2-<commit>'
+python scripts/register_model.py \
+  --run-id '<selected-mlflow-run-id>' \
+  --stage Staging
 make reload-check VERSION=<registered-version>
 ```
 
@@ -132,4 +134,4 @@ the study code. The Lab 1 digest is provenance, not the image claimed for Lab 2 
 - [x] Selected model registered with all eight lineage fields
 - [x] Version promoted to Staging and reloaded by exact version
 - [ ] Settled Azure cost checked; total remains below 150 THB
-- [ ] Nonessential compute/jobs removed only after evidence is preserved
+- [x] Nonessential compute/jobs removed only after evidence is preserved
