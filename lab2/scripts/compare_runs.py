@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import statistics
 import sys
 from pathlib import Path
@@ -23,9 +24,52 @@ def _tracking_uri(cfg, override: str | None) -> str:
     return cfg.mlflow_tracking_uri
 
 
+def _job_ids_for_study(history_path: Path, study_id: str) -> set[str]:
+    if not history_path.is_file():
+        raise FileNotFoundError(f"job history is absent: {history_path}")
+    history = json.loads(history_path.read_text(encoding="utf-8"))
+    job_ids = {
+        str(entry["job_id"])
+        for entry in history
+        if entry.get("study_id") == study_id and entry.get("job_id")
+    }
+    if not job_ids:
+        raise RuntimeError(f"no job history entries found for study {study_id!r}")
+    return job_ids
+
+
+def _runs_for_jobs(runs: pd.DataFrame, job_ids: set[str]) -> pd.DataFrame:
+    column = "tags.training_job_id"
+    if column not in runs:
+        raise RuntimeError(f"tracked runs do not contain required tag {column!r}")
+    return runs[runs[column].isin(job_ids)].copy()
+
+
+def _markdown_table(frame: pd.DataFrame) -> str:
+    """Render a small DataFrame without pandas' optional tabulate dependency."""
+
+    def cell(value: object) -> str:
+        return str(value).replace("|", r"\|").replace("\n", " ")
+
+    headers = [cell(column) for column in frame.columns]
+    rows = [[cell(value) for value in row] for row in frame.itertuples(index=False, name=None)]
+    lines = [
+        f"| {' | '.join(headers)} |",
+        f"| {' | '.join('---' for _ in headers)} |",
+    ]
+    lines.extend(f"| {' | '.join(row)} |" for row in rows)
+    return "\n".join(lines)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--experiment", default="itcs355-lab2")
+    ap.add_argument("--study-id", required=True)
+    ap.add_argument(
+        "--job-history",
+        type=Path,
+        default=Path("reports/lab2-jobs.json"),
+    )
     ap.add_argument("--metric", default="val_pr_auc")
     ap.add_argument("--tracking-uri", default=None)
     ap.add_argument("--out", type=Path, default=Path("reports/lab2-comparison.md"))
@@ -38,7 +82,11 @@ def main() -> int:
         print(f"No experiment named {args.experiment!r}. Run the managed study first.")
         return 1
 
-    runs = mlflow.search_runs(experiment_ids=[experiment.experiment_id])
+    job_ids = _job_ids_for_study(args.job_history, args.study_id)
+    runs = _runs_for_jobs(
+        mlflow.search_runs(experiment_ids=[experiment.experiment_id]),
+        job_ids,
+    )
     metric_col = f"metrics.{args.metric}"
     if metric_col not in runs or runs[metric_col].dropna().empty:
         print(f"No completed runs contain {args.metric!r}.")
@@ -46,8 +94,11 @@ def main() -> int:
     runs = runs[runs[metric_col].notna()].copy()
     study = runs[runs.get("tags.phase") == "study"].copy()
     seed_runs = runs[runs.get("tags.phase") == "seed"].copy()
-    if len(study) < 12:
-        print(f"Only {len(study)} study runs found; Lab 2 requires at least 12.")
+    if len(study) != 12 or len(seed_runs) != 5:
+        print(
+            f"Study {args.study_id!r} has {len(study)} configuration and "
+            f"{len(seed_runs)} seed runs; expected exactly 12 and 5."
+        )
         return 1
 
     selected_rows = study[study.get("tags.selected_candidate") == "true"]
@@ -57,7 +108,9 @@ def main() -> int:
     selected = selected_rows.iloc[0]
 
     table = pd.DataFrame({
-        "run_id": study["run_id"].str[:8],
+        # Keep the complete ID so Azure job-backed runs do not collapse to the
+        # same visible "lab2-202" prefix in the audit report.
+        "run_id": study["run_id"],
         args.metric: study[metric_col].astype(float),
         "test_pr_auc": study["metrics.test_pr_auc"].astype(float),
         "cost_thb": study["metrics.cost_thb"].astype(float),
@@ -116,14 +169,15 @@ def main() -> int:
     lines = [
         "# Lab 2 — Run comparison",
         "",
-        f"Experiment `{args.experiment}` · {len(study)} configuration trials · "
+        f"Study `{args.study_id}` · experiment `{args.experiment}` · "
+        f"{len(study)} configuration trials · "
         f"{len(seed_runs)} seed trials · estimated trial compute "
         f"{runs['metrics.cost_thb'].dropna().astype(float).sum():.6f} THB.",
         "",
         f"Selection metric: `{args.metric}`. Held-out test PR-AUC is shown for audit only and "
         "was not used to select the candidate.",
         "",
-        display.to_markdown(index=False),
+        _markdown_table(display),
         "",
         "## Decision (200 words maximum)",
         "",
@@ -136,9 +190,10 @@ def main() -> int:
         f"{costs.VERIFIED_PRICE.source} on {costs.VERIFIED_PRICE.checked_on}.",
         "- Per-trial estimates use measured fit/evaluation wall time multiplied by that rate; "
         "they do not claim to equal the final Azure invoice.",
-        "- The persistent checkpoint and the two job records are retained in "
-        "`reports/lab2-jobs.json`; the first job intentionally stops after a saved trial and "
-        "the second job resumes the same study path.",
+        f"- The persistent checkpoint and {len(job_ids)} job records for study "
+        f"`{args.study_id}` are retained in `reports/lab2-jobs.json`; the first job "
+        "intentionally stops after a saved trial and the second job resumes the same study "
+        "path.",
         "",
         "## Promotion ownership",
         "",

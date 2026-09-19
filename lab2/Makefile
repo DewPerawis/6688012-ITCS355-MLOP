@@ -106,7 +106,7 @@ tune: ## Local development study; submission evidence must come from train-remot
 	python -m src.tune --trials 12 --seed-repeats 5 --budget-thb 150
 
 compare: ## Rank runs by metric and by cost per point
-	python scripts/compare_runs.py --experiment itcs355-lab2
+	python scripts/compare_runs.py --experiment itcs355-lab2 --study-id "$(STUDY_ID)"
 
 register: ## Register the selected run with lineage and promote it to Staging
 	python scripts/register_model.py
