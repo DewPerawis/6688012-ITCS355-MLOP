@@ -95,7 +95,7 @@ clean: ## Remove local artifacts
 	rm -rf mlruns mlartifacts mlflow.db reports/metrics.json .pytest_cache
 
 # --- Lab 2 -------------------------------------------------------------------
-azureml-bootstrap: ## Create/verify workspace, datastore, and scale-to-zero low-priority compute
+azureml-bootstrap: ## Create/verify workspace, datastore, and scale-to-zero dedicated compute
 	python scripts/bootstrap_azureml.py
 
 train-remote: ## Submit/resume the managed study (requires digest-pinned IMAGE_URI)

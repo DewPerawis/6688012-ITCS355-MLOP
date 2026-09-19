@@ -3,7 +3,7 @@
 Student ID: **6688012** · Provider: **Azure** · Region: **Central India**
 
 This lab continues the reproducible machine-failure classifier from Lab 1. It moves the
-digest-pinned training container to Azure Machine Learning low-priority compute, runs a
+digest-pinned training container to Azure Machine Learning dedicated compute, runs a
 budgeted MLflow study, registers the chosen model with reconstructable lineage, promotes
 it to Staging, and reloads the exact registry version to score held-out rows.
 
@@ -36,9 +36,8 @@ make reload-check VERSION=<registered-version>
 The first evidence run is submitted with `scripts/run_remote.py --interrupt-after 4`.
 It writes its checkpoint to a persistent Azure ML datastore path and exits deliberately.
 Submitting the same `STUDY_ID` again without that flag must print that the first four
-trials were skipped and finish the study. This is a controlled test of the same resume
-path needed after low-priority VM eviction; it is labelled as simulated rather than
-misrepresented as an actual Azure eviction.
+trials were skipped and finish the study. This is a controlled resumability test and is
+labelled as simulated rather than misrepresented as an Azure eviction.
 
 ## Study design
 
@@ -60,11 +59,14 @@ described as accuracy. ROC AUC remains logged so later readers can compare with 
 
 ## Budget and price evidence
 
-The exact Linux `DS2 v2 Low Priority` meter for `Standard_DS2_v2` in Central India was
-queried from the official Azure Retail Prices API on 2026-09-19: **1.1083 THB/hour**
-(approximately 1.11 THB/hour). The on-demand Linux meter returned 5.558 THB/hour and the
-Spot meter returned 1.1316 THB/hour. `src/costs.py` uses the exact low-priority value
-returned by the API instead of an assumed discount factor.
+The exact Linux on-demand `DS2 v2` meter for `Standard_DS2_v2` in Central India was
+queried from the official Azure Retail Prices API on 2026-09-19: **5.558 THB/hour**.
+`src/costs.py` uses that exact value instead of an assumed discount factor. The API also
+returned a Spot rate of 1.1316 THB/hour, but Spot wasn't selected because the Azure for
+Students subscription reported `TotalLowPriorityCores=0` in Central India, Southeast
+Asia, East Asia and South India, didn't permit a quota increase without a Pay-As-You-Go
+upgrade, and returned no usage record for West India. Dedicated DSv2 quota was 6 vCPUs;
+this lab uses one 2-vCPU node and records the limitation rather than claiming a Spot run.
 
 Each run logs fit/evaluation wall time, instance and estimated THB. A conservative
 10-minute projected duration is checked before starting each trial, and the study stops
@@ -72,7 +74,9 @@ before the next run could cross the 150 THB lab limit. Per-trial estimates exclu
 provisioning, storage and control-plane overhead; the final report must therefore compare
 them with settled Azure Cost Management data rather than claiming they are the invoice.
 
-The cluster is limited to one node, has `min_instances=0`, and scales down after 120 seconds.
+The cluster is limited to one dedicated node, has `min_instances=0`, and scales down after
+120 seconds. Seventeen conservative 10-minute trial allowances project to about 15.75 THB
+of VM time at the checked rate, before provisioning/storage overhead and settled billing.
 
 ## Lineage and model promotion
 
@@ -114,7 +118,7 @@ the study code. The Lab 1 digest is provenance, not the image claimed for Lab 2 
 
 ## Submission checklist
 
-- [ ] Azure ML workspace/datastore and low-priority scale-to-zero compute verified
+- [ ] Azure ML workspace/datastore and dedicated scale-to-zero compute verified
 - [ ] Digest-pinned Lab 2 image pushed
 - [ ] First managed job interrupted after a persistent checkpoint
 - [ ] Resume job completed 12 configuration trials and 5 seed trials

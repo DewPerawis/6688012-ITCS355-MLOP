@@ -14,6 +14,8 @@ from azure.storage.blob import BlobServiceClient
 
 from cloudlayer.base import CloudAdapter
 
+ACR_LOGIN_SUFFIX = ".azurecr.io"
+
 
 def _blob_location(uri: str) -> tuple[str, str, str]:
     """Return account URL, container, and blob prefix/name from an HTTPS Blob URI."""
@@ -42,6 +44,23 @@ def _safe_blob_key(key: str) -> str:
 def _run_output(args: list[str]) -> str:
     result = subprocess.run(args, check=True, capture_output=True, text=True)
     return result.stdout.strip()
+
+
+def _acr_resource_id(login_server: str) -> str:
+    """Resolve an ACR resource ID from its login server.
+
+    A registries created with domain-name-label reuse protection have a hash in the
+    login server, so the hostname prefix is not necessarily the ARM resource name.
+    """
+    if not login_server.endswith(ACR_LOGIN_SUFFIX):
+        raise ValueError(f"ACR login server must end with {ACR_LOGIN_SUFFIX}")
+
+    query = f"[?loginServer=='{login_server}'].id | [0]"
+    resource_id = _run_output(["az", "acr", "list", "--query", query, "-o", "tsv"])
+    expected_segment = "/providers/Microsoft.ContainerRegistry/registries/"
+    if not resource_id or expected_segment.lower() not in resource_id.lower():
+        raise RuntimeError(f"no accessible ACR matches login server {login_server}")
+    return resource_id
 
 
 class AzureAdapter(CloudAdapter):

@@ -55,7 +55,7 @@ class Config:
     azure_resource_group: str = ""
     azureml_workspace: str = ""
     training_target: str = ""
-    training_instance: str = "Standard_DS2_v2-low-priority"
+    training_instance: str = "Standard_DS2_v2-dedicated"
     git_commit: str = ""
     data_dir: Path = field(default=REPO_ROOT / "data")
     reports_dir: Path = field(default=REPO_ROOT / "reports")
@@ -89,7 +89,7 @@ def load(strict: bool = True) -> Config:
         azure_subscription_id=get("AZURE_SUBSCRIPTION_ID", ""),
         azure_resource_group=get("AZURE_RESOURCE_GROUP", get("PROJECT_ID", "unset")),
         azureml_workspace=get("AZUREML_WORKSPACE", get("PROJECT_ID", "unset")),
-        training_target=get("TRAINING_TARGET", "itcs355-lab2-spot"),
-        training_instance=get("TRAINING_INSTANCE", "Standard_DS2_v2-low-priority"),
+        training_target=get("TRAINING_TARGET", "itcs355-lab2-dedicated"),
+        training_instance=get("TRAINING_INSTANCE", "Standard_DS2_v2-dedicated"),
         git_commit=get("GIT_COMMIT", ""),
     )

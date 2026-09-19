@@ -2,7 +2,8 @@
 
 Rates are explicit measured inputs, not hidden constants. The Azure rate used by this
 submission was checked against the Azure Retail Prices API in THB on 2026-09-19 for
-Central India. It is a Linux low-priority rate; Azure retail prices and actual billed
+Central India. It is the Linux on-demand rate selected after the Azure for Students
+subscription reported zero low-priority quota in nearby regions. Retail prices and billed
 cost can change, so the report must retain the check date and compare the estimate with
 Cost Management after the job settles.
 """
@@ -25,9 +26,9 @@ class PriceEvidence:
 VERIFIED_PRICE = PriceEvidence(
     provider="azure",
     region="centralindia",
-    instance="Standard_DS2_v2-low-priority",
-    hourly_thb=1.1083,
-    meter="DS2 v2 Low Priority (Linux)",
+    instance="Standard_DS2_v2-dedicated",
+    hourly_thb=5.558,
+    meter="DS2 v2 (Linux Consumption)",
     checked_on="2026-09-19",
     source="Azure Retail Prices API",
 )

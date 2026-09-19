@@ -1,4 +1,4 @@
-"""Create or verify the Azure ML workspace, datastore and low-priority compute.
+"""Create or verify the Azure ML workspace, datastore and dedicated compute.
 
 This script is intentionally separate from job submission: creating cloud resources is a
 visible decision. The compute cluster scales to zero and has one-node maximum.
@@ -16,7 +16,7 @@ from azure.ai.ml.entities import AmlCompute, AzureBlobDatastore, Workspace
 from azure.core.exceptions import ResourceNotFoundError
 from azure.identity import DefaultAzureCredential
 
-from cloudlayer.azure import _blob_location
+from cloudlayer.azure import _acr_resource_id, _blob_location
 from src import config
 
 
@@ -37,7 +37,6 @@ def main() -> int:
     account_url, container, prefix = _blob_location(cfg.blob_uri)
     storage_name = account_url.removeprefix("https://").split(".", 1)[0]
     registry_host = cfg.container_registry.split("/", 1)[0]
-    registry_name = registry_host.split(".", 1)[0]
     credential = DefaultAzureCredential()
 
     subscription_client = MLClient(
@@ -61,13 +60,7 @@ def main() -> int:
                 "storageAccounts",
                 storage_name,
             ),
-            container_registry=_resource_id(
-                cfg.azure_subscription_id,
-                cfg.azure_resource_group,
-                "Microsoft.ContainerRegistry",
-                "registries",
-                registry_name,
-            ),
+            container_registry=_acr_resource_id(registry_host),
         )
         workspace = subscription_client.workspaces.begin_create(workspace_spec).result()
         workspace_action = "created"
@@ -94,7 +87,7 @@ def main() -> int:
         min_instances=0,
         max_instances=1,
         idle_time_before_scale_down=120,
-        tier="low_priority",
+        tier="dedicated",
         tags=cfg.tags(2),
     )
     compute = client.compute.begin_create_or_update(compute_spec).result()

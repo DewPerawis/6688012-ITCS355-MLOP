@@ -35,4 +35,4 @@ def test_selection_prefers_cheapest_candidate_inside_near_best_band() -> None:
 
 
 def test_verified_azure_price_is_used_exactly() -> None:
-    assert costs.hourly_rate("azure", "Standard_DS2_v2-low-priority") == 1.1083
+    assert costs.hourly_rate("azure", "Standard_DS2_v2-dedicated") == 5.558
