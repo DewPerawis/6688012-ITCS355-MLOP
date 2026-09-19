@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from cloudlayer.azure import _blob_location
+from cloudlayer.azure import _blob_location, _datastore_uri
 from cloudlayer.factory import get_adapter
 from src import config, seeds
 from src.train import dvc_data_version
@@ -43,10 +43,12 @@ def main() -> int:
     if not raw_path.is_file():
         raise FileNotFoundError(f"{raw_path} is absent; run `make data` or `dvc pull`")
 
-    data_uri = adapter.upload(raw_path.as_posix(), "lab2/data/sensors.csv")
+    adapter.upload(raw_path.as_posix(), "lab2/data/sensors.csv")
     _, _, prefix = _blob_location(cfg.blob_uri)
-    output_parts = [part for part in (prefix, "lab2", "studies", args.study_id) if part]
-    output_uri = "azureml://datastores/itcs355blob/paths/" + "/".join(output_parts)
+    data_uri = _datastore_uri("itcs355blob", prefix, "lab2", "data", "sensors.csv")
+    output_uri = _datastore_uri(
+        "itcs355blob", prefix, "lab2", "studies", args.study_id
+    )
     revision = git_revision(config.REPO_ROOT)
     data_version = dvc_data_version(cfg.data_dir / "raw.dvc")
 

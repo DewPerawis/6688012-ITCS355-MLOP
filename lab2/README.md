@@ -101,9 +101,11 @@ from silently approving its own output.
 
 ## Identity boundary
 
-The submitter identity creates the job. The running job uses Azure ML user-identity
-passthrough to read the private Blob input and write the persistent checkpoint/output.
-No storage key, SAS URL, Azure token, `cloud.env`, raw CSV, MLflow database or DVC cache is
+The submitter identity creates the job. The running job uses the compute target's
+system-assigned managed identity with credential-free Azure ML datastore URIs. Bootstrap
+grants that identity `Storage Blob Data Contributor` only at the configured Blob container
+scope so it can read the versioned input and write the persistent checkpoint/output. No
+storage key, SAS URL, Azure token, `cloud.env`, raw CSV, MLflow database or DVC cache is
 committed or copied into the image.
 
 ## Lab 1 lineage carried forward

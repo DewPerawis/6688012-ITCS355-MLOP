@@ -22,7 +22,12 @@ from azure.ai.ml.entities import (
 from azure.core.exceptions import ResourceNotFoundError
 from azure.identity import DefaultAzureCredential
 
-from cloudlayer.azure import _acr_resource_id, _blob_location
+from cloudlayer.azure import (
+    BLOB_DATA_CONTRIBUTOR_ROLE,
+    _acr_resource_id,
+    _blob_location,
+    _ensure_role_assignment,
+)
 from src import config
 
 
@@ -56,6 +61,13 @@ def main() -> int:
 
     account_url, container, prefix = _blob_location(cfg.blob_uri)
     storage_name = account_url.removeprefix("https://").split(".", 1)[0]
+    storage_id = _resource_id(
+        cfg.azure_subscription_id,
+        cfg.azure_resource_group,
+        "Microsoft.Storage",
+        "storageAccounts",
+        storage_name,
+    )
     registry_host = cfg.container_registry.split("/", 1)[0]
     credential = DefaultAzureCredential()
 
@@ -73,13 +85,7 @@ def main() -> int:
             location=cfg.region,
             description="ITCS355 Lab 2 experiment tracking and model registry",
             tags=cfg.tags(2),
-            storage_account=_resource_id(
-                cfg.azure_subscription_id,
-                cfg.azure_resource_group,
-                "Microsoft.Storage",
-                "storageAccounts",
-                storage_name,
-            ),
+            storage_account=storage_id,
             container_registry=_acr_resource_id(registry_host),
         )
         workspace = subscription_client.workspaces.begin_create(workspace_spec).result()
@@ -110,6 +116,13 @@ def main() -> int:
     if not compute_principal_id:
         raise RuntimeError("Azure ML compute returned no managed-identity principal ID")
 
+    container_scope = f"{storage_id}/blobServices/default/containers/{container}"
+    storage_role_action = _ensure_role_assignment(
+        compute_principal_id,
+        BLOB_DATA_CONTRIBUTOR_ROLE,
+        container_scope,
+    )
+
     evidence = {
         "workspace": workspace.name,
         "workspace_action": workspace_action,
@@ -122,6 +135,9 @@ def main() -> int:
         "compute_tier": compute.tier,
         "compute_identity_type": str(compute_identity_type),
         "compute_principal_configured": True,
+        "compute_storage_role": BLOB_DATA_CONTRIBUTOR_ROLE,
+        "compute_storage_role_action": storage_role_action,
+        "compute_storage_scope": f"container:{container}",
         "min_instances": compute.min_instances,
         "max_instances": compute.max_instances,
     }

@@ -56,3 +56,60 @@ def test_dedicated_compute_has_scale_to_zero_system_identity():
     assert compute.idle_time_before_scale_down == 120
     assert compute.tier == "dedicated"
     assert compute.identity.type.value == "SystemAssigned"
+
+
+def test_datastore_uri_uses_safe_versioned_path():
+    uri = azure._datastore_uri("course-data", "project", "lab2", "data.csv")
+
+    assert uri.startswith(azure.AZUREML_DATASTORE_PREFIX)
+    assert uri.endswith("/course-data/paths/project/lab2/data.csv")
+
+
+@pytest.mark.parametrize("part", ("../secret", "/absolute", "folder/../../secret"))
+def test_datastore_uri_rejects_unsafe_path(part):
+    with pytest.raises(ValueError, match="unsafe blob key"):
+        azure._datastore_uri("course-data", part)
+
+
+def test_role_assignment_is_not_recreated_when_present(monkeypatch):
+    assignment_id = "/subscriptions/example/providers/authorization/assignments/existing"
+    calls: list[list[str]] = []
+
+    def fake_run_output(args: list[str]) -> str:
+        calls.append(args)
+        return assignment_id
+
+    monkeypatch.setattr(azure, "_run_output", fake_run_output)
+
+    action = azure._ensure_role_assignment(
+        "principal-example",
+        azure.BLOB_DATA_CONTRIBUTOR_ROLE,
+        "/subscriptions/example/resourceGroups/course-lab",
+    )
+
+    assert action == "verified"
+    assert len(calls) == 1
+    assert calls[0][:4] == ["az", "role", "assignment", "list"]
+
+
+def test_role_assignment_is_created_when_absent(monkeypatch):
+    assignment_id = "/subscriptions/example/providers/authorization/assignments/new"
+    calls: list[list[str]] = []
+
+    def fake_run_output(args: list[str]) -> str:
+        calls.append(args)
+        return "" if "list" in args else assignment_id
+
+    monkeypatch.setattr(azure, "_run_output", fake_run_output)
+
+    action = azure._ensure_role_assignment(
+        "principal-example",
+        azure.BLOB_DATA_CONTRIBUTOR_ROLE,
+        "/subscriptions/example/resourceGroups/course-lab",
+    )
+
+    assert action == "created"
+    assert len(calls) == 2
+    assert calls[1][:4] == ["az", "role", "assignment", "create"]
+    assert "--assignee-object-id" in calls[1]
+    assert "--assignee-principal-type" in calls[1]

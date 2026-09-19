@@ -15,6 +15,8 @@ from azure.storage.blob import BlobServiceClient
 from cloudlayer.base import CloudAdapter
 
 ACR_LOGIN_SUFFIX = ".azurecr.io"
+AZUREML_DATASTORE_PREFIX = "azureml://datastores/"
+BLOB_DATA_CONTRIBUTOR_ROLE = "Storage Blob Data Contributor"
 
 
 def _blob_location(uri: str) -> tuple[str, str, str]:
@@ -41,9 +43,51 @@ def _safe_blob_key(key: str) -> str:
     return candidate.as_posix()
 
 
+def _datastore_uri(datastore: str, *parts: str) -> str:
+    """Build a private Azure ML datastore URI without embedding storage credentials."""
+    if not datastore or "/" in datastore or "\\" in datastore:
+        raise ValueError(f"invalid datastore name: {datastore!r}")
+    path = "/".join(_safe_blob_key(part) for part in parts if part)
+    if not path:
+        raise ValueError("datastore URI requires a path")
+    return f"{AZUREML_DATASTORE_PREFIX}{datastore}/paths/{path}"
+
+
 def _run_output(args: list[str]) -> str:
     result = subprocess.run(args, check=True, capture_output=True, text=True)
     return result.stdout.strip()
+
+
+def _ensure_role_assignment(principal_id: str, role: str, scope: str) -> str:
+    """Create one least-privilege Azure role assignment if it is absent."""
+    if not principal_id or not role or not scope.startswith("/subscriptions/"):
+        raise ValueError("principal ID, role and absolute Azure scope are required")
+
+    query = (
+        f"[?principalId=='{principal_id}' && roleDefinitionName=='{role}'].id | [0]"
+    )
+    existing = _run_output([
+        "az", "role", "assignment", "list",
+        "--scope", scope,
+        "--include-inherited",
+        "--query", query,
+        "-o", "tsv",
+    ])
+    if existing:
+        return "verified"
+
+    created = _run_output([
+        "az", "role", "assignment", "create",
+        "--assignee-object-id", principal_id,
+        "--assignee-principal-type", "ServicePrincipal",
+        "--role", role,
+        "--scope", scope,
+        "--query", "id",
+        "-o", "tsv",
+    ])
+    if not created:
+        raise RuntimeError(f"Azure returned no role-assignment ID for {role}")
+    return "created"
 
 
 def _acr_resource_id(login_server: str) -> str:
@@ -153,8 +197,8 @@ class AzureAdapter(CloudAdapter):
     def submit_training(self, image_uri: str, args: dict[str, Any]) -> str:
         """Submit the Lab 2 container as an Azure ML command job.
 
-        Data is a private Blob input accessed with the submitter's Entra identity. The
-        checkpoint/report output is an rw-mounted datastore path reused by a resumed job.
+        Private input and checkpoint paths use the workspace datastore. The compute's
+        managed identity supplies the least-privilege storage credentials for both.
         """
         if "@sha256:" not in image_uri:
             raise ValueError("managed training image must be digest-pinned")
@@ -164,7 +208,11 @@ class AzureAdapter(CloudAdapter):
             raise ValueError(f"missing training arguments: {', '.join(missing)}")
 
         from azure.ai.ml import Input, Output, command
-        from azure.ai.ml.entities import CommandJobLimits, Environment, UserIdentityConfiguration
+        from azure.ai.ml.entities import (
+            CommandJobLimits,
+            Environment,
+            ManagedIdentityConfiguration,
+        )
 
         trials = int(args.get("trials", 12))
         budget_thb = float(args.get("budget_thb", 150.0))
@@ -209,7 +257,7 @@ class AzureAdapter(CloudAdapter):
                     type="uri_folder", path=str(args["output_uri"]), mode="rw_mount"
                 )
             },
-            identity=UserIdentityConfiguration(),
+            identity=ManagedIdentityConfiguration(),
             environment_variables={
                 "GIT_COMMIT": str(args.get("git_commit", "unknown")),
                 "DATA_VERSION": str(args["data_version"]),
