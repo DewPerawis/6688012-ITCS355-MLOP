@@ -17,6 +17,9 @@ from cloudlayer.base import CloudAdapter
 ACR_LOGIN_SUFFIX = ".azurecr.io"
 AZUREML_DATASTORE_PREFIX = "azureml://datastores/"
 BLOB_DATA_CONTRIBUTOR_ROLE = "Storage Blob Data Contributor"
+TERMINAL_JOB_STATUSES = frozenset(
+    {"COMPLETED", "FAILED", "CANCELED", "CANCELLED", "NOTRESPONDING"}
+)
 
 
 def _blob_location(uri: str) -> tuple[str, str, str]:
@@ -41,6 +44,51 @@ def _safe_blob_key(key: str) -> str:
     if candidate.is_absolute() or not candidate.parts or ".." in candidate.parts:
         raise ValueError(f"unsafe blob key: {key!r}")
     return candidate.as_posix()
+
+
+def _training_environment(
+    cfg: Any,
+    args: dict[str, Any],
+    image_uri: str,
+    job_name: str,
+) -> dict[str, str]:
+    """Build the non-secret runtime configuration injected into a training job."""
+    return {
+        "CLOUD_PROVIDER": str(cfg.provider),
+        "REGION": str(cfg.region),
+        "TRAINING_INSTANCE": str(cfg.training_instance),
+        "MLFLOW_TRACKING_URI": str(cfg.mlflow_tracking_uri),
+        "GIT_COMMIT": str(args.get("git_commit", "unknown")),
+        "DATA_VERSION": str(args["data_version"]),
+        "TRAINING_JOB_ID": job_name,
+        "IMAGE_DIGEST": image_uri.split("@", 1)[1],
+        "PYTHONHASHSEED": str(args.get("seed", 20260101)),
+    }
+
+
+def _terminal_status(status: Any) -> str:
+    return str(status).split(".")[-1].upper()
+
+
+def _wait_for_terminal_job(
+    client: Any,
+    job_id: str,
+    *,
+    timeout_s: float = 600.0,
+    poll_s: float = 5.0,
+) -> Any:
+    """Poll after log streaming ends or fails so reports never capture an interim state."""
+    deadline = time.monotonic() + timeout_s
+    while True:
+        job = client.jobs.get(job_id)
+        if _terminal_status(job.status) in TERMINAL_JOB_STATUSES:
+            return job
+        if time.monotonic() >= deadline:
+            raise TimeoutError(
+                f"Azure ML job {job_id} remained in non-terminal state {job.status!r} "
+                f"for {timeout_s:.0f} seconds after log streaming ended"
+            )
+        time.sleep(poll_s)
 
 
 def _datastore_uri(datastore: str, *parts: str) -> str:
@@ -258,13 +306,9 @@ class AzureAdapter(CloudAdapter):
                 )
             },
             identity=ManagedIdentityConfiguration(),
-            environment_variables={
-                "GIT_COMMIT": str(args.get("git_commit", "unknown")),
-                "DATA_VERSION": str(args["data_version"]),
-                "TRAINING_JOB_ID": job_name,
-                "IMAGE_DIGEST": image_uri.split("@", 1)[1],
-                "PYTHONHASHSEED": str(args.get("seed", 20260101)),
-            },
+            environment_variables=_training_environment(
+                self.cfg, args, image_uri, job_name
+            ),
             tags={**self.cfg.tags(2), "study": str(args["study_id"])},
             limits=CommandJobLimits(timeout=int(args.get("timeout_s", 7200))),
         )
@@ -278,7 +322,7 @@ class AzureAdapter(CloudAdapter):
             client.jobs.stream(job_id)
         except Exception as exc:  # Azure raises after streaming a failed user command.
             stream_error = f"{type(exc).__name__}: {exc}"
-        job = client.jobs.get(job_id)
+        job = _wait_for_terminal_job(client, job_id)
         return {
             "job_id": job.name,
             "status": job.status,

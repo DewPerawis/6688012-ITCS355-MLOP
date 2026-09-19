@@ -1,6 +1,8 @@
 """Unit tests for Azure resource setup without contacting Azure."""
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import pytest
 
 from cloudlayer import azure
@@ -113,3 +115,55 @@ def test_role_assignment_is_created_when_absent(monkeypatch):
     assert calls[1][:4] == ["az", "role", "assignment", "create"]
     assert "--assignee-object-id" in calls[1]
     assert "--assignee-principal-type" in calls[1]
+
+
+def test_training_environment_injects_cloud_runtime_configuration():
+    cfg = SimpleNamespace(
+        provider="azure",
+        region="centralindia",
+        training_instance="Standard_DS2_v2-dedicated",
+        mlflow_tracking_uri="azureml://tracking/example",
+    )
+    args = {
+        "data_version": "data-version-example",
+        "git_commit": "commit-example",
+        "seed": 1234,
+    }
+    image_uri = "registry.example/course@sha256:digest-example"
+
+    environment = azure._training_environment(
+        cfg, args, image_uri, "job-example"
+    )
+
+    assert environment == {
+        "CLOUD_PROVIDER": "azure",
+        "REGION": "centralindia",
+        "TRAINING_INSTANCE": "Standard_DS2_v2-dedicated",
+        "MLFLOW_TRACKING_URI": "azureml://tracking/example",
+        "GIT_COMMIT": "commit-example",
+        "DATA_VERSION": "data-version-example",
+        "TRAINING_JOB_ID": "job-example",
+        "IMAGE_DIGEST": "sha256:digest-example",
+        "PYTHONHASHSEED": "1234",
+    }
+
+
+def test_wait_for_terminal_job_polls_past_interim_status(monkeypatch):
+    statuses = iter(("Running", "Finalizing", "Failed"))
+    jobs = SimpleNamespace(
+        get=lambda _job_id: SimpleNamespace(status=next(statuses))
+    )
+    client = SimpleNamespace(jobs=jobs)
+    sleeps: list[float] = []
+
+    monkeypatch.setattr(azure.time, "sleep", sleeps.append)
+
+    job = azure._wait_for_terminal_job(
+        client,
+        "job-example",
+        timeout_s=60,
+        poll_s=2,
+    )
+
+    assert job.status == "Failed"
+    assert sleeps == [2, 2]
