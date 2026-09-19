@@ -344,11 +344,17 @@ class AzureAdapter(CloudAdapter):
             raise ValueError("model_uri must identify an MLflow run artifact: runs:/...")
 
         import mlflow
+        from mlflow.exceptions import MlflowException
+        from mlflow.protos.databricks_pb2 import RESOURCE_DOES_NOT_EXIST, ErrorCode
+        from mlflow.store.artifact.runs_artifact_repo import RunsArtifactRepository
         from mlflow.tracking import MlflowClient
 
         tracking_uri = self.tracking_uri()
         mlflow.set_tracking_uri(tracking_uri)
-        run_id = model_uri.removeprefix("runs:/").split("/", 1)[0]
+        run_id, artifact_path = RunsArtifactRepository.parse_runs_uri(model_uri)
+        if not artifact_path:
+            raise ValueError("model_uri must include a model artifact path")
+
         client = MlflowClient(tracking_uri=tracking_uri)
         run = client.get_run(run_id)
         tags = run.data.tags
@@ -368,7 +374,39 @@ class AzureAdapter(CloudAdapter):
         if missing:
             raise ValueError(f"refusing to register incomplete lineage: {', '.join(missing)}")
 
-        registered = mlflow.register_model(model_uri, name)
+        # MLflow 3's public run-artifact listing merges legacy run artifacts with
+        # Logged Models. Azure ML does not expose the Logged Models search endpoint,
+        # and its artifact repository lists the run root even when the runs:/ URI
+        # contains a subdirectory. Inspect the explicit path from the run root, then
+        # give the registry the resolved artifact source directly.
+        run_repo = RunsArtifactRepository(
+            f"runs:/{run_id}",
+            tracking_uri=tracking_uri,
+        )
+        artifact_files = run_repo._list_run_artifacts(artifact_path)
+        expected_mlmodel = f"{artifact_path.rstrip('/')}/MLmodel"
+        if expected_mlmodel not in {item.path for item in artifact_files}:
+            raise FileNotFoundError(
+                f"run {run_id} has no MLmodel at artifact path {artifact_path!r}"
+            )
+        source = RunsArtifactRepository.get_underlying_uri(
+            model_uri,
+            tracking_uri=tracking_uri,
+        )
+
+        try:
+            client.get_registered_model(name)
+        except MlflowException as exc:
+            if exc.error_code != ErrorCode.Name(RESOURCE_DOES_NOT_EXIST):
+                raise
+            client.create_registered_model(name)
+
+        registered = client.create_model_version(
+            name=name,
+            source=source,
+            run_id=run_id,
+            await_creation_for=180,
+        )
         version = str(registered.version)
         deadline = time.monotonic() + 180
         while time.monotonic() < deadline:

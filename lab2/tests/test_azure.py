@@ -188,3 +188,93 @@ def test_wait_for_terminal_job_polls_past_interim_status(monkeypatch):
 
     assert job.status == "Failed"
     assert sleeps == [2, 2]
+
+
+def test_register_model_uses_direct_run_artifact_source(monkeypatch):
+    import mlflow.store.artifact.runs_artifact_repo as artifact_module
+    import mlflow.tracking as tracking_module
+
+    run_id = "run-example"
+    model_uri = f"runs:/{run_id}/model"
+    calls: dict[str, object] = {}
+
+    class FakeRepository:
+        def __init__(self, artifact_uri, tracking_uri=None):
+            calls["repository_uri"] = artifact_uri
+            calls["repository_tracking_uri"] = tracking_uri
+
+        @staticmethod
+        def parse_runs_uri(_model_uri):
+            return run_id, "model"
+
+        @staticmethod
+        def get_underlying_uri(_model_uri, tracking_uri=None):
+            calls["resolved_tracking_uri"] = tracking_uri
+            return "azureml://artifacts/run-example/model"
+
+        def _list_run_artifacts(self, path=None):
+            calls["listed_path"] = path
+            return [SimpleNamespace(path="model/MLmodel")]
+
+    class FakeClient:
+        def __init__(self, tracking_uri=None):
+            calls["client_tracking_uri"] = tracking_uri
+
+        def get_run(self, _run_id):
+            return SimpleNamespace(
+                data=SimpleNamespace(
+                    tags={
+                        "git_commit": "commit-example",
+                        "data_version": "data-example",
+                        "training_job_id": "job-example",
+                        "image_digest": "sha256:digest-example",
+                    },
+                    metrics={"val_pr_auc": 0.4, "test_pr_auc": 0.5},
+                    params={"seed": "1234"},
+                )
+            )
+
+        def get_registered_model(self, model_name):
+            calls["registered_model"] = model_name
+            return SimpleNamespace(name=model_name)
+
+        def create_model_version(self, **kwargs):
+            calls["create_model_version"] = kwargs
+            return SimpleNamespace(version="7")
+
+        def get_model_version(self, _name, _version):
+            return SimpleNamespace(status="READY")
+
+        def set_model_version_tag(self, name, version, key, value):
+            calls.setdefault("tags", {})[key] = value
+
+        def update_model_version(self, name, version, description):
+            calls["description"] = description
+
+    monkeypatch.setattr(artifact_module, "RunsArtifactRepository", FakeRepository)
+    monkeypatch.setattr(tracking_module, "MlflowClient", FakeClient)
+
+    adapter = azure.AzureAdapter(SimpleNamespace())
+    monkeypatch.setattr(adapter, "tracking_uri", lambda: "azureml://tracking/example")
+
+    version = adapter.register_model(model_uri, "course-model")
+
+    assert version == "7"
+    assert calls["repository_uri"] == f"runs:/{run_id}"
+    assert calls["listed_path"] == "model"
+    assert calls["create_model_version"] == {
+        "name": "course-model",
+        "source": "azureml://artifacts/run-example/model",
+        "run_id": run_id,
+        "await_creation_for": 180,
+    }
+    assert set(calls["tags"]) == {
+        "git_commit",
+        "data_version",
+        "mlflow_run_id",
+        "training_job_id",
+        "image_digest",
+        "seed",
+        "metric_val",
+        "metric_test",
+    }
