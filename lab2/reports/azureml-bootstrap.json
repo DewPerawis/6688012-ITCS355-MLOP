@@ -1,0 +1,18 @@
+{
+  "blob_prefix": "itcs355",
+  "compute": "itcs355-lab2-dedicated",
+  "compute_identity_type": "system_assigned",
+  "compute_principal_configured": true,
+  "compute_size": "Standard_DS2_v2",
+  "compute_storage_role": "Storage Blob Data Contributor",
+  "compute_storage_role_action": "created",
+  "compute_storage_scope": "container:itcs355",
+  "compute_tier": "dedicated",
+  "datastore": "itcs355blob",
+  "location": "centralindia",
+  "max_instances": 1,
+  "min_instances": 0,
+  "tracking_uri_configured": true,
+  "workspace": "itcs355-6688012",
+  "workspace_action": "verified"
+}

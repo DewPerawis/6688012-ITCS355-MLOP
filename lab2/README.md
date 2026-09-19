@@ -9,11 +9,15 @@ it to Staging, and reloads the exact registry version to score held-out rows.
 
 ## Evidence status
 
-The source, deterministic local tests, cost lookup, and managed-job workflow are prepared.
-Cloud run IDs, metrics, registry version, interruption evidence, and actual Azure cost are
-recorded only after those operations complete; this README intentionally does not invent
-them in advance. Generated evidence belongs in `reports/lab2-*.json` and
-`reports/lab2-comparison.md`.
+The managed study `lab2-6e10bd9` completed on Azure ML from the digest-pinned image
+`sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8`.
+The first job deliberately stopped after four persisted configuration trials; the second
+job resumed that checkpoint and completed all 12 configurations plus five seed repeats.
+The selected run `9b7ff1c3-1a06-4557-a16e-e753ded72079` is registered as
+`itcs355-6688012` version `1`, promoted to `Staging`, and was reloaded by exact version to
+score five held-out rows. Sanitised generated evidence is retained in
+`reports/lab2-*.json` and `reports/lab2-comparison.md`; settled Azure billing remains
+pending and is not represented by the trial-time estimate.
 
 ## Reproduce the workflow
 
@@ -120,12 +124,12 @@ the study code. The Lab 1 digest is provenance, not the image claimed for Lab 2 
 
 ## Submission checklist
 
-- [ ] Azure ML workspace/datastore and dedicated scale-to-zero compute verified
-- [ ] Digest-pinned Lab 2 image pushed
-- [ ] First managed job interrupted after a persistent checkpoint
-- [ ] Resume job completed 12 configuration trials and 5 seed trials
-- [ ] `reports/lab2-comparison.md` contains measured results and <=200-word decision
-- [ ] Selected model registered with all eight lineage fields
-- [ ] Version promoted to Staging and reloaded by exact version
+- [x] Azure ML workspace/datastore and dedicated scale-to-zero compute verified
+- [x] Digest-pinned Lab 2 image pushed
+- [x] First managed job interrupted after a persistent checkpoint
+- [x] Resume job completed 12 configuration trials and 5 seed trials
+- [x] `reports/lab2-comparison.md` contains measured results and <=200-word decision
+- [x] Selected model registered with all eight lineage fields
+- [x] Version promoted to Staging and reloaded by exact version
 - [ ] Settled Azure cost checked; total remains below 150 THB
 - [ ] Nonessential compute/jobs removed only after evidence is preserved

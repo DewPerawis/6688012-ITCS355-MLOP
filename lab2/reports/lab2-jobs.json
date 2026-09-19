@@ -1,0 +1,26 @@
+[
+  {
+    "checkpoint_completed_trials": 4,
+    "checkpoint_verified": true,
+    "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+    "expected_interruption": true,
+    "image_digest": "sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+    "interrupt_after": 4,
+    "job_id": "lab2-20260919-151227--6e10bd9",
+    "status": "Failed",
+    "study_id": "lab2-6e10bd9",
+    "submitted_at": "2026-09-19T15:12:38.782458+00:00"
+  },
+  {
+    "checkpoint_completed_trials": 17,
+    "checkpoint_verified": true,
+    "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+    "expected_interruption": false,
+    "image_digest": "sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+    "interrupt_after": 0,
+    "job_id": "lab2-20260919-152043--6e10bd9",
+    "status": "Completed",
+    "study_id": "lab2-6e10bd9",
+    "submitted_at": "2026-09-19T15:20:54.450992+00:00"
+  }
+]
