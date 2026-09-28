@@ -11,8 +11,8 @@ endpoint, measures latency under load, and demonstrates a timestamped canary rol
 The production model `itcs355-6688012` version `1` was served from a digest-pinned image on
 Azure ML. Service tests, smoke tests, concurrency/batch/payload/instance experiments, and a
 timestamped 90/10 canary rollback have been completed. Raw JSON evidence and the measured
-analysis are stored under `reports/`; the production endpoint remains active only until the
-final evidence commit is created, after which it must be deleted to stop compute charges.
+analysis are stored under `reports/`. The production endpoint and canary deployment were
+deleted after evidence capture, and the automated absence check is recorded in the report.
 
 ## Predeclared service objective
 

@@ -22,7 +22,7 @@ MODEL_VERSION ?= 1
 .PHONY: help lock setup data test lint portability-audit cloud-check download-model \
         serve image run-container image-push deploy smoke register-canary deploy-canary loadtest \
         k6-version load-summary payload100-and-summary instance-experiment canary-probe traffic-canary \
-        canary-local-check canary-experiment rollback cost teardown clean
+        canary-local-check canary-experiment rollback cost teardown final-teardown clean
 
 help:
 	@grep -E "^[a-zA-Z_-]+:.*?## .*$$" $(MAKEFILE_LIST) | awk -F":.*?## " '{printf "  %-20s %s\n", $$1, $$2}'
@@ -208,6 +208,10 @@ cost: ## Calculate THB/1,000; pass ARGS with measured values
 teardown: ## DESTRUCTIVE: delete exact Lab 3 endpoint after name confirmation
 	test -n "$(ENDPOINT_CONFIRM)" || (echo "set ENDPOINT_CONFIRM=<exact endpoint>" && exit 2)
 	python -m scripts.teardown --confirm-endpoint "$(ENDPOINT_CONFIRM)"
+
+final-teardown: ## DESTRUCTIVE: delete endpoint, verify absence, and update final evidence
+	test -n "$(ENDPOINT_CONFIRM)" || (echo "set ENDPOINT_CONFIRM=<exact endpoint>" && exit 2)
+	python -m scripts.finalize_teardown --confirm-endpoint "$(ENDPOINT_CONFIRM)"
 
 clean: ## Remove only local caches; preserves reports and cloud resources
 	rm -rf .pytest_cache .ruff_cache **/__pycache__

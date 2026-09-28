@@ -291,6 +291,15 @@ class AzureAdapter(CloudAdapter):
         ).result()
         return True
 
+    def endpoint_exists(self, endpoint: str) -> bool:
+        from azure.core.exceptions import ResourceNotFoundError
+
+        try:
+            self._ml_client().online_endpoints.get(endpoint)
+        except ResourceNotFoundError:
+            return False
+        return True
+
     def teardown(self, tags: dict[str, str]) -> list[str]:
         if tags.get("lab") != "3":
             raise ValueError("Lab 3 teardown requires lab=3")

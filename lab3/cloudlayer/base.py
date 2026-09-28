@@ -51,5 +51,9 @@ class CloudAdapter(ABC):
         """Delete one exact deployment after verifying its ownership tags."""
 
     @abstractmethod
+    def endpoint_exists(self, endpoint: str) -> bool:
+        """Return whether one exact endpoint still exists."""
+
+    @abstractmethod
     def teardown(self, tags: dict[str, str]) -> list[str]:
         """Delete only resources whose tags match exactly."""

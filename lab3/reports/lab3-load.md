@@ -75,6 +75,7 @@ Formula: `hourly THB / (measured predictions/s × 3600 × utilisation) × 1000`.
 ## Teardown
 
 - Canary deployment `green`: deleted at `2026-09-28T01:02:10.766741+00:00`
-- Production endpoint `itcs355-6688012-lab3`: **still active pending final evidence commit**
-- Final endpoint deletion and Azure Portal confirmation: pending
-- Settled Cost Management check: pending because Azure billing data can lag
+- Production endpoint `itcs355-6688012-lab3`: deletion completed at `2026-09-28T01:40:12.418443+00:00`
+- Azure SDK absence verification completed at `2026-09-28T01:40:15.441241+00:00`
+- Azure Portal visual confirmation: perform once before submission; it is not claimed by this automated check
+- Settled Cost Management check: review later because Azure billing data can lag

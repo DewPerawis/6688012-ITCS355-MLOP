@@ -1,0 +1,10 @@
+{
+  "affected": [
+    "deleted endpoint:itcs355-6688012-lab3"
+  ],
+  "deleted_at": "2026-09-28T01:40:12.418443+00:00",
+  "endpoint": "itcs355-6688012-lab3",
+  "exists_after_teardown": false,
+  "portal_confirmation": "manual check required",
+  "verified_absent_at": "2026-09-28T01:40:15.441241+00:00"
+}
