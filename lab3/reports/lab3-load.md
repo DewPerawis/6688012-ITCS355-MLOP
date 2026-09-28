@@ -2,10 +2,12 @@
 
 ## Predeclared target
 
-Committed before endpoint measurement: warm client-observed end-to-end p95 below **250 ms** at **10 VUs**, HTTP
-error rate below **1%**, measured for **60 seconds** after a **15-second warm-up**.
+Declared in the working tree before endpoint measurement: warm client-observed end-to-end p95 below **250 ms** at
+**10 VUs**, HTTP error rate below **1%**, measured for **60 seconds** after a **15-second warm-up**.
 
-The target was not changed after measurement. The 10-VU run missed the latency target while meeting the error target.
+The target was not changed after measurement. However, `lab3-load.md` first entered Git history in commit `01298c6`
+after the measurements, so Git does not independently prove pre-measurement commitment. The 10-VU run missed the
+latency target while meeting the error target.
 
 ## Endpoint and lineage
 
