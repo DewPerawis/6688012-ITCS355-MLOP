@@ -1,0 +1,10 @@
+{
+  "deployed_at": "2026-09-27T23:36:55.512975+00:00",
+  "deployment": "blue",
+  "endpoint": "itcs355-6688012-lab3",
+  "instance": "Standard_DS3_v2",
+  "model_name": "itcs355-6688012",
+  "model_version": "1",
+  "scoring_uri_configured": true,
+  "serving_image_digest": "sha256:4e7f94595568e706e09a31a1a2a51247452fdc4c2a70d877b09fb3248b82291d"
+}

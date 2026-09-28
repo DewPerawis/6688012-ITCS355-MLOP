@@ -1,0 +1,26 @@
+[
+  {
+    "endpoint": "itcs355-6688012-lab3",
+    "observed_at": "2026-09-28T00:27:02.387624+00:00",
+    "traffic": {
+      "blue": 100,
+      "green": 0
+    }
+  },
+  {
+    "endpoint": "itcs355-6688012-lab3",
+    "observed_at": "2026-09-28T00:27:56.684331+00:00",
+    "traffic": {
+      "blue": 90,
+      "green": 10
+    }
+  },
+  {
+    "endpoint": "itcs355-6688012-lab3",
+    "observed_at": "2026-09-28T00:57:03.424203+00:00",
+    "traffic": {
+      "blue": 100,
+      "green": 0
+    }
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "lookup_at": "2026-09-27T23:35:56.764118+00:00",
+  "prices": [
+    {
+      "currency": "THB",
+      "effective_start": "2025-05-01T00:00:00Z",
+      "hourly_retail_price": 5.558,
+      "meter": "DS2 v2",
+      "product": "Virtual Machines DSv2 Series",
+      "region": "centralindia",
+      "sku": "Standard_DS2_v2",
+      "unit": "1 Hour"
+    },
+    {
+      "currency": "THB",
+      "effective_start": "2025-05-01T00:00:00Z",
+      "hourly_retail_price": 11.0831,
+      "meter": "DS3 v2",
+      "product": "Virtual Machines DSv2 Series",
+      "region": "centralindia",
+      "sku": "Standard_DS3_v2",
+      "unit": "1 Hour"
+    }
+  ],
+  "source": "https://prices.azure.com/api/retail/prices"
+}

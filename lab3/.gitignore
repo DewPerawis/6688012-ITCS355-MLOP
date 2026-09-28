@@ -1,0 +1,12 @@
+cloud.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+data/raw/
+reports/model*/
+reports/*.log
+reports/k6-*.txt
+!reports/.gitkeep
+!reports/lab3-load.md

@@ -1,0 +1,12 @@
+{
+  "canary_metric": "0.389062000",
+  "expected_absolute_drop": "0.010985283",
+  "lab3_role": "canary",
+  "metric_name": "val_pr_auc",
+  "name": "itcs355-6688012",
+  "production_metric": "0.400047283",
+  "production_reference_version": "1",
+  "registered_at": "2026-09-27T23:48:35.172627+00:00",
+  "source_run_id": "49fd25d0-0b36-4958-ae0f-905190a2bb25",
+  "version": "2"
+}
