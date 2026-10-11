@@ -1,0 +1,1 @@
+Controlled Lab 4 failure exercise: generated training CSV omits temp_c. The data schema contract must block CI before build and deployment. This PR will be closed without merging after the failing test is captured.
