@@ -1,0 +1,167 @@
+verify	Data contracts and leakage	﻿2026-10-11T20:30:19.0019479Z ##[group]Run python -m pytest -q tests/test_data_contracts.py
+verify	Data contracts and leakage	2026-10-11T20:30:19.0019974Z [36;1mpython -m pytest -q tests/test_data_contracts.py[0m
+verify	Data contracts and leakage	2026-10-11T20:30:19.0082293Z shell: /usr/bin/bash -e {0}
+verify	Data contracts and leakage	2026-10-11T20:30:19.0082544Z env:
+verify	Data contracts and leakage	2026-10-11T20:30:19.0082808Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+verify	Data contracts and leakage	2026-10-11T20:30:19.0083243Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+verify	Data contracts and leakage	2026-10-11T20:30:19.0083674Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+verify	Data contracts and leakage	2026-10-11T20:30:19.0084052Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+verify	Data contracts and leakage	2026-10-11T20:30:19.0084439Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+verify	Data contracts and leakage	2026-10-11T20:30:19.0085011Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+verify	Data contracts and leakage	2026-10-11T20:30:19.0085345Z ##[endgroup]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9823788Z FFF.F                                                                    [100%]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9824723Z =================================== FAILURES ===================================
+verify	Data contracts and leakage	2026-10-11T20:30:19.9825704Z ________________________ test_training_schema_contract _________________________
+verify	Data contracts and leakage	2026-10-11T20:30:19.9826262Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9826641Z frame =       reading_id  machine_id  ...  ambient_humidity  failed_within_7d
+verify	Data contracts and leakage	2026-10-11T20:30:19.9827467Z 0              0           0  ...            63....65.351                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9828120Z 5999        5999         239  ...            55.347                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9828537Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9828715Z [6000 rows x 8 columns]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9828991Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9829802Z     def test_training_schema_contract(frame):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9830425Z >       validate_training(frame)
+verify	Data contracts and leakage	2026-10-11T20:30:19.9830628Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9830753Z tests/test_data_contracts.py:20: 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9831106Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9831382Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9831589Z frame =       reading_id  machine_id  ...  ambient_humidity  failed_within_7d
+verify	Data contracts and leakage	2026-10-11T20:30:19.9832065Z 0              0           0  ...            63....65.351                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9832458Z 5999        5999         239  ...            55.347                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9832714Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9832811Z [6000 rows x 8 columns]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9832966Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9833150Z     def validate_training(frame: pd.DataFrame) -> None:
+verify	Data contracts and leakage	2026-10-11T20:30:19.9833578Z         expected = set(FEATURES) | {"reading_id", GROUP, TARGET}
+verify	Data contracts and leakage	2026-10-11T20:30:19.9833972Z         if set(frame.columns) != expected:
+verify	Data contracts and leakage	2026-10-11T20:30:19.9834423Z >           raise ValueError(f"training schema mismatch: expected {sorted(expected)}")
+verify	Data contracts and leakage	2026-10-11T20:30:19.9835462Z E           ValueError: training schema mismatch: expected ['ambient_humidity', 'failed_within_7d', 'hours_since_service', 'load_pct', 'machine_id', 'pressure_kpa', 'reading_id', 'temp_c', 'vibration_mm_s']
+verify	Data contracts and leakage	2026-10-11T20:30:19.9836232Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9836347Z src/contracts.py:29: ValueError
+verify	Data contracts and leakage	2026-10-11T20:30:19.9836768Z _________________ test_plausible_ranges_and_zero_null_contract _________________
+verify	Data contracts and leakage	2026-10-11T20:30:19.9837102Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9837315Z frame =       reading_id  machine_id  ...  ambient_humidity  failed_within_7d
+verify	Data contracts and leakage	2026-10-11T20:30:19.9837739Z 0              0           0  ...            63....65.351                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9838094Z 5999        5999         239  ...            55.347                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9838329Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9838417Z [6000 rows x 8 columns]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9838563Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9838719Z     def test_plausible_ranges_and_zero_null_contract(frame):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9839055Z >       validate_training(frame)
+verify	Data contracts and leakage	2026-10-11T20:30:19.9839533Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9839642Z tests/test_data_contracts.py:24: 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9839953Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9840189Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9840376Z frame =       reading_id  machine_id  ...  ambient_humidity  failed_within_7d
+verify	Data contracts and leakage	2026-10-11T20:30:19.9841120Z 0              0           0  ...            63....65.351                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9841465Z 5999        5999         239  ...            55.347                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9841691Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9841781Z [6000 rows x 8 columns]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9841914Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9842055Z     def validate_training(frame: pd.DataFrame) -> None:
+verify	Data contracts and leakage	2026-10-11T20:30:19.9842430Z         expected = set(FEATURES) | {"reading_id", GROUP, TARGET}
+verify	Data contracts and leakage	2026-10-11T20:30:19.9842778Z         if set(frame.columns) != expected:
+verify	Data contracts and leakage	2026-10-11T20:30:19.9843182Z >           raise ValueError(f"training schema mismatch: expected {sorted(expected)}")
+verify	Data contracts and leakage	2026-10-11T20:30:19.9844227Z E           ValueError: training schema mismatch: expected ['ambient_humidity', 'failed_within_7d', 'hours_since_service', 'load_pct', 'machine_id', 'pressure_kpa', 'reading_id', 'temp_c', 'vibration_mm_s']
+verify	Data contracts and leakage	2026-10-11T20:30:19.9844942Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9845049Z src/contracts.py:29: ValueError
+verify	Data contracts and leakage	2026-10-11T20:30:19.9845408Z _______________ test_schema_rejects_missing_and_unknown_features _______________
+verify	Data contracts and leakage	2026-10-11T20:30:19.9845694Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9845879Z frame =       reading_id  machine_id  ...  ambient_humidity  failed_within_7d
+verify	Data contracts and leakage	2026-10-11T20:30:19.9846272Z 0              0           0  ...            63....65.351                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9846620Z 5999        5999         239  ...            55.347                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9846852Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9846942Z [6000 rows x 8 columns]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9847074Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9847232Z     def test_schema_rejects_missing_and_unknown_features(frame):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9847631Z         with pytest.raises(ValueError, match="schema mismatch"):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9848013Z >           validate_training(frame.drop(columns=[FEATURES[0]]))
+verify	Data contracts and leakage	2026-10-11T20:30:19.9848346Z                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verify	Data contracts and leakage	2026-10-11T20:30:19.9848547Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9848651Z tests/test_data_contracts.py:37: 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9848951Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9849626Z /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pandas/core/frame.py:5603: in drop
+verify	Data contracts and leakage	2026-10-11T20:30:19.9850118Z     return super().drop(
+verify	Data contracts and leakage	2026-10-11T20:30:19.9850561Z /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pandas/core/generic.py:4810: in drop
+verify	Data contracts and leakage	2026-10-11T20:30:19.9851118Z     obj = obj._drop_axis(labels, axis, level=level, errors=errors)
+verify	Data contracts and leakage	2026-10-11T20:30:19.9851483Z           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verify	Data contracts and leakage	2026-10-11T20:30:19.9852001Z /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pandas/core/generic.py:4852: in _drop_axis
+verify	Data contracts and leakage	2026-10-11T20:30:19.9852535Z     new_axis = axis.drop(labels, errors=errors)
+verify	Data contracts and leakage	2026-10-11T20:30:19.9852848Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verify	Data contracts and leakage	2026-10-11T20:30:19.9853160Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9853404Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9853598Z self = Index(['reading_id', 'machine_id', 'vibration_mm_s', 'pressure_kpa',
+verify	Data contracts and leakage	2026-10-11T20:30:19.9854025Z        'hours_since_service', 'load_pct', 'ambient_humidity',
+verify	Data contracts and leakage	2026-10-11T20:30:19.9854354Z        'failed_within_7d'],
+verify	Data contracts and leakage	2026-10-11T20:30:19.9854584Z       dtype='object')
+verify	Data contracts and leakage	2026-10-11T20:30:19.9854850Z labels = array(['temp_c'], dtype=object), errors = 'raise'
+verify	Data contracts and leakage	2026-10-11T20:30:19.9855158Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9855243Z     def drop(
+verify	Data contracts and leakage	2026-10-11T20:30:19.9855464Z         self,
+verify	Data contracts and leakage	2026-10-11T20:30:19.9855703Z         labels: Index | np.ndarray | Iterable[Hashable],
+verify	Data contracts and leakage	2026-10-11T20:30:19.9856018Z         errors: IgnoreRaise = "raise",
+verify	Data contracts and leakage	2026-10-11T20:30:19.9856278Z     ) -> Index:
+verify	Data contracts and leakage	2026-10-11T20:30:19.9856471Z         """
+verify	Data contracts and leakage	2026-10-11T20:30:19.9856711Z         Make new Index with passed list of labels deleted.
+verify	Data contracts and leakage	2026-10-11T20:30:19.9857390Z     
+verify	Data contracts and leakage	2026-10-11T20:30:19.9857696Z         Parameters
+verify	Data contracts and leakage	2026-10-11T20:30:19.9858183Z         ----------
+verify	Data contracts and leakage	2026-10-11T20:30:19.9858570Z         labels : array-like or scalar
+verify	Data contracts and leakage	2026-10-11T20:30:19.9859011Z         errors : {'ignore', 'raise'}, default 'raise'
+verify	Data contracts and leakage	2026-10-11T20:30:19.9859669Z             If 'ignore', suppress error and existing labels are dropped.
+verify	Data contracts and leakage	2026-10-11T20:30:19.9860156Z     
+verify	Data contracts and leakage	2026-10-11T20:30:19.9860411Z         Returns
+verify	Data contracts and leakage	2026-10-11T20:30:19.9861207Z         -------
+verify	Data contracts and leakage	2026-10-11T20:30:19.9861728Z         Index
+verify	Data contracts and leakage	2026-10-11T20:30:19.9862466Z             Will be same type as self, except for RangeIndex.
+verify	Data contracts and leakage	2026-10-11T20:30:19.9863189Z     
+verify	Data contracts and leakage	2026-10-11T20:30:19.9863469Z         Raises
+verify	Data contracts and leakage	2026-10-11T20:30:19.9863889Z         ------
+verify	Data contracts and leakage	2026-10-11T20:30:19.9864369Z         KeyError
+verify	Data contracts and leakage	2026-10-11T20:30:19.9864837Z             If not all of the labels are found in the selected axis
+verify	Data contracts and leakage	2026-10-11T20:30:19.9865247Z     
+verify	Data contracts and leakage	2026-10-11T20:30:19.9865501Z         Examples
+verify	Data contracts and leakage	2026-10-11T20:30:19.9879599Z         --------
+verify	Data contracts and leakage	2026-10-11T20:30:19.9879929Z         >>> idx = pd.Index(['a', 'b', 'c'])
+verify	Data contracts and leakage	2026-10-11T20:30:19.9880241Z         >>> idx.drop(['a'])
+verify	Data contracts and leakage	2026-10-11T20:30:19.9880532Z         Index(['b', 'c'], dtype='object')
+verify	Data contracts and leakage	2026-10-11T20:30:19.9880831Z         """
+verify	Data contracts and leakage	2026-10-11T20:30:19.9881075Z         if not isinstance(labels, Index):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9881385Z             # avoid materializing e.g. RangeIndex
+verify	Data contracts and leakage	2026-10-11T20:30:19.9882033Z             arr_dtype = "object" if self.dtype == "object" else None
+verify	Data contracts and leakage	2026-10-11T20:30:19.9882747Z             labels = com.index_labels_to_array(labels, dtype=arr_dtype)
+verify	Data contracts and leakage	2026-10-11T20:30:19.9883355Z     
+verify	Data contracts and leakage	2026-10-11T20:30:19.9883737Z         indexer = self.get_indexer_for(labels)
+verify	Data contracts and leakage	2026-10-11T20:30:19.9884265Z         mask = indexer == -1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9884712Z         if mask.any():
+verify	Data contracts and leakage	2026-10-11T20:30:19.9885120Z             if errors != "ignore":
+verify	Data contracts and leakage	2026-10-11T20:30:19.9885470Z >               raise KeyError(f"{labels[mask].tolist()} not found in axis")
+verify	Data contracts and leakage	2026-10-11T20:30:19.9885868Z E               KeyError: "['temp_c'] not found in axis"
+verify	Data contracts and leakage	2026-10-11T20:30:19.9886084Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9886430Z /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pandas/core/indexes/base.py:7136: KeyError
+verify	Data contracts and leakage	2026-10-11T20:30:19.9887053Z _____________________ test_labels_and_identifiers_contract _____________________
+verify	Data contracts and leakage	2026-10-11T20:30:19.9887340Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9887528Z frame =       reading_id  machine_id  ...  ambient_humidity  failed_within_7d
+verify	Data contracts and leakage	2026-10-11T20:30:19.9887950Z 0              0           0  ...            63....65.351                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9888305Z 5999        5999         239  ...            55.347                 1
+verify	Data contracts and leakage	2026-10-11T20:30:19.9888537Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9888625Z [6000 rows x 8 columns]
+verify	Data contracts and leakage	2026-10-11T20:30:19.9888767Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9888902Z     def test_labels_and_identifiers_contract(frame):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9889399Z         broken = frame.copy()
+verify	Data contracts and leakage	2026-10-11T20:30:19.9889667Z         broken.loc[0, "failed_within_7d"] = 7
+verify	Data contracts and leakage	2026-10-11T20:30:19.9889991Z >       with pytest.raises(ValueError, match="binary"):
+verify	Data contracts and leakage	2026-10-11T20:30:19.9890344Z E       AssertionError: Regex pattern did not match.
+verify	Data contracts and leakage	2026-10-11T20:30:19.9890669Z E         Expected regex: 'binary'
+verify	Data contracts and leakage	2026-10-11T20:30:19.9891437Z E         Actual message: "training schema mismatch: expected ['ambient_humidity', 'failed_within_7d', 'hours_since_service', 'load_pct', 'machine_id', 'pressure_kpa', 'reading_id', 'temp_c', 'vibration_mm_s']"
+verify	Data contracts and leakage	2026-10-11T20:30:19.9892135Z 
+verify	Data contracts and leakage	2026-10-11T20:30:19.9892262Z tests/test_data_contracts.py:52: AssertionError
+verify	Data contracts and leakage	2026-10-11T20:30:19.9892624Z =========================== short test summary info ============================
+verify	Data contracts and leakage	2026-10-11T20:30:19.9893790Z FAILED tests/test_data_contracts.py::test_training_schema_contract - ValueError: training schema mismatch: expected ['ambient_humidity', 'failed_within_7d', 'hours_since_service', 'load_pct', 'machine_id', 'pressure_kpa', 'reading_id', 'temp_c', 'vibration_mm_s']
+verify	Data contracts and leakage	2026-10-11T20:30:19.9895570Z FAILED tests/test_data_contracts.py::test_plausible_ranges_and_zero_null_contract - ValueError: training schema mismatch: expected ['ambient_humidity', 'failed_within_7d', 'hours_since_service', 'load_pct', 'machine_id', 'pressure_kpa', 'reading_id', 'temp_c', 'vibration_mm_s']
+verify	Data contracts and leakage	2026-10-11T20:30:19.9897105Z FAILED tests/test_data_contracts.py::test_schema_rejects_missing_and_unknown_features - KeyError: "['temp_c'] not found in axis"
+verify	Data contracts and leakage	2026-10-11T20:30:19.9897934Z FAILED tests/test_data_contracts.py::test_labels_and_identifiers_contract - AssertionError: Regex pattern did not match.
+verify	Data contracts and leakage	2026-10-11T20:30:19.9898478Z   Expected regex: 'binary'
+verify	Data contracts and leakage	2026-10-11T20:30:19.9899343Z   Actual message: "training schema mismatch: expected ['ambient_humidity', 'failed_within_7d', 'hours_since_service', 'load_pct', 'machine_id', 'pressure_kpa', 'reading_id', 'temp_c', 'vibration_mm_s']"
+verify	Data contracts and leakage	2026-10-11T20:30:19.9900264Z 4 failed, 1 passed in 0.74s
+verify	Data contracts and leakage	2026-10-11T20:30:20.0517726Z ##[error]Process completed with exit code 1.

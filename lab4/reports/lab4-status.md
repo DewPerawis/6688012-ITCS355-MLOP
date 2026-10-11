@@ -1,4 +1,4 @@
-# Lab 4 preparation status — 11 October 2026
+# Lab 4 progress status — 12 October 2026 (Thailand)
 
 This report separates verified local preparation from the cloud evidence still required.
 The assistant prepared and ran local checks at the student's request. These results must
@@ -32,6 +32,21 @@ GitHub reported environment creation at `2026-10-11T19:55:22Z`.
 `LAB4_DEPLOY_ENABLED` remains false. This is student-supplied setup evidence;
 an actual GitHub Actions OIDC login and deployment have not yet been verified.
 
+## Student-run GitHub CI evidence
+
+Commit `fb8bef9fe067bc7cbd7112f9975599bbc22867c7` passed the main workflow:
+https://github.com/DewPerawis/6688012-ITCS355-MLOP/actions/runs/38171649219
+The first run failed during fixture export; explicitly selecting cloudpickle for the
+CI-trained fixture corrected that export failure. The subsequent workflow succeeded.
+
+PR #1 deliberately removed `temp_c` from the generated CSV in commit
+`45ce2d99232e247a4b4d78c4f76d7228737c914e`. Run `38172414175` failed in
+Data contracts and leakage: 4 failed, 1 passed, including `test_training_schema_contract`
+with `training schema mismatch`. Job details confirm image build, integration and
+deployment were skipped. PR #1 was CLOSED with mergedAt=null.
+Evidence: `blocked-ci.log`, `blocked-ci-run.json`, `blocked-pr.json`,
+`blocked-pr-closure.json`. Staging deployment and scheduled cloud drift remain outstanding.
+
 ## Verified preparation
 
 | Check | Actual observed result | Evidence |
@@ -59,9 +74,9 @@ existing pinned environment. It did not fail tests; no dependency migration was 
 
 | Required artifact | Implementation ready | Actual exercise status |
 |---|---|---|
-| GitHub Actions full gate | `.github/workflows/lab4-ci.yml` | Not published/run in this preparation |
+| GitHub Actions full gate | `.github/workflows/lab4-ci.yml` | Main run 38171649219 succeeded |
 | OIDC and scoped roles | `scripts.github_setup`, preview before execute | Student execution completed; actual Actions login still required |
-| Bad PR blocked before build | `scripts.bad_pr` | Actual failing PR/run still required |
+| Bad PR blocked before build | `scripts.bad_pr` | PR #1 failed schema gate; build/deploy skipped; closed unmerged |
 | SHA image push/staging/smoke | Workflow and Azure adapter | No Lab 4 endpoint created |
 | Dashboard with five signals | Workbook JSON, KQL and service logs | Portal import and actual dashboard screenshot required |
 | SLO target/window/response | `monitoring/slo.yaml` | Definition ready; long-window compliance unmeasured |

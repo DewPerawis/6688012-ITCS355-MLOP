@@ -1,0 +1,8 @@
+{
+  "url": "https://github.com/DewPerawis/6688012-ITCS355-MLOP/pull/1",
+  "branch": "codex/lab4-bad-contract",
+  "expected_failing_test": "test_training_schema_contract",
+  "status": "CI schema failure verified; image build and deployment skipped; PR closed without merging",
+  "failing_run_id": 38172414175,
+  "passing_main_run_id": 38171649219
+}
