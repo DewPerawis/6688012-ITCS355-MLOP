@@ -20,6 +20,29 @@ workbook definition and raw panel results are also committed. Recent compute cha
 were not yet present in Cost Management when queried; billing reconciliation remains pending.
 See `reports/lab4-status.md`, `reports/submission-summary.md`, and `reports/lab4-cost.md`.
 
+## Handout deliverables checklist — verified complete
+
+- [x] Unit tests, at least two data contracts, model behaviour, integration and leakage tests — 28 local tests passed; final GitHub CI passed.
+- [x] README names the production incident each data contract would catch — see the contract table below.
+- [x] CI runs lint, tests, image build and integration, with secrets through OIDC — `.github/workflows/lab4-ci.yml`.
+- [x] Images use commit-SHA tags and immutable deployment digests — `reports/image-push.json` and `reports/monitor-image-push.json`.
+- [x] CD deploys staging only after green checks on main — successful run `38174583649` and managed smoke test.
+- [x] Bad commit is blocked by a named test — PR #1, run `38172414175`, `test_training_schema_contract`; closed without merging.
+- [x] Dashboard covers all five signals — Workbook/KQL definitions plus actual Azure log data and PNG/PDF dashboard export.
+- [x] SLO states target, measurement window and error-budget response — `monitoring/slo.yaml`.
+- [x] Scheduled detector has a justified threshold and real-channel alert — `reports/scheduled-run.json`, calibration and Discord receipts.
+- [x] Injected drift includes alert, timestamps and detection time — temperature PSI `1.21851169`; injection-to-webhook `521.911988` seconds.
+- [x] Five-line post-mortem gives a reasoned response — `reports/postmortem.md`; repair the input producer and keep the registered model.
+- [x] Teardown completed, including schedule — `reports/lab4-teardown.json` and `reports/final-cloud-check.json` show no remaining endpoint, schedule or monitor compute.
+
+Published implementation/evidence commit: `d9b23e8`. Final verification run
+[`38183928346`](https://github.com/DewPerawis/6688012-ITCS355-MLOP/actions/runs/38183928346)
+completed successfully; deployment was skipped because the switch remains false.
+
+Follow-up outside this deliverables checklist: reconcile recent compute billing once posted.
+The dashboard evidence is explicitly a retained-cloud-data export, not a Portal screenshot;
+no 30-day SLO compliance or final billed total is claimed.
+
 ## Reproduce the checks
 
 Use Python 3.11. Install with the committed hash lock in an isolated environment:

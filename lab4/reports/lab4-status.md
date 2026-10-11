@@ -104,7 +104,8 @@ This does not establish zero residual storage, registry or logging charges.
 The five-panel dashboard export is labelled as actual retained Azure log data, not a
 Portal screenshot. `dashboard-cloud-data.json` records all queries and observed rows;
 `dashboard-cloud-evidence.png` and `.pdf` display the shift. Historical workbook JSON
-pins the experiment window. Source edits and evidence still need a reviewed final commit/push.
+pins the experiment window. Implementation and evidence were published in commit `d9b23e8`;
+final CI run `38183928346` completed successfully and deployment was skipped.
 Retail price references and three posted shared-resource cost rows are captured; recent
 compute charges are absent, so final billing reconciliation remains pending.
 

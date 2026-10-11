@@ -1,7 +1,9 @@
 # Lab 4 submission evidence — 6688012
 
-The cloud exercise completed on 12 October 2026, Thailand time. The remaining publication
-step is a reviewed Git commit/push. Cost Management reconciliation must be refreshed after
+The cloud exercise completed on 12 October 2026, Thailand time. Implementation and evidence
+were published in commit `d9b23e8`; final CI run `38183928346` completed successfully with
+deployment skipped. The handout's 12 deliverables are mapped below and checked in README.
+Cost Management reconciliation must be refreshed after
 Azure posts the recent compute usage; the current billing snapshot is not a final Lab 4 bill.
 
 | Requirement | Actual evidence |
