@@ -19,7 +19,7 @@ def main():
     train, _, _ = split(frame)
     Path("data/raw").mkdir(parents=True, exist_ok=True)
     Path("reports").mkdir(exist_ok=True)
-    frame.to_csv("data/raw/sensors.csv", index=False)
+    frame.drop(columns=["temp_c"]).to_csv("data/raw/sensors.csv", index=False)
     train.to_csv("data/reference.csv", index=False)
     model = RandomForestClassifier(n_estimators=60, max_depth=8, min_samples_leaf=5,
                                    random_state=20260101, n_jobs=1)
