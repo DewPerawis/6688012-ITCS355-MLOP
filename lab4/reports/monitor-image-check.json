@@ -1,0 +1,12 @@
+{
+  "image": "itcs355-lab4-monitor:local-preparation",
+  "status": "passed",
+  "checked_at": "2026-10-11T01:33:17.530551+00:00",
+  "runtime": {
+    "uid": 10001,
+    "mlflow": "3.15.0",
+    "azureml_mlflow": "1.62.0.post6",
+    "azureml_tracking_registered": true
+  },
+  "scope": "local dependency/runtime check; no cloud job submitted"
+}

@@ -1,0 +1,20 @@
+service: itcs355-6688012-lab4
+objectives:
+  - name: availability
+    target: 0.995
+    window: 30d
+    measurement: 2xx responses / (2xx + 5xx responses) on scoring routes; report 4xx separately
+    error_budget: 0.5 percent of eligible scoring requests
+    on_budget_exhausted: Freeze nonessential deploys; inspect 5xx and readiness; roll back only if a new serving release caused the failures.
+  - name: latency
+    target_p95_ms: 250
+    window: 5m rolling; compare the Lab 3 controlled 10-VU, 60-second window separately
+    measurement: Azure gateway TotalDurationMs on scoring calls; local service latency excludes gateway and network
+    error_budget: At most 5 percent of eligible warm scoring requests exceed 250 ms
+    on_budget_exhausted: Pause new deploys; inspect load, batch size and throttling; limit traffic or resize after checking cost and then remeasure.
+  - name: monitoring_freshness
+    target: 500 recent feature rows available within a 15-minute input window
+    window: every 5 minutes during the controlled exercise
+    measurement: Accepted model-version-1 inference inputs in Log Analytics, including ingestion delay
+    on_budget_exhausted: Treat insufficient data as a monitoring failure; inspect logging and replay traffic; never label a missing window stable.
+limitations: A short lab demonstration cannot establish achievement of a 30-day availability SLO.

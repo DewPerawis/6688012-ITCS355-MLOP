@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-10-11T01:22:33.974169+00:00",
+  "workspace": "itcs355-6688012",
+  "model": "itcs355-6688012",
+  "model_version": "1",
+  "model_tags": {
+    "git_commit": "6e10bd9755593a5a004e3fb7d506b344adbc6deb",
+    "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+    "mlflow_run_id": "9b7ff1c3-1a06-4557-a16e-e753ded72079",
+    "training_job_id": "lab2-20260919-151227--6e10bd9",
+    "image_digest": "sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+    "seed": "20260101",
+    "metric_val": "0.40004728306048276",
+    "metric_test": "0.4661076316460343",
+    "promotion_stage": "Staging"
+  },
+  "compute": [],
+  "endpoint_exists": false,
+  "key_vault_resource_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Keyvault/vaults/itcs3556keyvault63d2a327"
+}

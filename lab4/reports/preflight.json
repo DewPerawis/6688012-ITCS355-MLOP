@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-11T19:07:55.157612+00:00",
+  "python": "3.11.16",
+  "checks": {
+    "python_module_numpy": true,
+    "python_module_pandas": true,
+    "python_module_sklearn": true,
+    "python_module_fastapi": true,
+    "python_module_mlflow": true,
+    "python_module_pytest": true,
+    "python_module_ruff": true,
+    "python_module_azure.ai.ml": true,
+    "tool_docker": true,
+    "tool_az": true,
+    "tool_gh": true,
+    "tool_git": true,
+    "docker_engine_running": true,
+    "hashed_lock": true,
+    "local_config": true,
+    "reference": true,
+    "calibration": true
+  },
+  "passed": true,
+  "note": "read-only local check; no install, commit, push or cloud deployment"
+}

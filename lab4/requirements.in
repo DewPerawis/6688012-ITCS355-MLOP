@@ -1,0 +1,17 @@
+# Compile with hashes before installation:
+#   python -m pip install pip==26.1.2 pip-tools==7.6.0
+#   pip-compile --generate-hashes requirements.in -o requirements.txt
+# Keep MLflow/scikit-learn aligned with the Lab 2 model runtime.
+fastapi==0.141.1
+uvicorn==0.34.0
+pydantic==2.13.5
+httpx==0.28.1
+pandas==2.3.3
+numpy==2.4.4
+scikit-learn==1.8.0
+mlflow==3.15.0
+joblib==1.4.2
+pytest==9.1.1
+ruff==0.16.6
+azure-ai-ml==1.35.0
+azure-identity

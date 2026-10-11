@@ -1,0 +1,129 @@
+name: Lab4 CI and staging
+on:
+  pull_request:
+    paths: ['lab4/**', '.github/workflows/lab4-ci.yml']
+  push:
+    branches: [main]
+    paths: ['lab4/**', '.github/workflows/lab4-ci.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lab4-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lab4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: lab4/requirements.txt
+      - name: Install hashed dependencies
+        run: python -m pip install --require-hashes -r requirements.txt
+      - name: Lint and provider boundary
+        run: |
+          python -m ruff check src service monitoring cloudlayer scripts tests
+          python -m scripts.portability_audit
+      - name: Generate deterministic inputs and CI fixture
+        run: python -m scripts.prepare
+      - name: Unit tests
+        run: python -m pytest -q tests/test_unit.py
+      - name: Data contracts and leakage
+        run: python -m pytest -q tests/test_data_contracts.py
+      - name: Model behaviour tests
+        run: python -m pytest -q tests/test_model_behaviour.py
+      - name: Service, observability, adapter tests
+        run: python -m pytest -q tests/test_service.py tests/test_observability.py tests/test_monitoring.py tests/test_github_setup.py
+      - uses: docker/setup-buildx-action@v3
+      - name: Build SHA-tagged serving image
+        run: >-
+          docker buildx build --progress=plain --platform linux/amd64
+          --build-arg GIT_COMMIT=${{ github.sha }} -f service/Dockerfile.serve
+          -t itcs355-lab4-serve:${{ github.sha }} --load .
+      - name: Integration test against the built image
+        run: |
+          python -m scripts.export_ci_model
+          python -m scripts.integration --image itcs355-lab4-serve:${{ github.sha }} --model-path reports/ci-model-mlflow --version ci-${{ github.sha }}
+      - name: Save the tested image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker save itcs355-lab4-serve:${{ github.sha }} -o reports/serving-image.tar
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: serving-image-${{ github.sha }}
+          path: lab4/reports/serving-image.tar
+          retention-days: 2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-${{ github.sha }}
+          path: |
+            lab4/reports/container-integration.json
+            lab4/reports/threshold-calibration.json
+          retention-days: 7
+  deploy-staging:
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.LAB4_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: staging
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: lab4
+    env:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZUREML_WORKSPACE: ${{ vars.AZUREML_WORKSPACE }}
+      CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
+      ACR_NAME: ${{ vars.ACR_NAME }}
+      MODEL_REGISTRY_NAME: itcs355-6688012
+      MODEL_VERSION: '1'
+      ONLINE_ENDPOINT: itcs355-6688012-lab4
+      DEPLOYMENT_NAME: blue
+      SERVING_INSTANCE: Standard_DS2_v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: serving-image-${{ github.sha }}
+          path: lab4/reports
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --require-hashes -r requirements.txt
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Load the exact tested image and registered model
+        run: |
+          docker load -i reports/serving-image.tar
+          python -m scripts.make_dataset
+          python -m scripts.download_model
+          MODEL_PATH="$(find reports/model-v1 -name MLmodel -printf '%h\n')" python -m pytest -q tests/test_model_behaviour.py
+          python -m scripts.integration --image itcs355-lab4-serve:${{ github.sha }} --model-path "$(find reports/model-v1 -name MLmodel -printf '%h\n')" --version 1 --out reports/registry-container-integration.json
+      - name: Push SHA image and deploy its immutable digest
+        run: |
+          python -m scripts.push_image --tag itcs355-lab4-serve:${{ github.sha }} --github-env "$GITHUB_ENV"
+      - name: Deploy staging only after checks
+        run: |
+          python -m scripts.deploy
+          python -m scripts.smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: staging-${{ github.sha }}
+          path: |
+            lab4/reports/lab4-deployment.json
+            lab4/reports/registry-container-integration.json
+            lab4/reports/image-push.json
+          retention-days: 7

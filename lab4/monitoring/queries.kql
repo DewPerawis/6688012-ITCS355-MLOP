@@ -1,0 +1,14 @@
+// Request rate (requests/second)
+AmlOnlineEndpointTrafficLog | where EndpointName == "itcs355-6688012-lab4" | summarize RequestsPerSecond=count()/60.0 by bin(TimeGenerated,1m)
+
+// 4xx and 5xx error fractions
+AmlOnlineEndpointTrafficLog | where EndpointName == "itcs355-6688012-lab4" | summarize Total=count(), Client=countif(toint(ResponseCode) between (400..499)), Server=countif(toint(ResponseCode)>=500) by bin(TimeGenerated,1m) | project TimeGenerated, Error4xx=todouble(Client)/Total, Error5xx=todouble(Server)/Total
+
+// Gateway latency p50 / p95 / p99 (ms)
+AmlOnlineEndpointTrafficLog | where EndpointName == "itcs355-6688012-lab4" | summarize p50=percentile(TotalDurationMs,50), p95=percentile(TotalDurationMs,95), p99=percentile(TotalDurationMs,99) by bin(TimeGenerated,1m)
+
+// temp_c mean, rolling 5-minute window
+AmlOnlineEndpointConsoleLog | extend e=parse_json(Message) | where e.endpoint == "itcs355-6688012-lab4" | where e.event == "prediction_features" | extend EventTime=todatetime(e.timestamp), Temperature=todouble(e.features.temp_c) | where EventTime > ago(35m) | extend Buckets=range(bin(EventTime,1m),bin(EventTime,1m)+4m,1m) | mv-expand Buckets to typeof(datetime) | where Buckets between (ago(30m)..now()) | summarize MeanTemperature=avg(Temperature), FeatureRows=count() by TimeGenerated=Buckets
+
+// Current model versions
+AmlOnlineEndpointConsoleLog | extend e=parse_json(Message) | where e.endpoint == "itcs355-6688012-lab4" | where e.event == "request" and e.path in ("/predict","/predict/batch","/invoke") | summarize LastSeen=max(TimeGenerated), Requests=count() by ModelVersion=tostring(e.model_version)

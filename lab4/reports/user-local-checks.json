@@ -1,0 +1,16 @@
+{
+  "execution_origin": "student-run output supplied in chat",
+  "scope": "local checks; cloud and GitHub evidence remain pending",
+  "preflight_checked_at": "2026-10-11T19:07:55.157612+00:00",
+  "tests_passed": 24,
+  "warnings": 1,
+  "tests_duration_seconds": 5.52,
+  "all_six_steps_completed": true,
+  "input_log_sha256": "aa1c66a13472bc07b1238b080493a4ae3362b0060bad2de428474a0852e63b48",
+  "contract_failure_detected_and_data_restored": true,
+  "threshold": 0.7622300758267366,
+  "baseline_temp_c_psi": 0.012257588062844674,
+  "injected_temp_c_psi": 1.2863608401147704,
+  "real_channel_alert": false,
+  "scheduled_cloud_job": false
+}

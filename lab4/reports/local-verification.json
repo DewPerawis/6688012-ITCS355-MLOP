@@ -1,0 +1,64 @@
+{
+  "evidence_type": "assistant local preparation; cloud/GitHub graded evidence pending",
+  "verified_at": "2026-10-11T01:35:06.5372087+00:00",
+  "handoff_script_exit_code": 0,
+  "tests_passed": 24,
+  "warnings": 1,
+  "tests_duration_seconds": 4.7,
+  "lint": "passed",
+  "portability": "passed",
+  "container_integration": {
+    "status": "passed",
+    "image": "itcs355-lab4-serve:local-preparation",
+    "model_version": "1",
+    "checks": [
+      "ready and exact model version",
+      "single prediction schema, probability, version",
+      "batch prediction",
+      "422 data contract and batch limit",
+      "actual rolling request/error/latency/feature signals",
+      "non-root uid 10001"
+    ],
+    "observability": {
+      "window_seconds": 300,
+      "request_count": 4,
+      "request_rate": 0.013333333333333334,
+      "4xx_fraction": 0.5,
+      "5xx_fraction": 0.0,
+      "latency_ms": {
+        "p50": 31.298305000035498,
+        "p95": 69.2865151000234,
+        "p99": 71.20488862002333
+      },
+      "feature_mean": {
+        "temp_c": 78.4,
+        "vibration_mm_s": 3.1,
+        "pressure_kpa": 315.2,
+        "hours_since_service": 4200.0,
+        "load_pct": 68.0,
+        "ambient_humidity": 55.0
+      },
+      "model_version": "1",
+      "feature_rows": 4
+    },
+    "checked_at": "2026-10-11T08:21:49.828217+07:00"
+  },
+  "monitor_image": {
+    "image": "itcs355-lab4-monitor:local-preparation",
+    "status": "passed",
+    "checked_at": "2026-10-11T08:33:17.530551+07:00",
+    "runtime": {
+      "uid": 10001,
+      "mlflow": "3.15.0",
+      "azureml_mlflow": "1.62.0.post6",
+      "azureml_tracking_registered": true
+    },
+    "scope": "local dependency/runtime check; no cloud job submitted"
+  },
+  "registered_model_sha256": "30c06561e6dbef612bcb8fd664061778f73266f5fdcf1c16f218584930748269",
+  "live_download_matches_tested_model": true,
+  "temporary_containers_stopped": true,
+  "cloud_resources_created": false,
+  "git_committed_or_pushed": false,
+  "real_alert_sent": false
+}

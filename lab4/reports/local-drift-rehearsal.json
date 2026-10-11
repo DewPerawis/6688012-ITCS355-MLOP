@@ -1,0 +1,95 @@
+{
+  "evidence_type": "assistant local rehearsal only",
+  "threshold": 0.7622300758267366,
+  "injected_temp_c_shift": 12,
+  "baseline": [
+    {
+      "feature": "temp_c",
+      "psi": 0.012257588062844674,
+      "ks": 0.041166666666666685,
+      "reference_mean": 79.66890555555555,
+      "current_mean": 79.374228
+    },
+    {
+      "feature": "vibration_mm_s",
+      "psi": 0.033410217140327395,
+      "ks": 0.02672222222222226,
+      "reference_mean": 4.603220277777778,
+      "current_mean": 4.5782739999999995
+    },
+    {
+      "feature": "pressure_kpa",
+      "psi": 0.012488106239593812,
+      "ks": 0.02327777777777784,
+      "reference_mean": 318.1791177777778,
+      "current_mean": 318.45209199999994
+    },
+    {
+      "feature": "hours_since_service",
+      "psi": 0.01228570390269396,
+      "ks": 0.02800000000000001,
+      "reference_mean": 4533.585692222222,
+      "current_mean": 4492.653098000001
+    },
+    {
+      "feature": "load_pct",
+      "psi": 0.0250708348293504,
+      "ks": 0.042166666666666686,
+      "reference_mean": 65.66361861111112,
+      "current_mean": 64.90231600000001
+    },
+    {
+      "feature": "ambient_humidity",
+      "psi": 0.009682328260738459,
+      "ks": 0.033388888888888885,
+      "reference_mean": 58.038756388888885,
+      "current_mean": 57.665440000000004
+    }
+  ],
+  "injected": [
+    {
+      "feature": "temp_c",
+      "psi": 1.2863608401147704,
+      "ks": 0.4690000000000001,
+      "reference_mean": 79.66890555555555,
+      "current_mean": 91.374228
+    },
+    {
+      "feature": "vibration_mm_s",
+      "psi": 0.033410217140327395,
+      "ks": 0.02672222222222226,
+      "reference_mean": 4.603220277777778,
+      "current_mean": 4.5782739999999995
+    },
+    {
+      "feature": "pressure_kpa",
+      "psi": 0.012488106239593812,
+      "ks": 0.02327777777777784,
+      "reference_mean": 318.1791177777778,
+      "current_mean": 318.45209199999994
+    },
+    {
+      "feature": "hours_since_service",
+      "psi": 0.01228570390269396,
+      "ks": 0.02800000000000001,
+      "reference_mean": 4533.585692222222,
+      "current_mean": 4492.653098000001
+    },
+    {
+      "feature": "load_pct",
+      "psi": 0.0250708348293504,
+      "ks": 0.042166666666666686,
+      "reference_mean": 65.66361861111112,
+      "current_mean": 64.90231600000001
+    },
+    {
+      "feature": "ambient_humidity",
+      "psi": 0.009682328260738459,
+      "ks": 0.033388888888888885,
+      "reference_mean": 58.038756388888885,
+      "current_mean": 57.665440000000004
+    }
+  ],
+  "real_channel_alert": false,
+  "scheduled_cloud_job": false
+}

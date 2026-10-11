@@ -1,0 +1,12 @@
+{
+  "threshold": 0.7622300758267366,
+  "null_max_psi_p99": 0.508153383884491,
+  "margin": 1.5,
+  "floor": 0.1,
+  "window_rows": 500,
+  "bootstrap_repeats": 200,
+  "seed": 20260101,
+  "reference": "training machines only",
+  "method": "cluster bootstrap; max over six features",
+  "limitations": "in-sample synthetic calibration; confirm false alerts on real windows"
+}

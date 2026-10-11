@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "image": "itcs355-lab4-serve:local-preparation",
+  "model_version": "1",
+  "checks": [
+    "ready and exact model version",
+    "single prediction schema, probability, version",
+    "batch prediction",
+    "422 data contract and batch limit",
+    "actual rolling request/error/latency/feature signals",
+    "non-root uid 10001"
+  ],
+  "observability": {
+    "window_seconds": 300,
+    "request_count": 4,
+    "request_rate": 0.013333333333333334,
+    "4xx_fraction": 0.5,
+    "5xx_fraction": 0.0,
+    "latency_ms": {
+      "p50": 31.298305000035498,
+      "p95": 69.2865151000234,
+      "p99": 71.20488862002333
+    },
+    "feature_mean": {
+      "temp_c": 78.4,
+      "vibration_mm_s": 3.1,
+      "pressure_kpa": 315.2,
+      "hours_since_service": 4200.0,
+      "load_pct": 68.0,
+      "ambient_humidity": 55.0
+    },
+    "model_version": "1",
+    "feature_rows": 4
+  },
+  "checked_at": "2026-10-11T01:21:49.828217+00:00"
+}

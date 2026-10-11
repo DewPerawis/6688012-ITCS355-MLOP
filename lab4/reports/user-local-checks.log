@@ -1,0 +1,153 @@
+$ bash run_local_checks.sh
+1/6: read-only prerequisites
+{
+  "checked_at": "2026-10-11T19:07:55.157612+00:00",
+  "python": "3.11.16",
+  "checks": {
+    "python_module_numpy": true,
+    "python_module_pandas": true,
+    "python_module_sklearn": true,
+    "python_module_fastapi": true,
+    "python_module_mlflow": true,
+    "python_module_pytest": true,
+    "python_module_ruff": true,
+    "python_module_azure.ai.ml": true,
+    "tool_docker": true,
+    "tool_az": true,
+    "tool_gh": true,
+    "tool_git": true,
+    "docker_engine_running": true,
+    "hashed_lock": true,
+    "local_config": true,
+    "reference": true,
+    "calibration": true
+  },
+  "passed": true,
+  "note": "read-only local check; no install, commit, push or cloud deployment"
+}
+2/6: generate deterministic local fixtures
+Prepared deterministic dataset, CI fixture model, training-only reference
+{
+  "threshold": 0.7622300758267366,
+  "null_max_psi_p99": 0.508153383884491,
+  "margin": 1.5,
+  "floor": 0.1,
+  "window_rows": 500,
+  "bootstrap_repeats": 200,
+  "seed": 20260101,
+  "reference": "training machines only",
+  "method": "cluster bootstrap; max over six features",
+  "limitations": "in-sample synthetic calibration; confirm false alerts on real windows"
+}
+3/6: lint and provider boundary
+All checks passed!
+PORTABILITY AUDIT PASSED
+4/6: unit, data, model, service and monitoring tests
+........................                                                  [100%]
+=============================== warnings summary ================================
+../../../../../../../../../../../../../home/dew_perawis/yes/envs/itcs355-lab3/lib/python3.11/site-packages/fastapi/testclient.py:1
+  /home/dew_perawis/yes/envs/itcs355-lab3/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+24 passed, 1 warning in 5.52s
+5/6: deliberate local data-contract failure and exact restoration
+PASS: deliberately missing temp_c was rejected by the named contract test
+Restored the generated CSV byte-for-byte
+6/6: baseline versus injected drift rehearsal
+{
+  "evidence_type": "assistant local rehearsal only",
+  "threshold": 0.7622300758267366,
+  "injected_temp_c_shift": 12,
+  "baseline": [
+    {
+      "feature": "temp_c",
+      "psi": 0.012257588062844674,
+      "ks": 0.041166666666666685,
+      "reference_mean": 79.66890555555555,
+      "current_mean": 79.374228
+    },
+    {
+      "feature": "vibration_mm_s",
+      "psi": 0.033410217140327395,
+      "ks": 0.02672222222222226,
+      "reference_mean": 4.603220277777778,
+      "current_mean": 4.5782739999999995
+    },
+    {
+      "feature": "pressure_kpa",
+      "psi": 0.012488106239593812,
+      "ks": 0.02327777777777784,
+      "reference_mean": 318.1791177777778,
+      "current_mean": 318.45209199999994
+    },
+    {
+      "feature": "hours_since_service",
+      "psi": 0.01228570390269396,
+      "ks": 0.02800000000000001,
+      "reference_mean": 4533.585692222222,
+      "current_mean": 4492.653098000001
+    },
+    {
+      "feature": "load_pct",
+      "psi": 0.0250708348293504,
+      "ks": 0.042166666666666686,
+      "reference_mean": 65.66361861111112,
+      "current_mean": 64.90231600000001
+    },
+    {
+      "feature": "ambient_humidity",
+      "psi": 0.009682328260738459,
+      "ks": 0.033388888888888885,
+      "reference_mean": 58.038756388888885,
+      "current_mean": 57.665440000000004
+    }
+  ],
+  "injected": [
+    {
+      "feature": "temp_c",
+      "psi": 1.2863608401147704,
+      "ks": 0.4690000000000001,
+      "reference_mean": 79.66890555555555,
+      "current_mean": 91.374228
+    },
+    {
+      "feature": "vibration_mm_s",
+      "psi": 0.033410217140327395,
+      "ks": 0.02672222222222226,
+      "reference_mean": 4.603220277777778,
+      "current_mean": 4.5782739999999995
+    },
+    {
+      "feature": "pressure_kpa",
+      "psi": 0.012488106239593812,
+      "ks": 0.02327777777777784,
+      "reference_mean": 318.1791177777778,
+      "current_mean": 318.45209199999994
+    },
+    {
+      "feature": "hours_since_service",
+      "psi": 0.01228570390269396,
+      "ks": 0.02800000000000001,
+      "reference_mean": 4533.585692222222,
+      "current_mean": 4492.653098000001
+    },
+    {
+      "feature": "load_pct",
+      "psi": 0.0250708348293504,
+      "ks": 0.042166666666666686,
+      "reference_mean": 65.66361861111112,
+      "current_mean": 64.90231600000001
+    },
+    {
+      "feature": "ambient_humidity",
+      "psi": 0.009682328260738459,
+      "ks": 0.033388888888888885,
+      "reference_mean": 58.038756388888885,
+      "current_mean": 57.665440000000004
+    }
+  ],
+  "real_channel_alert": false,
+  "scheduled_cloud_job": false
+}
+Local checks completed. Next read START_HERE_TH.md for GitHub/Azure evidence.
