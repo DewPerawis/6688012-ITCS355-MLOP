@@ -1,0 +1,260 @@
+{
+  "source": "Azure Log Analytics",
+  "panels": [
+    {
+      "title": "Request rate (requests/second)",
+      "query": "AmlOnlineEndpointTrafficLog | where EndpointName == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize RequestsPerSecond=count()/60.0 by bin(TimeGenerated,1m)",
+      "rows": [
+        {
+          "TimeGenerated": "2026-10-11T22:10:00Z",
+          "RequestsPerSecond": 0.2
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:21:00Z",
+          "RequestsPerSecond": 0.016666666666666666
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:22:00Z",
+          "RequestsPerSecond": 0.18333333333333332
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:36:00Z",
+          "RequestsPerSecond": 0.06666666666666667
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:37:00Z",
+          "RequestsPerSecond": 0.13333333333333333
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:04:00Z",
+          "RequestsPerSecond": 0.16666666666666666
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:05:00Z",
+          "RequestsPerSecond": 0.03333333333333333
+        }
+      ]
+    },
+    {
+      "title": "4xx and 5xx error fractions",
+      "query": "AmlOnlineEndpointTrafficLog | where EndpointName == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize Total=count(), Client=countif(toint(ResponseCode) between (400..499)), Server=countif(toint(ResponseCode)>=500) by bin(TimeGenerated,1m) | project TimeGenerated, Error4xx=todouble(Client)/Total, Error5xx=todouble(Server)/Total",
+      "rows": [
+        {
+          "TimeGenerated": "2026-10-11T22:10:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:36:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:37:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:21:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:22:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:04:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:05:00Z",
+          "Error4xx": 0,
+          "Error5xx": 0
+        }
+      ]
+    },
+    {
+      "title": "Gateway latency p50 / p95 / p99 (ms)",
+      "query": "AmlOnlineEndpointTrafficLog | where EndpointName == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize p50=percentile(TotalDurationMs,50), p95=percentile(TotalDurationMs,95), p99=percentile(TotalDurationMs,99) by bin(TimeGenerated,1m)",
+      "rows": [
+        {
+          "TimeGenerated": "2026-10-11T22:10:00Z",
+          "p50": 37,
+          "p95": 46,
+          "p99": 46
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:36:00Z",
+          "p50": 38,
+          "p95": 46,
+          "p99": 46
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:37:00Z",
+          "p50": 38,
+          "p95": 45,
+          "p99": 45
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:21:00Z",
+          "p50": 40,
+          "p95": 40,
+          "p99": 40
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:22:00Z",
+          "p50": 39,
+          "p95": 58,
+          "p99": 58
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:04:00Z",
+          "p50": 38,
+          "p95": 41,
+          "p99": 41
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:05:00Z",
+          "p50": 35,
+          "p95": 39,
+          "p99": 39
+        }
+      ]
+    },
+    {
+      "title": "temp_c mean, rolling 5-minute window",
+      "query": "AmlOnlineEndpointConsoleLog | extend e=parse_json(Message) | where e.endpoint == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | where e.event == \"prediction_features\" | extend EventTime=todatetime(e.timestamp), Temperature=todouble(e.features.temp_c)  | where EventTime between (datetime(2026-10-11T21:56:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | extend Buckets=range(bin(EventTime,1m),bin(EventTime,1m)+4m,1m) | mv-expand Buckets to typeof(datetime)  | where Buckets between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize MeanTemperature=avg(Temperature), FeatureRows=count() by TimeGenerated=Buckets",
+      "rows": [
+        {
+          "TimeGenerated": "2026-10-11T22:21:00Z",
+          "MeanTemperature": 91.48599999999999,
+          "FeatureRows": 50
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:22:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:23:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:24:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:25:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:26:00Z",
+          "MeanTemperature": 91.32900363636362,
+          "FeatureRows": 550
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:36:00Z",
+          "MeanTemperature": 91.42509999999999,
+          "FeatureRows": 200
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:37:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:38:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:39:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:40:00Z",
+          "MeanTemperature": 91.34208666666659,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:41:00Z",
+          "MeanTemperature": 91.3005800000001,
+          "FeatureRows": 400
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:04:00Z",
+          "MeanTemperature": 79.37422799999992,
+          "FeatureRows": 500
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:05:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:06:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:07:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:08:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:09:00Z",
+          "MeanTemperature": 79.18138000000002,
+          "FeatureRows": 100
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:10:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:11:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:12:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:13:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        },
+        {
+          "TimeGenerated": "2026-10-11T22:14:00Z",
+          "MeanTemperature": 79.34208666666665,
+          "FeatureRows": 600
+        }
+      ]
+    },
+    {
+      "title": "Current model versions",
+      "query": "AmlOnlineEndpointConsoleLog | extend e=parse_json(Message) | where e.endpoint == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | where e.event == \"request\" and e.path in (\"/predict\",\"/predict/batch\",\"/invoke\") | summarize LastSeen=max(TimeGenerated), Requests=count() by ModelVersion=tostring(e.model_version)",
+      "rows": [
+        {
+          "ModelVersion": "1",
+          "LastSeen": "2026-10-11T22:37:24.8415722Z",
+          "Requests": 48
+        }
+      ]
+    }
+  ]
+}

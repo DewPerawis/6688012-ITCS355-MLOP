@@ -1,6 +1,9 @@
+import json
+
 import pytest
 
 from cloudlayer import observability
+from monitoring import alerts
 from monitoring.alerts import deliver
 
 
@@ -23,3 +26,23 @@ def test_unsafe_identifiers_do_not_reach_query(monkeypatch):
 def test_webhook_transport_requires_https():
     with pytest.raises(ValueError, match="HTTPS"):
         deliver("http://example.invalid", "test")
+
+
+def test_discord_webhook_sets_user_agent_and_content(monkeypatch):
+    class Response:
+        status = 204
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            pass
+
+    def send(request, timeout):
+        assert request.get_header("User-agent").startswith("DiscordBot (")
+        assert json.loads(request.data) == {"content": "test alert"}
+        assert timeout == 30
+        return Response()
+
+    monkeypatch.setattr(alerts, "urlopen", send)
+    assert deliver("https://discord.com/api/webhooks/example/fake", "test alert")["accepted"]

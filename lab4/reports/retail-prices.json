@@ -1,0 +1,62 @@
+{
+  "retrieved_at": "2026-10-11T23:13:05.160064+00:00",
+  "prices": [
+    {
+      "sku": "Standard_DS2_v2",
+      "source": "https://prices.azure.com/api/retail/prices?%24filter=serviceName+eq+%27Virtual+Machines%27+and+armRegionName+eq+%27centralindia%27+and+armSkuName+eq+%27Standard_DS2_v2%27",
+      "candidates": [
+        {
+          "currencyCode": "USD",
+          "tierMinimumUnits": 0.0,
+          "retailPrice": 0.169,
+          "unitPrice": 0.169,
+          "armRegionName": "centralindia",
+          "location": "IN Central",
+          "effectiveStartDate": "2025-05-01T00:00:00Z",
+          "meterId": "8ff981a1-40b8-4292-aa18-c1af57836008",
+          "meterName": "DS2 v2",
+          "productId": "DZH318Z0BQ4C",
+          "skuId": "DZH318Z0BQ4C/01D9",
+          "productName": "Virtual Machines DSv2 Series",
+          "skuName": "DS2 v2",
+          "serviceName": "Virtual Machines",
+          "serviceId": "DZH313Z7MMC8",
+          "serviceFamily": "Compute",
+          "unitOfMeasure": "1 Hour",
+          "type": "Consumption",
+          "isPrimaryMeterRegion": false,
+          "armSkuName": "Standard_DS2_v2"
+        }
+      ]
+    },
+    {
+      "sku": "Standard_DS1_v2",
+      "source": "https://prices.azure.com/api/retail/prices?%24filter=serviceName+eq+%27Virtual+Machines%27+and+armRegionName+eq+%27centralindia%27+and+armSkuName+eq+%27Standard_DS1_v2%27",
+      "candidates": [
+        {
+          "currencyCode": "USD",
+          "tierMinimumUnits": 0.0,
+          "retailPrice": 0.084,
+          "unitPrice": 0.084,
+          "armRegionName": "centralindia",
+          "location": "IN Central",
+          "effectiveStartDate": "2025-05-01T00:00:00Z",
+          "meterId": "661029d0-f3d1-41a4-8f27-f85785363906",
+          "meterName": "DS1 v2",
+          "productId": "DZH318Z0BQ4C",
+          "skuId": "DZH318Z0BQ4C/01B5",
+          "productName": "Virtual Machines DSv2 Series",
+          "skuName": "DS1 v2",
+          "serviceName": "Virtual Machines",
+          "serviceId": "DZH313Z7MMC8",
+          "serviceFamily": "Compute",
+          "unitOfMeasure": "1 Hour",
+          "type": "Consumption",
+          "isPrimaryMeterRegion": false,
+          "armSkuName": "Standard_DS1_v2"
+        }
+      ]
+    }
+  ],
+  "limitation": "Public retail reference; not the Azure Students invoice price."
+}

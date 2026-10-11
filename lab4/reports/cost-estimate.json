@@ -1,0 +1,15 @@
+{
+  "status": "partial_retail_reference_not_invoice",
+  "serving_price_usd_per_hour": 0.169,
+  "monitor_price_usd_per_hour": 0.084,
+  "serving_elapsed_hours_from_start": 1.6743353858333332,
+  "serving_elapsed_hours_from_completion": 1.508462453611111,
+  "serving_reference_cost_usd_from_start": 0.2829626802058333,
+  "serving_reference_cost_usd_from_completion": 0.2549301546602778,
+  "monitor_billable_hours": null,
+  "actual_lab4_billed_cost": null,
+  "posted_resource_group_totals": {
+    "USD": 0.11107099520000001
+  },
+  "limitation": "Elapsed-time references are not billing bounds. Monitor VM allocation time is unmeasured. Posted costs include shared earlier-lab resources; latest compute charges are absent."
+}

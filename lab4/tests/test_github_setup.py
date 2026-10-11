@@ -46,6 +46,14 @@ def test_managed_identity_preview_does_not_modify_azure_or_github(setup, monkeyp
     assert mutations == []
 
 
+def test_immutable_subject_override_is_preserved(setup, monkeypatch, capsys):
+    subject = "repo:example@123/student@456:environment:staging"
+    monkeypatch.setattr("sys.argv", ["github_setup", "--managed-identity", "lab4-ci", "--subject", subject])
+    github_setup.main()
+    assert subject in capsys.readouterr().out
+    assert setup[1] == []
+
+
 def test_managed_identity_execution_uses_arm_federation_and_scoped_roles(setup, monkeypatch):
     monkeypatch.setattr("sys.argv", ["github_setup", "--managed-identity", "lab4-ci", "--execute"])
     github_setup.main()
@@ -56,6 +64,7 @@ def test_managed_identity_execution_uses_arm_federation_and_scoped_roles(setup, 
                       if command[:4] == ["az", "identity", "federated-credential", "create"])
     assert federation[federation.index("--subject") + 1] == "repo:example/student:environment:staging"
     roles = [command for command in commands if command[:4] == ["az", "role", "assignment", "create"]]
+    assert {command[command.index("--role") + 1] for command in roles} == {"Contributor", "AcrPush", "Reader"}
     assert {command[command.index("--scope") + 1] for command in roles} == {"/workspace/w", "/registry/r"}
     switch = next(command for command in commands if command[:4] == ["gh", "variable", "set", "LAB4_DEPLOY_ENABLED"])
     assert switch[switch.index("--body") + 1] == "false"

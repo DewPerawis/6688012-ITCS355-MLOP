@@ -1,0 +1,9 @@
+{
+  "delete": {
+    "endpoint": "itcs355-6688012-lab4",
+    "schedule": "itcs355-6688012-lab4-drift",
+    "compute": "lab4monitor"
+  },
+  "active_lab4_jobs": [],
+  "keep": "Storage, ACR, workspace, registry, earlier Labs and Key Vault"
+}

@@ -1,0 +1,54 @@
+{
+  "status": "stable",
+  "checked_at": "2026-10-11T22:14:54.226770+00:00",
+  "source": "Azure managed endpoint console logs",
+  "rows": 500,
+  "oldest_input_at": "2026-10-11T22:10:28.4606860Z",
+  "newest_input_at": "2026-10-11T22:10:59.3147650Z",
+  "threshold": 0.7622300758267366,
+  "features": [
+    {
+      "feature": "temp_c",
+      "psi": 0.013052143186940934,
+      "ks": 0.03749999999999998,
+      "reference_mean": 79.66890555555555,
+      "current_mean": 79.305832
+    },
+    {
+      "feature": "vibration_mm_s",
+      "psi": 0.02325102697542172,
+      "ks": 0.03872222222222227,
+      "reference_mean": 4.603220277777778,
+      "current_mean": 4.588082
+    },
+    {
+      "feature": "pressure_kpa",
+      "psi": 0.009311572332016672,
+      "ks": 0.028555555555555556,
+      "reference_mean": 318.1791177777778,
+      "current_mean": 318.61693
+    },
+    {
+      "feature": "hours_since_service",
+      "psi": 0.006209101846781494,
+      "ks": 0.023333333333333317,
+      "reference_mean": 4533.585692222222,
+      "current_mean": 4568.658939999999
+    },
+    {
+      "feature": "load_pct",
+      "psi": 0.023851671642437303,
+      "ks": 0.037833333333333385,
+      "reference_mean": 65.66361861111112,
+      "current_mean": 65.25796399999999
+    },
+    {
+      "feature": "ambient_humidity",
+      "psi": 0.026712957291676255,
+      "ks": 0.04783333333333334,
+      "reference_mean": 58.038756388888885,
+      "current_mean": 57.519572
+    }
+  ],
+  "alert": null
+}

@@ -12,7 +12,8 @@ def main():
     parser.add_argument("--drift-json", required=True, type=Path)
     parser.add_argument("--alert-receipt", required=True,
                         help="local screenshot filename, channel timestamp, or confirmed receipt description")
-    parser.add_argument("--dashboard-screenshot", required=True)
+    parser.add_argument("--dashboard-screenshot", help="screenshot evidence; omit while capture is pending")
+    parser.add_argument("--dashboard-kind", choices=["portal_screenshot", "data_export"], default="portal_screenshot")
     args = parser.parse_args()
     drift = json.loads(args.drift_json.read_text())
     injection = json.loads(Path("reports/injection.json").read_text())
@@ -29,9 +30,12 @@ def main():
     if seconds < 0 or detection < start:
         raise ValueError("timestamps do not belong to this injection")
     evidence = {"injection_started_at": start.isoformat(), "detected_at": detection.isoformat(),
-                "alert_accepted_at": accepted.isoformat(), "detection_to_webhook_seconds": seconds,
+                "alert_accepted_at": accepted.isoformat(), "injection_to_webhook_seconds": seconds,
+                "detection_to_webhook_seconds": (accepted - detection).total_seconds(),
                 "definition": "first injected request to webhook HTTP acceptance; channel receipt captured separately",
                 "alert_receipt": args.alert_receipt, "dashboard_screenshot": args.dashboard_screenshot,
+                "dashboard_evidence_status": "supplied" if args.dashboard_screenshot else "pending",
+                "dashboard_evidence_kind": args.dashboard_kind if args.dashboard_screenshot else None,
                 "threshold": drift["threshold"], "features": drift["features"]}
     Path("reports/injected-drift-evidence.json").write_text(json.dumps(evidence, indent=2),
                                                          encoding="utf-8")

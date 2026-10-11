@@ -1,0 +1,10 @@
+{
+  "name": "itcs355-6688012-lab4-drift-08584098484054611101308887078CU10",
+  "status": "Completed",
+  "run_source": "Schedule",
+  "schedule": "itcs355-6688012-lab4-drift",
+  "properties": {
+    "azureml.enforceRerun": "True",
+    "azureml.pipelines.stages": "{\"Initialization\":null,\"Execution\":{\"StartTime\":\"2026-10-11T22:41:22.7880176+00:00\",\"EndTime\":\"2026-10-11T22:45:31.7352786+00:00\",\"Status\":\"Finished\"}}"
+  }
+}

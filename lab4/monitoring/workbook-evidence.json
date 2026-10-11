@@ -1,0 +1,111 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "name": "intro",
+      "content": {
+        "json": "# ITCS355 Lab 4 \u2014 historical cloud evidence\nUTC window: 2026-10-11T22:00:00+00:00 to 2026-10-11T23:10:00+00:00. Queries read retained Azure logs after teardown; no service is restarted. The workbook query scope is the last 24 hours; capture this exercise within that scope."
+      }
+    },
+    {
+      "type": 3,
+      "name": "panel-1",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "Request rate (requests/second)",
+        "query": "AmlOnlineEndpointTrafficLog | where EndpointName == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize RequestsPerSecond=count()/60.0 by bin(TimeGenerated,1m)",
+        "size": 0,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de"
+        ],
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "visualization": "timechart"
+      }
+    },
+    {
+      "type": 3,
+      "name": "panel-2",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "4xx and 5xx error fractions",
+        "query": "AmlOnlineEndpointTrafficLog | where EndpointName == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize Total=count(), Client=countif(toint(ResponseCode) between (400..499)), Server=countif(toint(ResponseCode)>=500) by bin(TimeGenerated,1m) | project TimeGenerated, Error4xx=todouble(Client)/Total, Error5xx=todouble(Server)/Total",
+        "size": 0,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de"
+        ],
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "visualization": "timechart"
+      }
+    },
+    {
+      "type": 3,
+      "name": "panel-3",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "Gateway latency p50 / p95 / p99 (ms)",
+        "query": "AmlOnlineEndpointTrafficLog | where EndpointName == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize p50=percentile(TotalDurationMs,50), p95=percentile(TotalDurationMs,95), p99=percentile(TotalDurationMs,99) by bin(TimeGenerated,1m)",
+        "size": 0,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de"
+        ],
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "visualization": "timechart"
+      }
+    },
+    {
+      "type": 3,
+      "name": "panel-4",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "temp_c mean, rolling 5-minute window",
+        "query": "AmlOnlineEndpointConsoleLog | extend e=parse_json(Message) | where e.endpoint == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | where e.event == \"prediction_features\" | extend EventTime=todatetime(e.timestamp), Temperature=todouble(e.features.temp_c)  | where EventTime between (datetime(2026-10-11T21:56:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | extend Buckets=range(bin(EventTime,1m),bin(EventTime,1m)+4m,1m) | mv-expand Buckets to typeof(datetime)  | where Buckets between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | summarize MeanTemperature=avg(Temperature), FeatureRows=count() by TimeGenerated=Buckets",
+        "size": 0,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de"
+        ],
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "visualization": "timechart"
+      }
+    },
+    {
+      "type": 3,
+      "name": "panel-5",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "Current model versions",
+        "query": "AmlOnlineEndpointConsoleLog | extend e=parse_json(Message) | where e.endpoint == \"itcs355-6688012-lab4\" | where TimeGenerated between (datetime(2026-10-11T22:00:00+00:00)..datetime(2026-10-11T23:10:00+00:00)) | where e.event == \"request\" and e.path in (\"/predict\",\"/predict/batch\",\"/invoke\") | summarize LastSeen=max(TimeGenerated), Requests=count() by ModelVersion=tostring(e.model_version)",
+        "size": 0,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de"
+        ],
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "visualization": "table"
+      }
+    }
+  ],
+  "isLocked": false,
+  "fallbackResourceIds": [
+    "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de"
+  ]
+}

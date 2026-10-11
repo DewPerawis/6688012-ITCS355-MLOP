@@ -19,6 +19,7 @@ def main():
     identity = parser.add_mutually_exclusive_group(required=True)
     identity.add_argument("--client-id", help="existing Entra application client ID")
     identity.add_argument("--managed-identity", help="existing user-assigned identity name in the Lab resource group")
+    parser.add_argument("--subject", help="exact GitHub OIDC subject, including immutable IDs when enabled")
     parser.add_argument("--execute", action="store_true")
     args = parser.parse_args()
     cfg = config.load()
@@ -47,12 +48,13 @@ def main():
     workspace = output("az", "ml", "workspace", "show", "-g", cfg.azure_resource_group,
                        "--name", cfg.azureml_workspace, "--query", "id", "-o", "tsv")
     federation = {"name": "itcs355-lab4-staging", "issuer": "https://token.actions.githubusercontent.com",
-                  "subject": f"repo:{repo}:environment:staging", "audiences": ["api://AzureADTokenExchange"]}
+                  "subject": args.subject or f"repo:{repo}:environment:staging",
+                  "audiences": ["api://AzureADTokenExchange"]}
     variables = {"AZURE_RESOURCE_GROUP": cfg.azure_resource_group,
                  "AZUREML_WORKSPACE": cfg.azureml_workspace,
                  "CONTAINER_REGISTRY": cfg.container_registry, "ACR_NAME": registry["name"],
                  "LAB4_DEPLOY_ENABLED": "false"}
-    print("Plan: add staging federation, grant Contributor on the ML workspace and AcrPush on the ACR;")
+    print("Plan: add staging federation, grant Contributor on the ML workspace and AcrPush + Reader on the ACR;")
     print("create GitHub staging environment; set identity IDs as secrets and config as variables.")
     print("Deployment stays disabled until you explicitly enable LAB4_DEPLOY_ENABLED=true.")
     print(json.dumps({"repo": repo, "federation": federation,
@@ -85,7 +87,9 @@ def main():
             if not match:
                 subprocess.run(["az", "ad", "app", "federated-credential", "create", "--id", application["id"],
                                 "--parameters", str(file), "--output", "none"], check=True)
-    for role, scope in (("Contributor", workspace), ("AcrPush", registry["id"])):
+    # AcrPush covers image operations; CLI registry discovery also needs ARM read access.
+    for role, scope in (("Contributor", workspace), ("AcrPush", registry["id"]),
+                        ("Reader", registry["id"])):
         subprocess.run(["az", "role", "assignment", "create", "--assignee-object-id", principal,
                         "--assignee-principal-type", "ServicePrincipal", "--role", role,
                         "--scope", scope, "--output", "none"], check=True)

@@ -1,0 +1,12 @@
+{
+  "kind": "baseline",
+  "started_at": "2026-10-11T22:10:15.615349+00:00",
+  "shift_temp_c": 0,
+  "rows_planned": 600,
+  "rows_sent": 600,
+  "target": "itcs355-6688012-lab4",
+  "model_version": "1",
+  "simulation": true,
+  "source": "controlled replay of training-only synthetic inputs",
+  "completed_at": "2026-10-11T22:10:59.593088+00:00"
+}

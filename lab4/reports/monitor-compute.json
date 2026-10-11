@@ -1,0 +1,7 @@
+{
+  "name": "lab4monitor",
+  "principal_id": "7da4980e-5b62-4865-a485-34a67928f689",
+  "min_instances": 0,
+  "max_instances": 1,
+  "next": "grant Log Analytics Reader and Key Vault Secrets User at resource scopes"
+}

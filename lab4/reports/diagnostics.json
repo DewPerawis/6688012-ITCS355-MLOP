@@ -1,0 +1,18 @@
+{
+  "endpoint": "itcs355-6688012-lab4",
+  "categories": [
+    {
+      "category": "AmlOnlineEndpointConsoleLog",
+      "enabled": true
+    },
+    {
+      "category": "AmlOnlineEndpointTrafficLog",
+      "enabled": true
+    },
+    {
+      "category": "AmlOnlineEndpointEventLog",
+      "enabled": true
+    }
+  ],
+  "configured_at": "2026-10-11T21:33:04.915637+00:00"
+}

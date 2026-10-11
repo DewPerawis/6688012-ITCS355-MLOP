@@ -1,0 +1,9 @@
+{
+  "checked_at": "2026-10-11T23:17:46.1808569Z",
+  "test_count_passed": 28,
+  "test_runtime_seconds": 5.22,
+  "warnings": [
+    "Starlette TestClient/httpx deprecation"
+  ],
+  "lint": "passed"
+}

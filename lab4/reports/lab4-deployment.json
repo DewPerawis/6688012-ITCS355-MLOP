@@ -1,0 +1,11 @@
+{
+  "deployed_at": "2026-10-11T21:30:47.243587+00:00",
+  "deployment": "blue",
+  "deployment_started_at": "2026-10-11T21:20:50.101031+00:00",
+  "endpoint": "itcs355-6688012-lab4",
+  "instance": "Standard_DS2_v2",
+  "model_name": "itcs355-6688012",
+  "model_version": "1",
+  "scoring_uri_configured": true,
+  "serving_image_digest": "sha256:e1b7ea92fd08d5bd3c800bb42b3515d1a17b5c0c216adf720f15b756c9f8656e"
+}

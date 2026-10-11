@@ -1,0 +1,54 @@
+{
+  "queried_at": "2026-10-11T23:13:08.624775+00:00",
+  "scope": "subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012",
+  "response": {
+    "id": "subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.CostManagement/query/cda5a4f2-5325-4be6-86f4-e9d19dbad456",
+    "name": "cda5a4f2-5325-4be6-86f4-e9d19dbad456",
+    "type": "Microsoft.CostManagement/query",
+    "location": null,
+    "sku": null,
+    "eTag": null,
+    "properties": {
+      "nextLink": null,
+      "columns": [
+        {
+          "name": "PreTaxCost",
+          "type": "Number"
+        },
+        {
+          "name": "UsageDate",
+          "type": "Number"
+        },
+        {
+          "name": "ResourceId",
+          "type": "String"
+        },
+        {
+          "name": "Currency",
+          "type": "String"
+        }
+      ],
+      "rows": [
+        [
+          0.1110675552,
+          20261011,
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/microsoft.containerregistry/registries/itcs3556688012",
+          "USD"
+        ],
+        [
+          3e-06,
+          20261011,
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/microsoft.keyvault/vaults/itcs3556keyvault63d2a327",
+          "USD"
+        ],
+        [
+          4.4e-07,
+          20261011,
+          "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/microsoft.storage/storageaccounts/itcs3556688012",
+          "USD"
+        ]
+      ]
+    }
+  },
+  "limitation": "Resource-group observations include shared earlier-lab resources; recent usage may not be posted yet."
+}

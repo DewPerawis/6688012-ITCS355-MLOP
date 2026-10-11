@@ -1,0 +1,12 @@
+{
+  "kind": "injection",
+  "started_at": "2026-10-11T22:36:40.299687+00:00",
+  "shift_temp_c": 12.0,
+  "rows_planned": 600,
+  "rows_sent": 600,
+  "target": "itcs355-6688012-lab4",
+  "model_version": "1",
+  "simulation": true,
+  "source": "controlled replay of training-only synthetic inputs",
+  "completed_at": "2026-10-11T22:37:25.139333+00:00"
+}

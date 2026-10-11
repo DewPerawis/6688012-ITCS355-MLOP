@@ -70,21 +70,43 @@ Evidence: `blocked-ci.log`, `blocked-ci-run.json`, `blocked-pr.json`,
 Known warning: FastAPI/Starlette deprecates its current httpx TestClient transport in the
 existing pinned environment. It did not fail tests; no dependency migration was performed.
 
-## Prepared implementation awaiting live proof
+## Live cloud execution and remaining submission evidence
 
 | Required artifact | Implementation ready | Actual exercise status |
 |---|---|---|
 | GitHub Actions full gate | `.github/workflows/lab4-ci.yml` | Main run 38171649219 succeeded |
-| OIDC and scoped roles | `scripts.github_setup`, preview before execute | Student execution completed; actual Actions login still required |
+| OIDC and scoped roles | `scripts.github_setup`, preview before execute | OIDC login passed in run 38174583649; immutable subject and ACR Reader corrections required |
 | Bad PR blocked before build | `scripts.bad_pr` | PR #1 failed schema gate; build/deploy skipped; closed unmerged |
-| SHA image push/staging/smoke | Workflow and Azure adapter | No Lab 4 endpoint created |
-| Dashboard with five signals | Workbook JSON, KQL and service logs | Portal import and actual dashboard screenshot required |
+| SHA image push/staging/smoke | Workflow and Azure adapter | Run 38174583649 passed; downloaded staging-04aedd4 artifacts |
+| Dashboard with five signals | Workbook JSON, KQL and service logs | Five actual Azure query results and PNG/PDF export saved; Portal screenshot is separate |
 | SLO target/window/response | `monitoring/slo.yaml` | Definition ready; long-window compliance unmeasured |
-| Scheduled production-input detector | Azure ML pipeline/schedule controller and managed-identity job | No schedule/monitor compute created |
-| Real channel alert | Slack/Discord HTTPS transport; Key Vault lookup | User channel/webhook and actual receipt required |
-| Injection-to-alert interval | Replay timestamp and strict evidence finalizer | Actual scheduled alert timestamps required |
-| Five-line post-mortem | Generated after measured evidence is supplied | No final post-mortem claimed yet |
-| Teardown/cost | Tag/name-checked cleanup and cost template/estimator | Execute after cloud exercise; no Lab 4 cost measured |
+| Scheduled production-input detector | Azure ML pipeline/schedule controller and managed-identity job | Actual scheduled run completed; read 500 endpoint log inputs |
+| Real channel alert | Discord HTTPS transport; Key Vault lookup | HTTP 204 and actual Discord screenshots confirmed |
+| Injection-to-alert interval | Replay timestamp and strict evidence finalizer | 521.911988 seconds from first injected request to webhook acceptance |
+| Five-line post-mortem | Generated from measured evidence | postmortem.md and measured evidence reference the actual cloud dashboard export |
+| Teardown/cost | Tag/name-checked cleanup and cost report | Endpoint, schedule and monitor compute deleted; remaining={}; billed cost still pending |
+
+Successful scheduled pipeline:
+`itcs355-6688012-lab4-drift-08584098484054611101308887078CU10`;
+child `f3247490-e8ce-45b9-8212-eea464dced9d` Completed.
+Actual drift artifact: status=drift, rows=500, temp_c PSI approximately 1.2185,
+threshold=0.7622300758, webhook HTTP=204. Discord receipt at 05:45 on 12 October 2026
+Thailand time is saved in `discord-drift-alert.png` and `discord-drift-alerts.png`.
+The first scheduled attempts reached delivery but failed with HTTP 403; adding the
+documented Discord User-Agent and Discord content payload allowed delivery.
+The separate channel setup test is not counted as scheduled drift evidence.
+
+Teardown verified at 2026-10-11T23:01:17.708420Z (06:01:17 on 12 October, Thailand).
+`lab4-teardown.json` confirms no remaining Lab 4 endpoint, schedule or monitor compute.
+Workspace, ACR, Storage, model registry, Key Vault and workbook remain for later work.
+This does not establish zero residual storage, registry or logging charges.
+
+The five-panel dashboard export is labelled as actual retained Azure log data, not a
+Portal screenshot. `dashboard-cloud-data.json` records all queries and observed rows;
+`dashboard-cloud-evidence.png` and `.pdf` display the shift. Historical workbook JSON
+pins the experiment window. Source edits and evidence still need a reviewed final commit/push.
+Retail price references and three posted shared-resource cost rows are captured; recent
+compute charges are absent, so final billing reconciliation remains pending.
 
 ## What was changed on the owner's machine
 

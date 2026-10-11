@@ -6,11 +6,19 @@ The authoritative handout is `course/labs/lab-04-cicd-monitoring-drift.md` in th
 
 ## Evidence status
 
-This folder is prepared for execution. Local tests, a deliberately failing local contract
-rehearsal, a real serving-container smoke test, and local drift calibration are checked.
-The assistant's local checks are preparation evidence. **They do not complete the required
-failing GitHub PR, staging deployment, scheduled cloud detector, real alert receipt,
-injected-drift dashboard capture, or cloud teardown.** See `reports/lab4-status.md`.
+The student completed the cloud exercise on 12 October 2026 (Thailand). Main CI and
+staging deployment passed; PR #1 deliberately omitted `temp_c`, failed the data-contract
+gate before build and was closed without merging. An actual scheduled Azure ML job read
+500 service input logs, detected temperature drift (PSI 1.21851169 versus threshold
+0.76223008), and delivered a Discord alert confirmed by both HTTP 204 and channel screenshots.
+Injection-to-webhook acceptance took 521.911988 seconds. Endpoint, schedule and dedicated
+monitor compute were removed and absence verified. Latest local tests: 28 passed.
+
+`reports/dashboard-cloud-evidence.png` renders the five actual retained Azure log query
+results; it is a dashboard data export, not an Azure Portal screenshot. The historical
+workbook definition and raw panel results are also committed. Recent compute charges
+were not yet present in Cost Management when queried; billing reconciliation remains pending.
+See `reports/lab4-status.md`, `reports/submission-summary.md`, and `reports/lab4-cost.md`.
 
 ## Reproduce the checks
 
@@ -55,13 +63,14 @@ transferred to CD rather than rebuilt. CD tests the registered model before push
 pushes a SHA-tagged image, deploys its immutable digest, and smoke-tests the managed endpoint.
 
 Use GitHub's `staging` environment and Entra OIDC subject
-`repo:DewPerawis/6688012-ITCS355-MLOP:environment:staging`. No client secret is needed.
+`repo:DewPerawis@163615056/6688012-ITCS355-MLOP@1367694929:environment:staging`.
+This repository uses GitHub's immutable subject format. No client secret is needed.
 `scripts.github_setup` previews federation, scoped roles, repository variables, and identity
-IDs before `--execute`. Workspace Contributor and registry AcrPush are separate scopes;
+IDs before `--execute`. Workspace Contributor and registry AcrPush plus Reader are separate scopes;
 refine these to custom roles if operating beyond the coursework demonstration.
 
 If the tenant denies app registration, an existing user-assigned managed identity can
-also trust the same GitHub OIDC subject. Use `scripts.github_setup --managed-identity NAME`
+also trust the same GitHub OIDC subject. Use `scripts.github_setup --managed-identity NAME --subject "<EXACT_OIDC_SUBJECT>"`
 to preview its setup; this path uses Azure Resource Manager operations and avoids app/SP
 directory lookups. Creating an identity and assigning roles still require the appropriate
 Azure resource permissions. The GitHub-hosted OIDC workflow needs no Azure VM.
@@ -83,6 +92,12 @@ settings. `monitoring/workbook.json` imports into Azure Workbooks; `monitoring/q
 contains its five panels: request rate, 4xx/5xx, gateway p50/p95/p99, rolling five-minute
 temperature mean, and current model versions. `/metrics` latency is application-only;
 gateway `TotalDurationMs` is a different measurement. Do not compare them as identical.
+
+After teardown, retained cloud logs can still show the experiment. Generate the historical
+definition with `python -m scripts.workbook --start 2026-10-11T22:00:00Z --end 2026-10-11T23:10:00Z`.
+Import `monitoring/workbook-evidence.json` to view the exercise in Portal. Its query scope is
+the last 24 hours, while KQL pins the actual experiment window. `scripts.render_dashboard`
+recreates the PNG/PDF offline from `reports/dashboard-cloud-data.json`, without cloud compute.
 
 `monitoring/slo.yaml` defines availability 99.5% over 30 days, gateway p95 below 250 ms,
 and monitoring freshness. Each has a response when its budget is spent. The short lab
@@ -122,7 +137,9 @@ remain separate facts. No retraining or model rollback is automatic.
 
 Inspect live Azure prices/quota and billing before starting the endpoint or compute.
 Azure Students credit is still consumption; the course-wide limit is below 800 THB.
-No measured Lab 4 cloud cost exists yet. `reports/lab4-cost.md` records the fields to capture.
+Current public retail prices and a Cost Management snapshot are saved. Public prices and
+elapsed deployment intervals are estimates, not the Azure Students invoice.
+`reports/lab4-cost.md` states the posted shared-resource costs and missing compute charges.
 
 ```bash
 make disable-schedule

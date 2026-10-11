@@ -1,0 +1,7 @@
+{
+  "principal_id": "7da4980e-5b62-4865-a485-34a67928f689",
+  "log_role": "Log Analytics Reader",
+  "log_scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.OperationalInsights/workspaces/itcs3556logalytibb5455de",
+  "vault_mode": "RBAC",
+  "vault_permission": "Key Vault Secrets User on the named alert secret"
+}

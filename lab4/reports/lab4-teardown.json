@@ -1,0 +1,10 @@
+{
+  "deleted": {
+    "endpoint": "itcs355-6688012-lab4",
+    "schedule": "itcs355-6688012-lab4-drift",
+    "compute": "lab4monitor"
+  },
+  "remaining": {},
+  "verified_at": "2026-10-11T23:01:17.708420+00:00",
+  "portal_confirmation": "capture manually"
+}
