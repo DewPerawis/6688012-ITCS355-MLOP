@@ -1,0 +1,850 @@
+{
+  "checked_at": "2026-10-23T06:21:10.412399+00:00",
+  "scope": "read-only planning",
+  "preflight_sha256": "a81ab9ab8b085f5e58590c7b2b0aafa6c00f2bec3c023c7c13208b4e509021f9",
+  "quota": {
+    "status": "ok",
+    "region": "centralindia",
+    "items": [
+      {
+        "name": "TotalClusters",
+        "current": 0,
+        "limit": 200,
+        "unit": "Count"
+      },
+      {
+        "name": "TotalDedicatedCores",
+        "current": 0,
+        "limit": 20,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDFamily",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDv2Family",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDv3Family",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDSv2Family",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDSv3Family",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardFSv2Family",
+        "current": 0,
+        "limit": 16,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCFamily",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCSv2Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCSv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDSFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDSv2Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNVFamily",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardMSFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNVSv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHBrsv2Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHCSFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "Standard NCASv3_T4 Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "Standard NDASv4_A100 Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCADSA100v4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standard NDAMSv4_A100Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCPromoFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEAv4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHBSFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDSv4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardLSv2Family",
+        "current": 0,
+        "limit": 4,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHBv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardFXMDVSFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardESv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDASv4Family",
+        "current": 0,
+        "limit": 4,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEADSv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDv4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDAv4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDSv4Family",
+        "current": 0,
+        "limit": 4,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDv4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEASv4Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardAv2Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDAMSv4A100noRDMAFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDADSv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEBDSv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDSv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDv5H100Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDSv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDv5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardLSv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardLASv3Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDv4A100FlexFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCADSH100v5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNVADSA10v5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDv5H100FlexFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDAMSFv4A100Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISH100V5noRDMAFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISFlexH100V5noRDMAFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardMSv2Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISH200V5noRDMAFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISRH200V5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISFlexH200V5noRDMAFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISRFlexH200V5Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDMI300Xv5IBFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDFlexMI300XV5noRDMAFamily",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "TotalLowPriorityCores",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDSv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardFSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCSv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDSFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNVFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardMSFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNVSv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHBrsv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHCSFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "Standard NCASv3_T4 Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "Standard NDASv4_A100 Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCADSA100v4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standard NDAMSv4_A100Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCPromoFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEAv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHBSFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDSv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardLSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHBv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardFXMDVSFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardESv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDASv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEADSv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDAv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDSv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEASv4Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardAv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardHFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDAMSv4A100noRDMAFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDADSv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEBDSv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDSv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDv5H100Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDSv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardEDv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDDv5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardLSv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardLASv3Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDv4A100FlexFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNCADSH100v5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNVADSA10v5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDv5H100FlexFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDAMSFv4A100Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISH100V5noRDMAFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISFlexH100V5noRDMAFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardMSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISH200V5noRDMAFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISRH200V5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISFlexH200V5noRDMAFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "StandardNDISRFlexH200V5Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDMI300Xv5IBFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDFlexMI300XV5noRDMAFamily",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      }
+    ],
+    "relevant": [
+      {
+        "name": "TotalClusters",
+        "current": 0,
+        "limit": 200,
+        "unit": "Count"
+      },
+      {
+        "name": "TotalDedicatedCores",
+        "current": 0,
+        "limit": 20,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDSv2Family",
+        "current": 0,
+        "limit": 6,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDSv2Family",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "TotalLowPriorityCores",
+        "current": 0,
+        "limit": 0,
+        "unit": "Count"
+      },
+      {
+        "name": "standardDSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      },
+      {
+        "name": "standardNDSv2Family",
+        "current": 0,
+        "limit": -1,
+        "unit": "Count"
+      }
+    ],
+    "note": "Subscription/region ML quota only. This does not prove SKU capacity, role permissions, endpoint quota or discounted-compute eligibility."
+  },
+  "identities": {
+    "status": "ok",
+    "items": [
+      {
+        "location": "centralindia",
+        "name": "itcs355-6688012-lab4-ci",
+        "principalId": "51d18b7b-ccbd-4088-81aa-696cea767485"
+      }
+    ]
+  },
+  "group_billing": {
+    "status": "unavailable",
+    "error_type": "HTTPError",
+    "http_status": 429,
+    "actual_cost": null
+  },
+  "lab5_billing": {
+    "status": "unavailable",
+    "error_type": "HTTPError",
+    "http_status": 429,
+    "actual_cost": null
+  },
+  "estimate": {
+    "status": "draft_created",
+    "path": "lab5-estimate.md",
+    "hourly_thb": 5.6784,
+    "part_a_subtotal_thb": 17.3568,
+    "proposed_envelope_thb": 44.8282,
+    "meter_id": "8ff981a1-40b8-4292-aa18-c1af57836008",
+    "sha256": "65e0795089f3748c99a08c9abd44eff94d2558939e24ff7c02f648de7247350a"
+  },
+  "status": "ready_for_review"
+}

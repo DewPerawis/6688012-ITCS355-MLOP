@@ -1,0 +1,237 @@
+{
+  "prepared_at": "2026-10-23T06:51:44.976691+00:00",
+  "status": "preview_ready",
+  "estimate_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+  "source_base_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+  "local_rehearsal": {
+    "split_rows": [
+      3600,
+      1200,
+      1200
+    ],
+    "broken_contract_blocked": true,
+    "synthetic_gate_probes": {
+      "pass": true,
+      "degraded_blocked": true,
+      "unchanged_blocked": true
+    }
+  },
+  "gate_policy": {
+    "metric": "val_pr_auc",
+    "floor": 0.4,
+    "minimum_delta": 0.002,
+    "incumbent": 0.40004728306048276,
+    "seed": 20260101,
+    "limitation": "Single-seed operational guard; not statistical evidence of a stable gain."
+  },
+  "source_bundle": "_bundles/20261023T065144716018Z",
+  "bundle_hashes": {
+    "runtime.json": "c2af60b7c126f8b43d053d79aabcc0459eab28a7f2c560ab962b25f5ab7d6e88",
+    "cloudlayer/release.py": "1d155c375b3868226a1cd52c6a22133c157029ea9886b873b4076f806c18eb96",
+    "cloudlayer/run_step.py": "20643f91327823ad93a518b8ff47abdf15fc7a62f4246e1ac86b9b42e927ac97",
+    "cloudlayer/__init__.py": "aa2c1787e7037249696c9af002c6de776815f5f5e61587b9bf3ff8b57cd990ba",
+    "src/data.py": "f4f48d0412ac1d57383a6922c8af6f37e93dcbe60327ffaa54070c59d56ec36c",
+    "src/pipeline_steps.py": "d32b4fd1bceeaf089fd09882f94dd59fb0b52ab51a3dfe56dbd154c5cfa89a04",
+    "src/__init__.py": "4f3f2448b69a76861af35ae46972cf86b7bf307d2d519be9c34573713cd81488"
+  },
+  "pipeline_files": [
+    "reports/pipeline-20261023T065144716018Z.yaml",
+    "reports/pipeline-degraded-20261023T065144716018Z.yaml"
+  ],
+  "raw_sha256": "422cccb9136e814061b83e4f041cff21ba7372c6f7fb0feb2c321555c6a6341f",
+  "runtime": {
+    "subscription": "b175b91e-058e-4a22-8e96-39e6e432b006",
+    "group": "itcs355-6688012",
+    "workspace": "itcs355-6688012",
+    "model_name": "itcs355-6688012",
+    "incumbent_version": "1",
+    "incumbent_metric": 0.40004728306048276,
+    "train_identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-train",
+    "serve_identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve",
+    "ci_identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab4-ci",
+    "ci_client_id": "308025e6-89e3-492f-b58e-672c4b0f2ef8",
+    "training_image": "itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355@sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+    "serving_image": "itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355-serve@sha256:e1b7ea92fd08d5bd3c800bb42b3515d1a17b5c0c216adf720f15b756c9f8656e",
+    "endpoint": "itcs355-6688012-lab5",
+    "raw_uri": "azureml://datastores/itcs355blob/paths/itcs355/lab2/data/sensors.csv",
+    "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+    "source_base_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+    "estimate_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+    "tracking_uri": "azureml://centralindia.api.azureml.ms/mlflow/v1.0/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.MachineLearningServices/workspaces/itcs355-6688012"
+  },
+  "release_price_reference": {
+    "retrieved_at": "2026-10-23T06:51:44.715565+00:00",
+    "source": "https://prices.azure.com/api/retail/prices?currencyCode=%27THB%27&%24filter=serviceName+eq+%27Virtual+Machines%27+and+armRegionName+eq+%27centralindia%27+and+armSkuName+eq+%27Standard_DS1_v2%27+and+priceType+eq+%27Consumption%27",
+    "sku": "Standard_DS1_v2",
+    "region": "centralindia",
+    "meters": [
+      {
+        "meterId": "661029d0-f3d1-41a4-8f27-f85785363906",
+        "meterName": "DS1 v2",
+        "productName": "Virtual Machines DSv2 Series",
+        "skuName": "DS1 v2",
+        "armSkuName": "Standard_DS1_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 2.8224,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "639d4639-9a26-46fb-90b1-d3ebbd41a686",
+        "meterName": "DS1 v2 Low Priority",
+        "productName": "Virtual Machines DSv2 Series Windows",
+        "skuName": "DS1 v2 Low Priority",
+        "armSkuName": "Standard_DS1_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 1.7472,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "f5bcb3fd-89e0-46a1-9f1a-c1f417806237",
+        "meterName": "DS1 v2",
+        "productName": "Virtual Machines DSv2 Series Windows",
+        "skuName": "DS1 v2",
+        "armSkuName": "Standard_DS1_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 4.368,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "7d8264f5-ac40-527f-b59e-098bffd79b9d",
+        "meterName": "DS1 v2 Spot",
+        "productName": "Virtual Machines DSv2 Series Windows",
+        "skuName": "DS1 v2 Spot",
+        "armSkuName": "Standard_DS1_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 0.9802,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2026-10-01T00:00:00Z",
+        "isPrimaryMeterRegion": true,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "9c2bae8a-fa97-49fa-8515-e82656fa6381",
+        "meterName": "DS1 v2 Low Priority",
+        "productName": "Virtual Machines DSv2 Series",
+        "skuName": "DS1 v2 Low Priority",
+        "armSkuName": "Standard_DS1_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 0.5678,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "dfd0d38a-e049-5ba0-a8e9-a37b9b07d6d8",
+        "meterName": "DS1 v2 Spot",
+        "productName": "Virtual Machines DSv2 Series",
+        "skuName": "DS1 v2 Spot",
+        "armSkuName": "Standard_DS1_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 0.6334,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2026-10-01T00:00:00Z",
+        "isPrimaryMeterRegion": true,
+        "tierMinimumUnits": 0.0
+      }
+    ],
+    "note": "Retail VM reference only; not the Azure Students invoice or an ML service quote. THB prices are budget references. Select the correct Linux meter before estimating."
+  },
+  "proposed_compute": [
+    {
+      "name": "lab5train",
+      "sku": "Standard_DS2_v2",
+      "identity": "lab5-train"
+    },
+    {
+      "name": "lab5release",
+      "sku": "Standard_DS1_v2",
+      "identity": "existing lab4-ci"
+    }
+  ],
+  "compute_limits": {
+    "min": 0,
+    "max_per_cluster": 1,
+    "idle_scale_down_seconds": 120
+  },
+  "identity_selection": {
+    "training": "Compute must attach only the Lab 5 training UAI; job uses type=managed",
+    "release": "CI selected explicitly by client_id on separate release compute"
+  },
+  "new_identities": [
+    "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-train",
+    "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve"
+  ],
+  "role_plan": [
+    {
+      "identity": "lab5-train",
+      "role": "Storage Blob Data Contributor",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/itcs355"
+    },
+    {
+      "identity": "lab5-train",
+      "role": "Storage Blob Data Reader",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91"
+    },
+    {
+      "identity": "lab5-train",
+      "role": "AcrPull",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012"
+    },
+    {
+      "identity": "existing lab4-ci",
+      "role": "Storage Blob Data Contributor",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/itcs355"
+    },
+    {
+      "identity": "existing lab4-ci",
+      "role": "Storage Blob Data Contributor",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91"
+    },
+    {
+      "identity": "existing lab4-ci",
+      "role": "Managed Identity Operator",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve"
+    },
+    {
+      "identity": "lab5-serve",
+      "role": "Storage Blob Data Reader",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91"
+    },
+    {
+      "identity": "lab5-serve",
+      "role": "AcrPull",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012"
+    }
+  ],
+  "existing_ci_workspace_roles": "Must verify existing workspace Contributor and ACR pull access before submission",
+  "discounted_compute": "unmet: observed TotalLowPriorityCores=0; dedicated fallback proposed",
+  "budget": {
+    "posted_usd": 7.896070275116232,
+    "term_thb_verified": false
+  },
+  "cloud_mutations": false,
+  "managed_jobs_submitted": false,
+  "next": "Review resource/role plan, source commit and budget before any execution. No managed result claimed."
+}

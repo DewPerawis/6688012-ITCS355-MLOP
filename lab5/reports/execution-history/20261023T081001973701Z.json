@@ -1,0 +1,152 @@
+{
+  "started_at": "2026-10-23T07:05:38.768942+00:00",
+  "run_prefix": "lab5-20261023-070538",
+  "estimate_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+  "status": "needs_attention",
+  "budget_planning": {
+    "posted_usd": 7.896070275116232,
+    "assumed_thb_per_usd": 40,
+    "unposted_other_scope_reserve_thb": 200,
+    "lab5_envelope_thb": 44.8282,
+    "combined_planning_envelope_thb": 560.671,
+    "full_term_actual_verified": false,
+    "note": "Explicit planning assumptions, not measured FX or proof of full-term cost compliance."
+  },
+  "source_commit": "2487815e5bb65d7a216daf62366f254042174d32",
+  "updated_at": "2026-10-23T07:54:00.399577+00:00",
+  "runtime": {
+    "subscription": "b175b91e-058e-4a22-8e96-39e6e432b006",
+    "group": "itcs355-6688012",
+    "workspace": "itcs355-6688012",
+    "model_name": "itcs355-6688012",
+    "incumbent_version": "1",
+    "incumbent_metric": 0.40004728306048276,
+    "train_identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-train",
+    "serve_identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve",
+    "ci_identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab4-ci",
+    "ci_client_id": "308025e6-89e3-492f-b58e-672c4b0f2ef8",
+    "training_image": "itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355@sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+    "serving_image": "itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355-serve@sha256:e1b7ea92fd08d5bd3c800bb42b3515d1a17b5c0c216adf720f15b756c9f8656e",
+    "endpoint": "itcs355-6688012-lab5",
+    "raw_uri": "azureml://datastores/itcs355blob/paths/itcs355/lab2/data/sensors.csv",
+    "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+    "source_base_commit": "2487815e5bb65d7a216daf62366f254042174d32",
+    "estimate_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+    "tracking_uri": "azureml://centralindia.api.azureml.ms/mlflow/v1.0/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.MachineLearningServices/workspaces/itcs355-6688012"
+  },
+  "bundle": "lab5/_bundles/lab5-20261023-070538",
+  "bundle_hashes": {
+    "runtime.json": "8886bf85a04da08645e83c67affe278ea006b242fb190302d221a2a3061a9ffd",
+    "cloudlayer/release.py": "bf1a17124ff01285f7940d07dc525dd1f3295c0cfd0763b0b03c8d530c299143",
+    "cloudlayer/run_step.py": "20643f91327823ad93a518b8ff47abdf15fc7a62f4246e1ac86b9b42e927ac97",
+    "cloudlayer/__init__.py": "aa2c1787e7037249696c9af002c6de776815f5f5e61587b9bf3ff8b57cd990ba",
+    "src/data.py": "f4f48d0412ac1d57383a6922c8af6f37e93dcbe60327ffaa54070c59d56ec36c",
+    "src/pipeline_steps.py": "d32b4fd1bceeaf089fd09882f94dd59fb0b52ab51a3dfe56dbd154c5cfa89a04",
+    "src/__init__.py": "4f3f2448b69a76861af35ae46972cf86b7bf307d2d519be9c34573713cd81488"
+  },
+  "identities": {
+    "lab5-train": {
+      "id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-train",
+      "principal_id": "f8ef6d50-058d-4971-8514-99e7849704e7"
+    },
+    "lab5-serve": {
+      "id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve",
+      "principal_id": "fe0fc231-c427-4d10-8270-dbc3757432b3"
+    }
+  },
+  "roles": [
+    {
+      "identity": "lab5-train",
+      "role": "Storage Blob Data Contributor",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/itcs355",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/itcs355/providers/Microsoft.Authorization/roleAssignments/b4457048-9655-409b-badb-bd6aa08ccf28"
+      ]
+    },
+    {
+      "identity": "lab5-train",
+      "role": "Storage Blob Data Reader",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91/providers/Microsoft.Authorization/roleAssignments/fb745719-5102-4cf8-a602-94f84d35cf73"
+      ]
+    },
+    {
+      "identity": "lab5-train",
+      "role": "AcrPull",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012/providers/Microsoft.Authorization/roleAssignments/00ecbb77-efbd-4b85-a383-921de35e35ec"
+      ]
+    },
+    {
+      "identity": "existing lab4-ci",
+      "role": "Storage Blob Data Contributor",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/itcs355",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/itcs355/providers/Microsoft.Authorization/roleAssignments/203247ba-5a4a-4a5f-8842-2443610919e7"
+      ]
+    },
+    {
+      "identity": "existing lab4-ci",
+      "role": "Storage Blob Data Contributor",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91/providers/Microsoft.Authorization/roleAssignments/f32f6ff3-5895-47cd-aaaf-a7d3f3bf93d9"
+      ]
+    },
+    {
+      "identity": "existing lab4-ci",
+      "role": "Managed Identity Operator",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve/providers/Microsoft.Authorization/roleAssignments/8ec66a6c-5f28-4769-8e92-3781bb92a178"
+      ]
+    },
+    {
+      "identity": "lab5-serve",
+      "role": "Storage Blob Data Reader",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012/blobServices/default/containers/azureml-blobstore-e470ffb6-c186-438f-ab46-be83f9e6fd91/providers/Microsoft.Authorization/roleAssignments/c77f3106-7116-45c2-aa12-fabccca54dae"
+      ]
+    },
+    {
+      "identity": "lab5-serve",
+      "role": "AcrPull",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012",
+      "assignment_ids": [
+        "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012/providers/Microsoft.Authorization/roleAssignments/0e7e7dc9-b42c-4048-8d1b-fa384b4c5824"
+      ]
+    }
+  ],
+  "compute": {
+    "lab5train": {
+      "size": "Standard_DS2_v2",
+      "min": 0,
+      "max": 1,
+      "identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-train"
+    },
+    "lab5release": {
+      "size": "Standard_DS1_v2",
+      "min": 0,
+      "max": 1,
+      "identity_id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab4-ci"
+    }
+  },
+  "baseline_model_versions": [
+    "1",
+    "2"
+  ],
+  "jobs": {
+    "degraded": {
+      "name": "lab5-20261023-070538-degraded",
+      "submitted_at": "2026-10-23T07:09:34.224055+00:00",
+      "status": "JobStatus.FAILED",
+      "studio_url": "https://ml.azure.com/runs/lab5-20261023-070538-degraded?wsid=/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/workspaces/itcs355-6688012&tid=9bc585f9-a8b8-431c-9013-efa7b2b40cdf"
+    }
+  },
+  "error_type": "TimeoutError",
+  "error_message": "Managed job still running after 45 minutes. It is NOT canceled; inspect Studio before rerunning.",
+  "cleanup_pending": true
+}

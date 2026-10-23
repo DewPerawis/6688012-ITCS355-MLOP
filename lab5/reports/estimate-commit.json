@@ -1,0 +1,12 @@
+{
+  "recorded_at": "2026-10-23T06:31:01.791611+00:00",
+  "estimate_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba",
+  "estimate_sha256": "65e0795089f3748c99a08c9abd44eff94d2558939e24ff7c02f648de7247350a",
+  "estimate_path": "lab5/reports/lab5-estimate.md",
+  "billing_status": {
+    "group_billing": "ok",
+    "lab5_billing": "ok"
+  },
+  "resources_started": false,
+  "note": "Estimate committed; budget headroom and discounted-compute requirement remain unresolved."
+}

@@ -1,0 +1,57 @@
+{
+  "queried_at": "2026-10-23T06:30:41.463397+00:00",
+  "scope": "read-only billing",
+  "group_billing": {
+    "status": "ok",
+    "queried_at": "2026-10-23T06:30:41.768267+00:00",
+    "from": "2026-09-01",
+    "to": "2026-10-23T06:30:41.768267+00:00",
+    "scope": "course resource group",
+    "lab5_tag_filter": false,
+    "pages": 1,
+    "rows": [
+      {
+        "resource": "microsoft.containerregistry/registries/itcs3556688012",
+        "cost": 6.6747595278,
+        "currency": "USD"
+      },
+      {
+        "resource": "microsoft.keyvault/vaults/itcs3556keyvault63d2a327",
+        "cost": 0.000351,
+        "currency": "USD"
+      },
+      {
+        "resource": "microsoft.machinelearningservices/workspaces/itcs355-6688012",
+        "cost": 1.220457387316232,
+        "currency": "USD"
+      },
+      {
+        "resource": "microsoft.operationalinsights/workspaces/itcs3556logalytibb5455de",
+        "cost": 0.0,
+        "currency": "USD"
+      },
+      {
+        "resource": "microsoft.storage/storageaccounts/itcs3556688012",
+        "cost": 0.00050236,
+        "currency": "USD"
+      }
+    ],
+    "posted_totals_by_currency": {
+      "USD": 7.896070275116232
+    },
+    "note": "Posted pretax charges only. Empty rows are not proof of free usage. The unfiltered group includes shared earlier-lab resources. This is an observation window, not a verified full-term total; FX/late charges/other scopes remain pending."
+  },
+  "lab5_billing": {
+    "status": "ok",
+    "queried_at": "2026-10-23T06:30:50.905035+00:00",
+    "from": "2026-09-01",
+    "to": "2026-10-23T06:30:50.905035+00:00",
+    "scope": "course resource group",
+    "lab5_tag_filter": true,
+    "pages": 1,
+    "rows": [],
+    "posted_totals_by_currency": {},
+    "note": "Posted pretax charges only. Empty rows are not proof of free usage. The unfiltered group includes shared earlier-lab resources. This is an observation window, not a verified full-term total; FX/late charges/other scopes remain pending."
+  },
+  "note": "Full-term THB budget and final Lab 5 actual cost remain unverified. No resources were started."
+}

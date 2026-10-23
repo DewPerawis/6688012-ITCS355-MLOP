@@ -1,0 +1,237 @@
+{
+  "checked_at": "2026-10-23T06:14:22.966130+00:00",
+  "scope": "readiness only; no managed training/deployment/evaluation has run",
+  "second_provider": "pending; user currently has Azure only",
+  "llm": "not yet verified",
+  "billing": "not queried; reconciliation pending",
+  "local": {
+    "wsl": true,
+    "python": "3.11.16",
+    "environment": "itcs355-lab3"
+  },
+  "packages": {
+    "azure-ai-ml": "1.35.0",
+    "azure-identity": "1.25.3",
+    "ipykernel": "7.4.0"
+  },
+  "docker": {
+    "reachable": true,
+    "platform": "linux/x86_64"
+  },
+  "base_commit": "a4bdbb886091f14914fdccf9daf43e79673df3ef",
+  "source_sha256": {
+    "lab2/reports/lab2-registry.json": "9313fd82ad044be2c45aa8d37c23f50854cdab82e2ff27434c781d3024c21d59",
+    "lab2/reports/lab2-comparison.md": "d59ca6d3b9bbf249cd2bd80b0fc89c8fcc0c1973280e30012b7862dd8d38ba43",
+    "lab4/reports/image-push.json": "10d845762c2a85349aa6df8dec0c248ae2fe9a4070820f3c170d556f73c3a15b",
+    "lab4/reports/final-cloud-check.json": "438ac5be175e2ac86db8c4c364e2dd5ca1f325e7c0f1aa50311b7af3338fc8fe",
+    "lab1/course/labs/lab-05-cloud-mlops-and-cost.md": "389202e4688e3409c40de0f6eddb757899c02ca480ccc1674e50902d71528e67"
+  },
+  "config_sources": [
+    "lab2/cloud.env",
+    "lab3/cloud.env",
+    "lab4/cloud.env"
+  ],
+  "config": {
+    "CLOUD_PROVIDER": "azure",
+    "PROJECT_ID": "6688012",
+    "REGION": "centralindia",
+    "CONTAINER_REGISTRY": "itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355",
+    "MODEL_REGISTRY_NAME": "itcs355-6688012",
+    "AZURE_RESOURCE_GROUP": "itcs355-6688012",
+    "AZUREML_WORKSPACE": "itcs355-6688012",
+    "MODEL_VERSION": "1"
+  },
+  "account": {
+    "name": "Azure for Students",
+    "state": "Enabled"
+  },
+  "workspace": {
+    "name": "itcs355-6688012",
+    "location": "centralindia"
+  },
+  "incumbent": {
+    "name": "itcs355-6688012",
+    "version": "1",
+    "type": "mlflow_model",
+    "lineage": {
+      "git_commit": "6e10bd9755593a5a004e3fb7d506b344adbc6deb",
+      "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+      "mlflow_run_id": "9b7ff1c3-1a06-4557-a16e-e753ded72079",
+      "training_job_id": "lab2-20260919-151227--6e10bd9",
+      "image_digest": "sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+      "seed": "20260101",
+      "metric_val": "0.40004728306048276",
+      "metric_test": "0.4661076316460343"
+    }
+  },
+  "compute": {
+    "status": "ok",
+    "items": []
+  },
+  "endpoints": {
+    "status": "ok",
+    "items": []
+  },
+  "schedules": {
+    "status": "ok",
+    "items": []
+  },
+  "quota": {
+    "status": "unavailable",
+    "error_type": "AttributeError"
+  },
+  "resource_inventory": {
+    "status": "ok",
+    "items": [
+      {
+        "location": "centralindia",
+        "name": "itcs3556688012",
+        "type": "Microsoft.Storage/storageAccounts"
+      },
+      {
+        "location": "centralindia",
+        "name": "itcs3556688012",
+        "type": "Microsoft.ContainerRegistry/registries"
+      },
+      {
+        "location": "centralindia",
+        "name": "itcs3556keyvault63d2a327",
+        "type": "Microsoft.KeyVault/vaults"
+      },
+      {
+        "location": "centralindia",
+        "name": "itcs3556logalytibb5455de",
+        "type": "Microsoft.OperationalInsights/workspaces"
+      },
+      {
+        "location": "centralindia",
+        "name": "itcs3556insights244e2b5b",
+        "type": "Microsoft.Insights/components"
+      },
+      {
+        "location": "centralindia",
+        "name": "itcs355-6688012",
+        "type": "Microsoft.MachineLearningServices/workspaces"
+      },
+      {
+        "location": "global",
+        "name": "Application Insights Smart Detection",
+        "type": "microsoft.insights/actiongroups"
+      },
+      {
+        "location": "centralindia",
+        "name": "itcs355-6688012-lab4-ci",
+        "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+      },
+      {
+        "location": "centralindia",
+        "name": "0d701291-aab6-4322-99c8-fa93e4e68050",
+        "type": "microsoft.insights/workbooks"
+      }
+    ]
+  },
+  "quota_note": "Quota visibility does not guarantee SKU capacity or Spot availability.",
+  "prices": {
+    "retrieved_at": "2026-10-23T06:14:48.151568+00:00",
+    "source": "https://prices.azure.com/api/retail/prices?currencyCode=%27THB%27&%24filter=serviceName+eq+%27Virtual+Machines%27+and+armRegionName+eq+%27centralindia%27+and+armSkuName+eq+%27Standard_DS2_v2%27+and+priceType+eq+%27Consumption%27",
+    "sku": "Standard_DS2_v2",
+    "region": "centralindia",
+    "meters": [
+      {
+        "meterId": "8ff981a1-40b8-4292-aa18-c1af57836008",
+        "meterName": "DS2 v2",
+        "productName": "Virtual Machines DSv2 Series",
+        "skuName": "DS2 v2",
+        "armSkuName": "Standard_DS2_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 5.6784,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "8f47f638-4a3b-4f46-b05d-3eab85fd68fe",
+        "meterName": "DS2 v2 Low Priority",
+        "productName": "Virtual Machines DSv2 Series Windows",
+        "skuName": "DS2 v2 Low Priority",
+        "armSkuName": "Standard_DS2_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 3.4944,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "7661d05f-1c8c-565d-81b5-19943e0cd377",
+        "meterName": "DS2 v2 Spot",
+        "productName": "Virtual Machines DSv2 Series",
+        "skuName": "DS2 v2 Spot",
+        "armSkuName": "Standard_DS2_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 1.2742,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2026-10-01T00:00:00Z",
+        "isPrimaryMeterRegion": true,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "1535aa76-5517-4687-8a32-61dcd5a82f53",
+        "meterName": "DS2 v2",
+        "productName": "Virtual Machines DSv2 Series Windows",
+        "skuName": "DS2 v2",
+        "armSkuName": "Standard_DS2_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 8.7696,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "d025576d-9427-5b24-bc99-21e1cd289789",
+        "meterName": "DS2 v2 Spot",
+        "productName": "Virtual Machines DSv2 Series Windows",
+        "skuName": "DS2 v2 Spot",
+        "armSkuName": "Standard_DS2_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 1.9688,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2026-10-01T00:00:00Z",
+        "isPrimaryMeterRegion": true,
+        "tierMinimumUnits": 0.0
+      },
+      {
+        "meterId": "b6534bdc-7eaf-4d43-8f75-0872503f02e1",
+        "meterName": "DS2 v2 Low Priority",
+        "productName": "Virtual Machines DSv2 Series",
+        "skuName": "DS2 v2 Low Priority",
+        "armSkuName": "Standard_DS2_v2",
+        "armRegionName": "centralindia",
+        "retailPrice": 1.1323,
+        "unitOfMeasure": "1 Hour",
+        "currencyCode": "THB",
+        "type": "Consumption",
+        "effectiveStartDate": "2025-05-01T00:00:00Z",
+        "isPrimaryMeterRegion": false,
+        "tierMinimumUnits": 0.0
+      }
+    ],
+    "note": "Retail VM reference only; not the Azure Students invoice or an ML service quote. THB prices are budget references. Select the correct Linux meter before estimating.",
+    "status": "ok"
+  },
+  "status": "ready_for_planning",
+  "elapsed_seconds": 26.29,
+  "next": "Stop here and send the printed summary; no billable resources have been started."
+}

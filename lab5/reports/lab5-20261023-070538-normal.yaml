@@ -1,0 +1,152 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: lab5-end-to-end
+experiment_name: itcs355-lab5
+tags:
+  course: itcs355
+  student: '6688012'
+  lab: '5'
+settings:
+  default_datastore: azureml:itcs355blob
+  force_rerun: true
+  continue_on_step_failure: false
+jobs:
+  ingest:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538
+    command: python -m cloudlayer.run_step ingest --input ${{inputs.raw}} --out ${{outputs.data}}
+      --sha256 422cccb9136e814061b83e4f041cff21ba7372c6f7fb0feb2c321555c6a6341f
+    environment: &id001
+      image: itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355@sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8
+    inputs:
+      raw:
+        type: uri_file
+        path: azureml://datastores/itcs355blob/paths/itcs355/lab2/data/sensors.csv
+        mode: download
+    outputs:
+      data:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5train
+    identity: &id002
+      type: managed
+    environment_variables: &id003
+      LAB5_GIT_COMMIT: 2487815e5bb65d7a216daf62366f254042174d32
+      LAB5_DATA_VERSION: 1c886b512c8a5c9bf723da1cd119fc80.dir
+      LAB5_IMAGE_DIGEST: sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8
+      MLFLOW_TRACKING_URI: azureml://centralindia.api.azureml.ms/mlflow/v1.0/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.MachineLearningServices/workspaces/itcs355-6688012
+      PYTHONHASHSEED: '20260101'
+    limits:
+      timeout: 1800
+    display_name: ingest
+  validate:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538
+    command: python -m cloudlayer.run_step validate --input ${{inputs.raw}} --out
+      ${{outputs.validated}}
+    environment: *id001
+    inputs:
+      raw:
+        type: uri_folder
+        path: ${{parent.jobs.ingest.outputs.data}}
+        mode: download
+    outputs:
+      validated:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5train
+    identity: *id002
+    environment_variables: *id003
+    limits:
+      timeout: 1800
+    display_name: validate
+  train:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538
+    command: python -m cloudlayer.run_step train --input ${{inputs.validated}} --out
+      ${{outputs.trained}} --degraded 0
+    environment: *id001
+    inputs:
+      validated:
+        type: uri_folder
+        path: ${{parent.jobs.validate.outputs.validated}}
+        mode: download
+    outputs:
+      trained:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5train
+    identity: *id002
+    environment_variables: *id003
+    limits:
+      timeout: 1800
+    display_name: train
+  evaluate:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538
+    command: python -m cloudlayer.run_step evaluate --input ${{inputs.trained}} --out
+      ${{outputs.gate}} --incumbent 0.40004728306048276
+    environment: *id001
+    inputs:
+      trained:
+        type: uri_folder
+        path: ${{parent.jobs.train.outputs.trained}}
+        mode: download
+    outputs:
+      gate:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5train
+    identity: *id002
+    environment_variables: *id003
+    limits:
+      timeout: 1800
+    display_name: evaluate
+  register:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538
+    command: python -m cloudlayer.release register --gate ${{inputs.gate}} --trained
+      ${{inputs.trained}} --out ${{outputs.registered}}
+    environment: *id001
+    inputs:
+      gate:
+        type: uri_folder
+        path: ${{parent.jobs.evaluate.outputs.gate}}
+        mode: download
+      trained:
+        type: uri_folder
+        path: ${{parent.jobs.train.outputs.trained}}
+        mode: download
+    outputs:
+      registered:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5release
+    identity: &id004
+      type: managed
+      client_id: 308025e6-89e3-492f-b58e-672c4b0f2ef8
+    environment_variables: *id003
+    limits:
+      timeout: 1800
+    display_name: register
+  deploy_staging:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538
+    command: python -m cloudlayer.release deploy --registered ${{inputs.registered}}
+      --out ${{outputs.deployed}}
+    environment: *id001
+    inputs:
+      registered:
+        type: uri_folder
+        path: ${{parent.jobs.register.outputs.registered}}
+        mode: download
+    outputs:
+      deployed:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5release
+    identity: *id004
+    environment_variables: *id003
+    limits:
+      timeout: 1800
+    display_name: deploy_staging

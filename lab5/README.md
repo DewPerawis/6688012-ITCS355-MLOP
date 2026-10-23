@@ -4,27 +4,37 @@ Student: **6688012**. Primary provider: **Azure**, continuing from Labs 2–4.
 
 ## Current implementation status
 
-The student's 15:21 inspection identified the normal-run failure: the RandomForest
-reached model saving, but MLflow's default skops serializer rejected
-`sklearn.tree._tree.Tree`. The fix explicitly uses the same cloudpickle serialization
-as Lab 2's previously executed training/export code. It does not change model settings,
-seeds, training data or the validation gate. Only our own fitted models are serialized.
+The student's 16:24 audit confirms the missing permission: the correct serving identity
+has AcrPull on workspace ACR but no unconditional Blob data reader role at workspace
+storage-account scope. Endpoint/model/image binding is verified: model
+`itcs355-6688012:3`, validation PR-AUC `0.40244651283160715`, test PR-AUC
+`0.48110817994638944`, training/MLflow run `f115d4dd-f69c-4195-8c1c-f4a87f9bbf3d`,
+source commit `4f3a8957ded20901989fa48bbe58be29c33f6578`. Both compute clusters had
+zero nodes at that audit; the failed staging deployment still exists.
 
-**Next step: [`notebooks/05d_repair_model_save.ipynb`](notebooks/05d_repair_model_save.ipynb).**
-This user-run part records a local allowlisted source commit, retains the old source and
-job evidence, snapshots revised runtime and submits/observes one deterministic
-`normal-repair` job. It reruns the six-step DAG with the revised source. The original
-pipelines had force_rerun=True, which prevents reuse of their child outputs by other
-jobs; no upstream reuse or saved training time is claimed. No identity/role/compute setup or degraded retraining is performed. Normal
-training and staging may incur additional cost; failure diagnostics are retrieved in
-the same execution. No managed repair result has been observed yet.
+**Next step: [`notebooks/05f_repair_deployment_only.ipynb`](notebooks/05f_repair_deployment_only.ipynb).**
+The user-run cell rechecks the audited model, identity, roles, compute and immutable
+source bundle, parses a deployment-only pipeline, adds only the missing Storage Blob
+Data Reader grant to the serving identity on the existing workspace storage account,
+allows 90 seconds for propagation, and submits/observes one deterministic
+`lab5-20261023-070538-deploy-repair` job. It uses the existing registration job's output
+under the CI identity. There is no training, registration, Git mutation or resource setup.
+Release compute and staging can incur charges. A replay observes the same job name.
+It verifies exact model binding, successful deployment and a scoring response, preserves
+registry versions, and retrieves failure diagnostics automatically. Staging stays open
+for evidence capture/cleanup. The original parent remains Failed; a successful deployment
+continuation is recorded separately rather than relabeling that parent as successful.
 
-The original normal job `lab5-20261023-070538-normal` passed ingest/validate but failed
-at train. At the 15:21 inspection registry versions were unchanged, no endpoint existed,
-and both clusters had zero nodes. These are timestamped observations, not a current
-resource guarantee. The degraded job previously completed training and was correctly
-blocked at evaluate: measured PR-AUC `0.10083333333333333` below floor `0.4`.
-Original source commit: `2487815e5bb65d7a216daf62366f254042174d32`.
+Offline preparation was checked in the student's existing WSL Python 3.11.16 environment:
+SDK 1.35.0 parsed the one-node pipeline, verified the actual saved candidate/bundle, and
+accepted the hyphenated container log names. All 20 offline tests passed there. No
+Azure calls, role grants, managed execution or Git commits were performed by the
+assistant during those checks. These checks do not prove live deployment success.
+
+The previous audit used container names from the API reference that SDK 1.35.0 rejects.
+It now uses `storage-initializer` / `inference-server`, verified with that SDK's validator.
+The future role preview source plans Blob Reader at workspace storage-account scope;
+this source correction alone has not changed Azure access or historical frozen bundles.
 
 The full lab still requires a successful normal pipeline, identity-withdrawal evidence,
 schedule/retraining discussion, second-provider demonstration, Part B LLM evidence,

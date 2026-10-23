@@ -1,0 +1,51 @@
+{
+  "inspected_at": "2026-10-23T08:01:27.289971+00:00",
+  "job": "lab5-20261023-070538-degraded",
+  "status": "Failed",
+  "parent_error": null,
+  "source_commit": "2487815e5bb65d7a216daf62366f254042174d32",
+  "children": [
+    {
+      "name": "49e0088c-762e-4207-9924-0ee1574a8433",
+      "step": "ingest",
+      "status": "Completed"
+    },
+    {
+      "name": "21af7d1c-bf4a-4b58-abd3-d40a27c06d03",
+      "step": "validate",
+      "status": "Completed"
+    },
+    {
+      "name": "0819aee5-63bd-4fdb-aad0-cc440d5c5aed",
+      "step": "train",
+      "status": "Completed"
+    },
+    {
+      "name": "4548bb51-9347-4e11-a911-265f92605cb6",
+      "step": "evaluate",
+      "status": "Failed",
+      "error": null,
+      "user_log_excerpts": [
+        {
+          "file": "artifacts/user_logs/std_log.txt",
+          "tail": "{\"passed\": false, \"measured_val_pr_auc\": 0.10083333333333333, \"evaluated_val_pr_auc\": 0.10083333333333333, \"deliberate_degradation\": true, \"incumbent\": 0.40004728306048276, \"floor\": 0.4, \"margin\": 0.002, \"note\": \"Operational guard only; this single-seed delta does not prove a stable gain.\"}\nGATE FAIL: registration and deployment must not run"
+        }
+      ]
+    }
+  ],
+  "jobs_submitted": false,
+  "training_started": false,
+  "setup_repeated": false,
+  "no_registration": true,
+  "endpoint_exists": false,
+  "compute_nodes": {
+    "lab5train": {
+      "count": 0
+    },
+    "lab5release": {
+      "count": 0
+    }
+  },
+  "gate_failure_candidate": true,
+  "next": "Send this diagnostic output. Do not rerun setup or submit a new training job yet."
+}

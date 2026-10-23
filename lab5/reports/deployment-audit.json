@@ -1,0 +1,146 @@
+{
+  "inspected_at": "2026-10-23T09:24:31.049733+00:00",
+  "status": "deployment_audit",
+  "job": "lab5-20261023-070538-normal-repair",
+  "job_status": "Failed",
+  "source_commit": "4f3a8957ded20901989fa48bbe58be29c33f6578",
+  "steps": [
+    {
+      "name": "65857f4b-5bc5-4814-bf5a-d07ec7495591",
+      "step": "ingest",
+      "status": "Completed"
+    },
+    {
+      "name": "ae0e96a9-64fb-444f-a649-164497e727eb",
+      "step": "validate",
+      "status": "Completed"
+    },
+    {
+      "name": "f115d4dd-f69c-4195-8c1c-f4a87f9bbf3d",
+      "step": "train",
+      "status": "Completed"
+    },
+    {
+      "name": "7bbc070f-fd21-4d76-b6b3-7292ae7b246e",
+      "step": "evaluate",
+      "status": "Completed"
+    },
+    {
+      "name": "c528322e-0d8a-4860-b7e4-c2f8fdde4de2",
+      "step": "register",
+      "status": "Completed"
+    },
+    {
+      "name": "1663ba38-6db6-42de-9520-ff6cfc1bc8d5",
+      "step": "deploy_staging",
+      "status": "Failed"
+    }
+  ],
+  "endpoint": {
+    "name": "itcs355-6688012-lab5",
+    "state": "EndpointProvisioningState.SUCCEEDED",
+    "auth_mode": "aml_token",
+    "identity_type": "user_assigned",
+    "attached_user_identities": [
+      "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve"
+    ],
+    "expected_identity_attached": true,
+    "traffic": {
+      "staging": 0
+    }
+  },
+  "serving_identity": {
+    "clientId": "63fc63ca-321a-46df-bdf1-8b370428c022",
+    "id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourcegroups/itcs355-6688012/providers/Microsoft.ManagedIdentity/userAssignedIdentities/itcs355-6688012-lab5-serve",
+    "principalId": "fe0fc231-c427-4d10-8270-dbc3757432b3"
+  },
+  "deployment": {
+    "name": "staging",
+    "state": "DeploymentProvisioningState.FAILED",
+    "model": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.MachineLearningServices/workspaces/itcs355-6688012/models/itcs355-6688012/versions/3",
+    "environment": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.MachineLearningServices/workspaces/itcs355-6688012/environments/CliV2AnonymousEnvironment/versions/515010e11a66cdd119214ecc598d87c5a64b41d51e3c649451caff1d6608b41c",
+    "instance_type": "Standard_DS2_v2",
+    "instance_count": 1,
+    "model_path": "/var/azureml-app/azureml-models/itcs355-6688012/3/model",
+    "model_version": "3",
+    "data_collector_configured": false,
+    "image": "itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355-serve@sha256:e1b7ea92fd08d5bd3c800bb42b3515d1a17b5c0c216adf720f15b756c9f8656e",
+    "image_matches_pinned": true,
+    "inference_config": "{'livenessRoute': {'path': '/health', 'port': 8080}, 'readinessRoute': {'path': '/ready', 'port': 8080}, 'scoringRoute': {'path': '/invoke', 'port': 8080}}"
+  },
+  "workspace_resources": {
+    "storage_account": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012",
+    "container_registry": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012"
+  },
+  "cloud_mutations": false,
+  "jobs_submitted": false,
+  "training_started": false,
+  "permission_checks": {
+    "workspace_storage_reader": {
+      "status": "ok",
+      "resource_scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012",
+      "verified_unconditional_role": false,
+      "matching_assignments": []
+    },
+    "registry_pull": {
+      "status": "ok",
+      "resource_scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012",
+      "verified_unconditional_role": true,
+      "matching_assignments": [
+        {
+          "role": "AcrPull",
+          "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012",
+          "condition": null,
+          "id": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.ContainerRegistry/registries/itcs3556688012/providers/Microsoft.Authorization/roleAssignments/0e7e7dc9-b42c-4048-8d1b-fa384b4c5824"
+        }
+      ]
+    }
+  },
+  "registered_model": {
+    "name": "itcs355-6688012",
+    "version": "3",
+    "path": "azureml://subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/workspaces/itcs355-6688012/datastores/workspaceblobstore/paths/LocalUpload/32077a06e2bab85b4837a89058cfb5576469e93ea1686ca68394b47fcd1fe307/model",
+    "lineage": {
+      "git_commit": "4f3a8957ded20901989fa48bbe58be29c33f6578",
+      "data_version": "1c886b512c8a5c9bf723da1cd119fc80.dir",
+      "mlflow_run_id": "f115d4dd-f69c-4195-8c1c-f4a87f9bbf3d",
+      "training_job_id": "f115d4dd-f69c-4195-8c1c-f4a87f9bbf3d",
+      "image_digest": "sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8",
+      "seed": "20260101",
+      "metric_val": "0.40244651283160715",
+      "metric_test": "0.48110817994638944",
+      "promotion_stage": "Staging",
+      "estimate_commit": "83c400d616b3323c292d9c028fd80cfd9e1200ba"
+    }
+  },
+  "container_logs": {
+    "StorageInitializer": {
+      "status": "unavailable",
+      "error_type": "ValidationException",
+      "message": "Invalid container type 'StorageInitializer'. Supported container types are inference-server and storage-initializer"
+    },
+    "InferenceServer": {
+      "status": "unavailable",
+      "error_type": "ValidationException",
+      "message": "Invalid container type 'InferenceServer'. Supported container types are inference-server and storage-initializer"
+    }
+  },
+  "compute_nodes": {
+    "lab5train": {
+      "count": 0
+    },
+    "lab5release": {
+      "count": 0
+    }
+  },
+  "proposed_role_correction": [
+    {
+      "principal_id": "fe0fc231-c427-4d10-8270-dbc3757432b3",
+      "role": "Storage Blob Data Reader",
+      "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012",
+      "applied": false
+    }
+  ],
+  "limits": "Role inventory is control-plane evidence, not an identity-token data-access test. Conditional/custom roles, deny assignments, ABAC and network access can require separate review.",
+  "next": "Review exact permissions and model binding before deployment-only repair. Do not retrain or rerun setup."
+}

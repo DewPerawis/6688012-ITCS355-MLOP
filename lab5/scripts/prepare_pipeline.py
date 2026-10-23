@@ -120,7 +120,9 @@ def main():
         {"identity": "existing lab4-ci", "role": "Storage Blob Data Contributor", "scope": training_storage},
         {"identity": "existing lab4-ci", "role": "Storage Blob Data Contributor", "scope": default_storage},
         {"identity": "existing lab4-ci", "role": "Managed Identity Operator", "scope": serve_identity},
-        {"identity": "lab5-serve", "role": "Storage Blob Data Reader", "scope": default_storage},
+        # Managed online endpoint startup checks access to workspace storage.
+        # A reader grant on only one blob container is insufficient for this check.
+        {"identity": "lab5-serve", "role": "Storage Blob Data Reader", "scope": workspace.storage_account},
         {"identity": "lab5-serve", "role": "AcrPull", "scope": registry["id"]},
     ]
     progress("4/4 Stage source allowlist, compile/parse six-step pipeline and write permission preview")
