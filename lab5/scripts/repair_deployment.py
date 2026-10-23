@@ -7,6 +7,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import shutil
 import time
 import uuid
 from datetime import datetime, timezone
@@ -46,10 +47,11 @@ def verified_candidate(audit, state):
     return model, steps["register"]["name"]
 
 
-def deployment_definition(state, preview, registered_uri):
-    document = definition(state["runtime"], str(REPO / state["bundle"]), preview["raw_sha256"])
+def deployment_definition(state, preview, code=None):
+    document = definition(state["runtime"], str(code or REPO / state["bundle"]), preview["raw_sha256"])
     node = copy.deepcopy(document["jobs"]["deploy_staging"])
-    node["inputs"]["registered"] = {"type": "uri_folder", "path": registered_uri, "mode": "download"}
+    node["inputs"] = {}
+    node["command"] = node["command"].replace("${{inputs.registered}}", "./registered")
     document["jobs"] = {"deploy_staging": node}
     document["settings"]["force_rerun"] = True
     document["display_name"] = "lab5-deployment-continuation"
@@ -61,6 +63,14 @@ def current_roles(runtime, principal, scope):
                      "--scope", scope, "--include-inherited", "--assignee-object-id", principal,
                      "--fill-principal-name", "false",
                      "--query", "[].{id:id,principalId:principalId,roleDefinitionName:roleDefinitionName,scope:scope,condition:condition}"])
+
+
+def registered_reference(job, expected_name, candidate):
+    # Persist the independently audited registry reference, not a cross-job URI.
+    if job.name != expected_name or job_status(job.status) != "Completed":
+        raise ValueError("Original registration job does not match or is not Completed")
+    return {"name": candidate["name"], "version": str(candidate["version"]),
+            "lineage": candidate["lineage"], "origin_registration_job": expected_name}
 
 
 def main():
@@ -85,7 +95,7 @@ def main():
     client = MLClient(AzureCliCredential(subscription=cfg["AZURE_SUBSCRIPTION_ID"]),
                       cfg["AZURE_SUBSCRIPTION_ID"], cfg["AZURE_RESOURCE_GROUP"], cfg["AZUREML_WORKSPACE"],
                       enable_telemetry=False)
-    label = "deploy-repair"
+    label = "deploy-repair-v2"
     name = state["run_prefix"] + "-" + label
     progress("1/4 Recheck the exact model, endpoint identity, compute and role scopes")
     endpoint = client.online_endpoints.get(runtime["endpoint"])
@@ -131,14 +141,18 @@ def main():
                 or compute.max_instances != 1 or attached != [expected["identity_id"].lower()]):
             raise ValueError("Compute configuration changed: " + compute_name)
     registered_job = client.jobs.get(register_job_name)
-    if job_status(registered_job.status) != "Completed":
-        raise ValueError("Original registration job is not Completed")
-    output = registered_job.outputs.get("registered")
-    registered_uri = getattr(output, "path", None)
-    if not isinstance(registered_uri, str) or not registered_uri.startswith("azureml://"):
-        raise ValueError("Cannot resolve the existing registration output URI; no job submitted")
+    registered = registered_reference(registered_job, register_job_name, candidate)
+    code = LAB / "_bundles" / name
+    code.mkdir(parents=True, exist_ok=True)
+    # Copy the verified frozen runtime; never modify the original training bundle.
+    for relative in state["bundle_hashes"]:
+        target = code / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(REPO / state["bundle"] / relative, target)
+    (code / "registered").mkdir(exist_ok=True)
+    (code / "registered/registered.json").write_text(json.dumps(registered, indent=2))
     preview = json.loads((LAB / "reports/pipeline-preview.json").read_text())
-    document = deployment_definition(state, preview, registered_uri)
+    document = deployment_definition(state, preview, code)
     yaml_path = LAB / "reports" / (name + ".yaml")
     yaml_path.write_text(yaml.safe_dump(document, sort_keys=False))
     parsed_job = load_job(source=yaml_path)  # Check schema before any role or deployment mutation.
@@ -152,10 +166,14 @@ def main():
     if not continuation:
         state["deployment_continuation"] = {
             "reviewed_audit": audit, "model": {"name": candidate["name"], "version": version},
-            "original_parent_status": "Failed", "registered_input": registered_uri,
+            "original_parent_status": "Failed", "registered_input": "audited registry reference in source bundle",
             "model_versions_before": sorted(str(item.version) for item in client.models.list(name=candidate["name"])),
             "controller_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
     record = state.setdefault("jobs", {}).setdefault(label, {"name": name, "source_commit": state["source_commit"]})
+    record["code_bundle"] = code.relative_to(REPO).as_posix()
+    record["code_bundle_hashes"] = {path.relative_to(code).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                                     for path in code.rglob("*") if path.is_file() and "__pycache__" not in path.parts}
+    record["registered_reference"] = registered
     state.update(active_normal_variant=label, cleanup_pending=True, status="repairing_deployment_only")
     state.pop("error_type", None)
     state.pop("error_message", None)
@@ -178,7 +196,7 @@ def main():
             if not role_evidence(assignments, principal, storage_scope, accepted)["verified_unconditional_role"]:
                 raise RuntimeError("Reader role is not visible yet; no deployment job submitted. Send summary")
             # Listing RBAC is not a token/data-plane probe. Allow propagation before startup.
-            for remaining in range(90, 0, -15):
+            for remaining in (range(90, 0, -15) if not has_reader else ()):
                 progress(f"Role propagation allowance: {remaining}s; no new compute started yet")
                 time.sleep(15)
             progress("3/4 Submit deployment-only continuation using the existing registered model " + version)

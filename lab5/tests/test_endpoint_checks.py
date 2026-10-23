@@ -3,7 +3,7 @@ import unittest
 import copy
 
 from cloudlayer.endpoint_checks import role_evidence
-from scripts.repair_deployment import deployment_definition, verified_candidate
+from scripts.repair_deployment import deployment_definition, verified_candidate, registered_reference
 
 
 class EndpointRoleTests(unittest.TestCase):
@@ -35,19 +35,33 @@ class EndpointRoleTests(unittest.TestCase):
 
 
 class DeploymentContinuationTests(unittest.TestCase):
-    def test_continuation_contains_only_release_under_ci_and_external_registration_input(self):
+    def test_registration_child_without_outputs_builds_audited_reference(self):
+        from types import SimpleNamespace
+
+        job = SimpleNamespace(name="registered-child", status="Completed")
+        self.assertFalse(hasattr(job, "outputs"))
+        candidate = {"name": "model", "version": "3", "lineage": {"git_commit": "verified"}}
+        self.assertEqual(registered_reference(job, "registered-child", candidate)["version"], "3")
+        with self.assertRaises(ValueError):
+            registered_reference(job, "another-child", candidate)
+        job.status = "Failed"
+        with self.assertRaises(ValueError):
+            registered_reference(job, "registered-child", candidate)
+
+    def test_continuation_uses_only_release_under_ci_and_local_reference(self):
         runtime = {"training_image": "image@sha256:abc", "ci_client_id": "ci-client",
                    "source_base_commit": "commit", "data_version": "data", "tracking_uri": "tracking",
                    "raw_uri": "raw", "incumbent_metric": .4}
         doc = deployment_definition({"runtime": runtime, "bundle": "bundle"}, {"raw_sha256": "sha"},
-                                    "azureml://datastores/store/paths/existing-registration/")
+                                    "/offline/deployment-bundle")
         self.assertEqual(set(doc["jobs"]), {"deploy_staging"})
         node = doc["jobs"]["deploy_staging"]
         self.assertEqual(node["identity"], {"type": "managed", "client_id": "ci-client"})
         self.assertEqual(node["compute"], "azureml:lab5release")
-        self.assertEqual(node["inputs"]["registered"]["path"], "azureml://datastores/store/paths/existing-registration/")
+        self.assertEqual(node["inputs"], {})
         self.assertIn("release deploy ", node["command"])
-        self.assertNotIn("parent.jobs", node["inputs"]["registered"]["path"])
+        self.assertIn("--registered ./registered", node["command"])
+        self.assertNotIn("${{inputs.", node["command"])
 
     def test_only_the_audited_model_and_passing_gate_can_be_deployed(self):
         state = {"jobs": {"normal-repair": {"name": "original", "source_commit": "commit"}},

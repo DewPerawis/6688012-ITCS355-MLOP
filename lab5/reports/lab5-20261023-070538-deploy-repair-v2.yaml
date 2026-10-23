@@ -1,0 +1,37 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: lab5-deployment-continuation
+experiment_name: itcs355-lab5
+tags:
+  course: itcs355
+  student: '6688012'
+  lab: '5'
+settings:
+  default_datastore: azureml:itcs355blob
+  force_rerun: true
+  continue_on_step_failure: false
+jobs:
+  deploy_staging:
+    type: command
+    code: /mnt/c/Users/SN23341J001185/Documents/MyWork/ICT/ICTYear4_1/MLop/public_teaching_mlaiops/course/6688012-ITCS355-MLOP/lab5/_bundles/lab5-20261023-070538-deploy-repair-v2
+    command: python -m cloudlayer.release deploy --registered ./registered --out ${{outputs.deployed}}
+    environment:
+      image: itcs3556688012-fje5fmhpgmadcxdz.azurecr.io/itcs355@sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8
+    inputs: {}
+    outputs:
+      deployed:
+        type: uri_folder
+        mode: rw_mount
+    compute: azureml:lab5release
+    identity:
+      type: managed
+      client_id: 308025e6-89e3-492f-b58e-672c4b0f2ef8
+    environment_variables:
+      LAB5_GIT_COMMIT: 4f3a8957ded20901989fa48bbe58be29c33f6578
+      LAB5_DATA_VERSION: 1c886b512c8a5c9bf723da1cd119fc80.dir
+      LAB5_IMAGE_DIGEST: sha256:6344b4d330abe774f2b981115504220eb4fe7a0747c7519803cc1cf6975b30b8
+      MLFLOW_TRACKING_URI: azureml://centralindia.api.azureml.ms/mlflow/v1.0/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.MachineLearningServices/workspaces/itcs355-6688012
+      PYTHONHASHSEED: '20260101'
+    limits:
+      timeout: 1800
+    display_name: deploy_staging

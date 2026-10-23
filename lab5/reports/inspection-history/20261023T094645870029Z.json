@@ -1,0 +1,70 @@
+{
+  "inspected_at": "2026-10-23T09:02:44.057031+00:00",
+  "job": "lab5-20261023-070538-normal-repair",
+  "variant": "normal-repair",
+  "status": "Failed",
+  "parent_error": null,
+  "source_commit": "4f3a8957ded20901989fa48bbe58be29c33f6578",
+  "children": [
+    {
+      "name": "65857f4b-5bc5-4814-bf5a-d07ec7495591",
+      "step": "ingest",
+      "status": "Completed"
+    },
+    {
+      "name": "ae0e96a9-64fb-444f-a649-164497e727eb",
+      "step": "validate",
+      "status": "Completed"
+    },
+    {
+      "name": "f115d4dd-f69c-4195-8c1c-f4a87f9bbf3d",
+      "step": "train",
+      "status": "Completed"
+    },
+    {
+      "name": "7bbc070f-fd21-4d76-b6b3-7292ae7b246e",
+      "step": "evaluate",
+      "status": "Completed"
+    },
+    {
+      "name": "c528322e-0d8a-4860-b7e4-c2f8fdde4de2",
+      "step": "register",
+      "status": "Completed"
+    },
+    {
+      "name": "1663ba38-6db6-42de-9520-ff6cfc1bc8d5",
+      "step": "deploy_staging",
+      "status": "Failed",
+      "error": null,
+      "user_log_excerpts": [
+        {
+          "file": "artifacts/user_logs/std_log.txt",
+          "tail": "Downloading the model LocalUpload/32077a06e2bab85b4837a89058cfb5576469e93ea1686ca68394b47fcd1fe307/model at /tmp/tmpm1jbm82e/itcs355-6688012/model\n\nInstance type Standard_DS2_v2 may be too small for compute resources. Minimum recommended compute SKU is Standard_DS3_v2 for general purpose endpoints. Learn more about SKUs here: https://learn.microsoft.com/azure/machine-learning/referencemanaged-online-endpoints-vm-sku-list\nCheck: endpoint itcs355-6688012-lab5 exists\n......................................................................................................Traceback (most recent call last):\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/polling/base_polling.py\", line 950, in run\n    self._poll()\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/polling/base_polling.py\", line 982, in _poll\n    raise OperationFailed(\"Operation failed or canceled\")\nazure.core.polling.base_polling.OperationFailed: Operation failed or canceled\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/mnt/azureml/cr/j/7b35210e88684caf942b7bdd002b456d/exe/wd/cloudlayer/release.py\", line 112, in <module>\n    main()\n  File \"/mnt/azureml/cr/j/7b35210e88684caf942b7bdd002b456d/exe/wd/cloudlayer/release.py\", line 91, in main\n    client.online_deployments.begin_create_or_update(deployment).result()\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/polling/_poller.py\", line 323, in result\n    self.wait(timeout)\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/tracing/decorator.py\", line 119, in wrapper_use_tracer\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/polling/_poller.py\", line 342, in wait\n    raise self._exception  # type: ignore\n    ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/polling/_poller.py\", line 247, in _start\n    self._polling_method.run()\n  File \"/usr/local/lib/python3.11/site-packages/azure/core/polling/base_polling.py\", line 965, in run\n    raise HttpResponseError(response=self._pipeline_response.http_response, error=err) from err\nazure.core.exceptions.HttpResponseError: (BadArgument) Startup task failed due to incorrect role assignments on resource. Please see troubleshooting guide, available here: https://aka.ms/oe-tsg#error-badargument\nCode: BadArgument\nMessage: Startup task failed due to incorrect role assignments on resource. Please see troubleshooting guide, available here: https://aka.ms/oe-tsg#error-badargument"
+        },
+        {
+          "file": "artifacts/logs/azureml/stderrlogs.txt",
+          "tail": "[2026-10-23 09:02:14Z] Job failed, job RunId is 1663ba38-6db6-42de-9520-ff6cfc1bc8d5. Error: {\"Error\":{\"Code\":\"UserError\",\"Severity\":null,\"Message\":\"Execution failed. User process 'python' exited with status code 1. Please check log file 'user_logs/std_log.txt' for error details. Error:   File \\\"<frozen runpy>\\\", line 88, in _run_code\\n  File \\\"/mnt/azureml/cr/j/7b35210e88684caf942b7bdd002b456d/exe/wd/cloudlayer/release.py\\\", line 112, in <module>\\n    main()\\n  File \\\"/mnt/azureml/cr/j/7b35210e88684caf942b7bdd002b456d/exe/wd/cloudlayer/release.py\\\", line 91, in main\\n    client.online_deployments.begin_create_or_update(deployment).result()\\n  File \\\"/usr/local/lib/python3.11/site-packages/azure/core/polling/_poller.py\\\", line 323, in result\\n    self.wait(timeout)\\n  File \\\"/usr/local/lib/python3.11/site-packages/azure/core/tracing/decorator.py\\\", line 119, in wrapper_use_tracer\\n    return func(*args, **kwargs)\\n           ^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.11/site-packages/azure/core/polling/_poller.py\\\", line 342, in wait\\n    raise self._exception  # type: ignore\\n    ^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.11/site-packages/azure/core/polling/_poller.py\\\", line 247, in _start\\n    self._polling_method.run()\\n  File \\\"/usr/local/lib/python3.11/site-packages/azure/core/polling/base_polling.py\\\", line 965, in run\\n    raise HttpResponseError(response=self._pipeline_response.http_response, error=err) from err\\nazure.core.exceptions.HttpResponseError: (BadArgument) Startup task failed due to incorrect role assignments on resource. Please see troubleshooting guide, available here: https://aka.ms/oe-tsg#error-badargument\\nCode: BadArgument\\nMessage: Startup task failed due to incorrect role assignments on resource. Please see troubleshooting guide, available here: https://aka.ms/oe-tsg#error-badargument\\n\",\"MessageFormat\":null,\"MessageParameters\":{},\"ReferenceCode\":null,\"DetailsUri\":null,\"Target\":null,\"Details\":[],\"InnerError\":null,\"DebugInfo\":null,\"AdditionalInfo\":null},\"Correlation\":null,\"Environment\":null,\"Location\":null,\"Time\":\"0001-01-01T00:00:00+00:00\",\"ComponentName\":\"CommonRuntime\"}"
+        },
+        {
+          "file": "artifacts/logs/azureml/stdoutlogs.txt",
+          "tail": ""
+        }
+      ]
+    }
+  ],
+  "jobs_submitted": false,
+  "training_started": false,
+  "setup_repeated": false,
+  "no_registration": false,
+  "endpoint_exists": true,
+  "compute_nodes": {
+    "lab5train": {
+      "count": 0
+    },
+    "lab5release": {
+      "count": 1
+    }
+  },
+  "gate_failure_candidate": false,
+  "next": "Send this diagnostic output. Do not rerun setup or submit a new training job yet."
+}

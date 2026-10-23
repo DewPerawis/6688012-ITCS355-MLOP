@@ -1,10 +1,11 @@
-# Lab 5 — Cost report (execution and reconciliation pending)
+# Lab 5 — Cost report (execution observed; reconciliation pending)
 
 ## 1. Estimate before running
 
 See [lab5-estimate.md](lab5-estimate.md) for price evidence and explicit assumptions.
 Pre-run commit SHA: `83c400d616b3323c292d9c028fd80cfd9e1200ba`, recorded by the student's
-Part 3 execution on 23 October 2026 at 13:31 Thailand time. No Task 1 execution is recorded yet.
+Part 3 execution on 23 October 2026 at 13:31 Thailand time. Managed execution and deployment continuation are now recorded in `managed-execution.json`;
+see `managed-result.md` for the successful stages and the failed original parent.
 
 ## 2. Actual billing
 
@@ -28,7 +29,9 @@ Do not treat billing lag or a credit-funded subscription as free usage.
 ## 4. Component breakdown
 
 Training, storage, serving, pipeline and monitoring: estimate in the linked pre-run report;
-measured durations, usage and allocated actual charges pending. Avoid shared-cost double counting.
+final measured durations, usage and allocated actual charges pending. The successful model
+is v3; the serving continuation completed and passed its smoke test. Do not price only
+the final successful attempt: failed training/deployment attempts also consumed resources. Avoid shared-cost double counting.
 
 ## 5. Cost per 1,000 predictions
 
