@@ -1,0 +1,31 @@
+{
+  "started_at": "2026-10-23T10:11:24.892467+00:00",
+  "status": "named_runtime_removed",
+  "scope": "named endpoint and two tagged Lab 5 compute clusters only",
+  "removed": [
+    "endpoint:itcs355-6688012-lab5",
+    "compute:lab5train",
+    "compute:lab5release"
+  ],
+  "absent_after": [
+    "endpoint:itcs355-6688012-lab5",
+    "compute:lab5train",
+    "compute:lab5release"
+  ],
+  "retained": [
+    "model versions including v3",
+    "job history",
+    "Storage",
+    "ACR",
+    "workspace",
+    "identities and role evidence"
+  ],
+  "portal_empty_screenshot": "pending manual confirmation",
+  "billing_24h": "pending; absence of runtime resources does not prove zero future charges",
+  "tagged_schedules": [],
+  "retained_model": {
+    "name": "itcs355-6688012",
+    "version": "3"
+  },
+  "finished_at": "2026-10-23T10:19:05.806953+00:00"
+}

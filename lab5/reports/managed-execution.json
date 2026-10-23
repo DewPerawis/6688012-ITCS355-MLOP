@@ -312,7 +312,7 @@
       }
     }
   },
-  "cleanup_pending": true,
+  "cleanup_pending": false,
   "controller_resume_sha256": "92f078e63961ed70cae4c4c83afd75ec7c7d38ccbe37ca8d4c3601b812c89c41",
   "serialization_repair": {
     "original": {
@@ -518,5 +518,6 @@
       "roleDefinitionId": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
       "scope": "/subscriptions/b175b91e-058e-4a22-8e96-39e6e432b006/resourceGroups/itcs355-6688012/providers/Microsoft.Storage/storageAccounts/itcs3556688012"
     }
-  }
+  },
+  "cleanup_runtime_report": "lab5/reports/cleanup-runtime.json"
 }

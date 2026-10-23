@@ -53,3 +53,13 @@ Pending measured before/after under the same workload. No optimisation result cl
 Pending provider/model access, real usage fields and current rates; no word-count token estimates.
 Record measured baseline/capped runs and eval gate, cache economics versus observed hits,
 and a short nontechnical budget defence after obtaining the measurements.
+
+## Cleanup and consolidated final review
+
+The user removed the named Lab 5 endpoint and two compute clusters and rechecked their
+absence on 23 October 2026 at 17:19 Thailand time. Model v3 and shared Storage/ACR were
+retained. See cleanup-runtime.json. This does not establish zero future or shared charges.
+Lab5_Final_Batch.ipynb queries fresh posted billing into reports/final-batch.json and
+final-batch.md without reusing the pre-execution billing cache. Run the same notebook
+at least 24 hours after teardown for the later observation. Final cost/FX allocation,
+20% estimate agreement and the full-term <800 THB condition remain unverified.

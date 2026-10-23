@@ -42,21 +42,24 @@ is not a deliberate permission-removal experiment; that assessed exercise remain
 
 ## Current next steps
 
-The successful 05f result is retained. Do not rerun old setup/training notebooks merely
-to regenerate evidence. Notebooks 01–05f document preparation, failures and recovery.
+The student completed runtime cleanup at 17:19 Thailand time on 23 October 2026:
+endpoint itcs355-6688012-lab5 and compute lab5train/lab5release were removed and rechecked
+absent, no tagged schedules were found, and model v3 was retained. See cleanup-runtime.json.
+Shared Storage/ACR remain; runtime deletion is not proof that every charge has stopped.
 
-`notebooks/06_cleanup_runtime.ipynb` is prepared for the student to run after reviewing
-its impact: it removes only the tagged Lab 5 endpoint and two compute clusters. It
-preserves model v3, registry/history, Storage, ACR, workspace and identity evidence.
-It stops if tagged Lab 5 work is active or schedules need review. It performs no Git
-changes. After it runs, a Portal screenshot and billing check after 24 hours still need
-to be supplied. Until actual cleanup succeeds, staging may continue to incur charges.
+Use **notebooks/Lab5_Final_Batch.ipynb** for one continuous batch of offline tests,
+provider audit, fresh read-only resource checks, fresh posted billing and a single
+final-batch.md report/commit checklist. No old notebook reruns, new compute, cloud
+mutations or Git changes are performed. Long billing throttles are reported while
+other checks continue. The same notebook can be rerun after the 24-hour billing cutoff;
+it does not wait for a day or introduce another numbered part.
 
-Remaining assessed work includes a single successful full pipeline execution, the
-permission-withdrawal test, schedule and retraining comparison, second-provider demo,
-LLM Tasks 7–9, actual cost/optimisation figures and verified full teardown. Azure-only
-access does not meet the second-provider requirement. See the status report before
-claiming this lab complete or ready for final submission.
+The batch consolidates reporting; it does not simulate outstanding assessed work.
+A single successful full pipeline execution, permission withdrawal, actual schedule,
+second-provider demonstration and LLM/token evidence still need real execution.
+Identity boundaries and the retraining comparison are in reports/operations-decisions.md.
+See reports/requirements-status.md for exact remaining criteria. Portal screenshots
+must still be checked manually. Do not describe the whole lab as completed yet.
 
 ## Offline checks
 
