@@ -113,7 +113,12 @@ def main():
             prediction = model.predict_proba(part[data.FEATURES])[:, 1]
             metrics[name + "_pr_auc"] = float(average_precision_score(part[data.TARGET], prediction))
             metrics[name + "_roc_auc"] = float(roc_auc_score(part[data.TARGET], prediction))
-        mlflow.sklearn.save_model(model, str(args.out / "model"))
+        # Match Lab 2's format, which the pinned Lab 4 serving image already loads.
+        # This is our own fitted estimator; do not deserialize external pickle files.
+        mlflow.sklearn.save_model(
+            model, str(args.out / "model"),
+            serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
+        )
         if os.environ.get("MLFLOW_TRACKING_URI"):
             import mlflow
 

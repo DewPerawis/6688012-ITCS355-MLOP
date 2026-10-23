@@ -4,12 +4,39 @@ Student: **6688012**. Primary provider: **Azure**, continuing from Labs 2–4.
 
 ## Current implementation status
 
+The student's 15:21 inspection identified the normal-run failure: the RandomForest
+reached model saving, but MLflow's default skops serializer rejected
+`sklearn.tree._tree.Tree`. The fix explicitly uses the same cloudpickle serialization
+as Lab 2's previously executed training/export code. It does not change model settings,
+seeds, training data or the validation gate. Only our own fitted models are serialized.
+
+**Next step: [`notebooks/05d_repair_model_save.ipynb`](notebooks/05d_repair_model_save.ipynb).**
+This user-run part records a local allowlisted source commit, retains the old source and
+job evidence, snapshots revised runtime and submits/observes one deterministic
+`normal-repair` job. It reruns the six-step DAG with the revised source. The original
+pipelines had force_rerun=True, which prevents reuse of their child outputs by other
+jobs; no upstream reuse or saved training time is claimed. No identity/role/compute setup or degraded retraining is performed. Normal
+training and staging may incur additional cost; failure diagnostics are retrieved in
+the same execution. No managed repair result has been observed yet.
+
+The original normal job `lab5-20261023-070538-normal` passed ingest/validate but failed
+at train. At the 15:21 inspection registry versions were unchanged, no endpoint existed,
+and both clusters had zero nodes. These are timestamped observations, not a current
+resource guarantee. The degraded job previously completed training and was correctly
+blocked at evaluate: measured PR-AUC `0.10083333333333333` below floor `0.4`.
+Original source commit: `2487815e5bb65d7a216daf62366f254042174d32`.
+
+The full lab still requires a successful normal pipeline, identity-withdrawal evidence,
+schedule/retraining discussion, second-provider demonstration, Part B LLM evidence,
+cost reconciliation and teardown. Prepared code or offline checks do not satisfy
+those managed/evaluated requirements by themselves.
+
 Part 4 passed on the student's rerun at 13:51 Thailand time, 23 October 2026. The real
 data contract and grouped split (3600/1200/1200 rows) passed; deliberate contract/gate
 probes were blocked; both pipeline definitions parsed with SDK 1.35.0. Input metadata
 and both pinned images were readable. These are preparation results, not managed runs.
 
-**Current next step: [`notebooks/05_managed_pipeline.ipynb`](notebooks/05_managed_pipeline.ipynb).**
+Part 5: [`notebooks/05_managed_pipeline.ipynb`](notebooks/05_managed_pipeline.ipynb).
 This explicit user-run part commits only allowlisted implementation source locally,
 creates/verifies two Lab 5 identities, the eight previewed scoped assignments, and two
 min=0/max=1 compute clusters. It runs a degraded candidate first and checks failure at

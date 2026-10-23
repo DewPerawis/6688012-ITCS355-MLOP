@@ -16,6 +16,16 @@ REPORT = LAB / "reports" / "managed-execution.json"
 TERMINAL = {"Completed", "Failed", "Canceled", "NotResponding"}
 
 
+def job_status(value):
+    """SDKs may return a string or Enum; str(Enum) is not the wire value."""
+    raw = getattr(value, "value", value)
+    token = str(raw).rsplit(".", 1)[-1].replace("_", "").replace(" ", "").lower()
+    names = {"completed": "Completed", "failed": "Failed", "canceled": "Canceled",
+             "cancelled": "Canceled", "notresponding": "NotResponding", "running": "Running",
+             "notstarted": "NotStarted", "queued": "Queued", "preparing": "Preparing"}
+    return names.get(token, str(raw))
+
+
 def progress(message):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {message}", flush=True)
 
@@ -160,14 +170,15 @@ def wait_job(client, name, state, record):
     started = time.monotonic()
     while True:
         job = client.jobs.get(name)
-        record["status"] = str(job.status)
+        record["status"] = job_status(job.status)
+        record["status_raw"] = str(job.status)
         record["studio_url"] = job.studio_url
         save(state)
-        progress("Job " + name + ": " + str(job.status))
-        if str(job.status) in TERMINAL:
+        progress("Job " + name + ": " + record["status"])
+        if record["status"] in TERMINAL:
             children = list(client.jobs.list(parent_job_name=name))
             record["steps"] = [{"name": child.name, "display_name": child.display_name,
-                                "status": str(child.status)} for child in children]
+                                "status": job_status(child.status)} for child in children]
             save(state)
             return job
         if time.monotonic() - started > 2700:
@@ -175,12 +186,12 @@ def wait_job(client, name, state, record):
         time.sleep(15)
 
 
-def run_variant(client, preview, state, degraded):
+def run_variant(client, preview, state, degraded, *, label=None, document=None):
     import yaml
     from azure.ai.ml import load_job
     from azure.core.exceptions import ResourceNotFoundError
 
-    label = "degraded" if degraded else "normal"
+    label = label or ("degraded" if degraded else "normal")
     record = state.setdefault("jobs", {}).setdefault(label, {"name": state["run_prefix"] + "-" + label})
     save(state)  # Persist the deterministic job name before submission to avoid duplicate jobs on retry.
     try:
@@ -188,12 +199,14 @@ def run_variant(client, preview, state, degraded):
         progress("Resume observation of existing job: " + record["name"])
     except ResourceNotFoundError:
         code = REPO / state["bundle"]
-        document = definition(state["runtime"], str(code), preview["raw_sha256"], degraded)
+        if document is None:
+            document = definition(state["runtime"], str(code), preview["raw_sha256"], degraded)
         path = REPORT.parent / (record["name"] + ".yaml")
         path.write_text(yaml.safe_dump(document, sort_keys=False))
         job = load_job(source=path)
         job.name = record["name"]
         job.tags.update(estimate_commit=preview["estimate_commit"], git_commit=state["source_commit"])
+        record["source_commit"] = state["source_commit"]
         progress("Submit managed pipeline: " + record["name"])
         client.jobs.create_or_update(job)
         record["submitted_at"] = datetime.now(timezone.utc).isoformat()
@@ -207,14 +220,14 @@ def run_variant(client, preview, state, degraded):
                              and step["status"] in ("Completed", "Running") for step in record["steps"])
         record["no_registration"] = versions == state["baseline_model_versions"]
         record["no_endpoint"] = not endpoint_exists(client, state["runtime"]["endpoint"])
-        record["expected_gate_failure_verified"] = (str(job.status) == "Failed" and failed_gate
+        record["expected_gate_failure_verified"] = (job_status(job.status) == "Failed" and failed_gate
                                                      and not downstream_ran and record["no_registration"]
                                                      and record["no_endpoint"])
         save(state)
         if not record["expected_gate_failure_verified"]:
             raise RuntimeError("Negative pipeline failed for an unexpected reason or changed registry/endpoint; inspect child steps")
     else:
-        if str(job.status) != "Completed":
+        if job_status(job.status) != "Completed":
             raise RuntimeError("Normal managed pipeline did not complete; inspect the child job log in Studio")
         if not endpoint_exists(client, state["runtime"]["endpoint"]):
             raise RuntimeError("Pipeline completed without its staging endpoint")
@@ -282,8 +295,11 @@ def main():
             state["source_commit"] = commit_source()
             save(state)
         else:
-            core = [str(path.relative_to(REPO)) for folder in ("cloudlayer", "scripts", "src")
-                    for path in (LAB / folder).rglob("*.py")]
+            # A controller-only status fix must not force retraining an unchanged
+            # frozen runtime bundle. Still reject edits to any code that runs remotely
+            # or changes the compiled DAG.
+            core = ["lab5/" + relative for relative in state["bundle_hashes"] if relative != "runtime.json"]
+            core.append("lab5/cloudlayer/pipelines.py")
             if git("diff", state["source_commit"], "--", *core).stdout.strip():
                 raise ValueError("Source changed after this execution began. Inspect prior jobs before starting a revised execution")
         if not state.get("bundle"):
